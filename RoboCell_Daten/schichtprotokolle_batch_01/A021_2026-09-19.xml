@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A021" datum="2026-09-19">
+  <schicht name="frueh" beginn="2026-09-19 06:00:00" ende="2026-09-19 14:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-19 06:00:00" ende="2026-09-19 06:09:56" produkt="P-2104" gut="11" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-19 06:09:56" ende="2026-09-19 06:13:17"/>
+    <zustand typ="produktion" beginn="2026-09-19 06:13:17" ende="2026-09-19 07:05:09" produkt="P-2104" gut="52" ausschuss="1"/>
+    <zustand typ="materialmangel" beginn="2026-09-19 07:05:09" ende="2026-09-19 07:13:52"/>
+    <zustand typ="rueckstau" beginn="2026-09-19 07:13:52" ende="2026-09-19 07:24:25"/>
+    <zustand typ="produktion" beginn="2026-09-19 07:24:25" ende="2026-09-19 07:53:07" produkt="P-2104" gut="30" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-19 07:53:07" ende="2026-09-19 08:00:09"/>
+    <zustand typ="produktion" beginn="2026-09-19 08:00:09" ende="2026-09-19 08:30:00" produkt="P-2104" gut="32" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-19 08:30:00" ende="2026-09-19 08:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-19 08:45:00" ende="2026-09-19 09:36:32" produkt="P-2104" gut="53" ausschuss="1"/>
+    <zustand typ="materialmangel" beginn="2026-09-19 09:36:32" ende="2026-09-19 09:40:50"/>
+    <zustand typ="produktion" beginn="2026-09-19 09:40:50" ende="2026-09-19 11:30:00" produkt="P-2104" gut="110" ausschuss="2"/>
+    <zustand typ="pause" beginn="2026-09-19 11:30:00" ende="2026-09-19 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-19 11:45:00" ende="2026-09-19 13:23:08" produkt="P-2104" gut="101" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-19 13:23:08" ende="2026-09-19 13:26:36" code="M-102"/>
+    <zustand typ="produktion" beginn="2026-09-19 13:26:36" ende="2026-09-19 14:00:00" produkt="P-2104" gut="35" ausschuss="0"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-19 14:00:00" ende="2026-09-19 22:00:00" geplant="nein"/>
+  <schicht name="nacht" beginn="2026-09-19 22:00:00" ende="2026-09-20 06:00:00" geplant="nein"/>
+</schichtprotokoll>

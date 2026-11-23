@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A015" datum="2026-09-26">
+  <schicht name="frueh" beginn="2026-09-26 06:00:00" ende="2026-09-26 14:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-26 06:00:00" ende="2026-09-26 07:57:47" produkt="P-2129" gut="126" ausschuss="1"/>
+    <zustand typ="stoerung" beginn="2026-09-26 07:57:47" ende="2026-09-26 07:58:26" code="S-310"/>
+    <zustand typ="produktion" beginn="2026-09-26 07:58:26" ende="2026-09-26 08:30:00" produkt="P-2129" gut="33" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-26 08:30:00" ende="2026-09-26 08:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-26 08:45:00" ende="2026-09-26 10:43:04" produkt="P-2129" gut="128" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-26 10:43:04" ende="2026-09-26 10:45:11" code="S-310"/>
+    <zustand typ="produktion" beginn="2026-09-26 10:45:11" ende="2026-09-26 11:30:00" produkt="P-2129" gut="49" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-26 11:30:00" ende="2026-09-26 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-26 11:45:00" ende="2026-09-26 14:00:00" produkt="P-2129" gut="144" ausschuss="2"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-26 14:00:00" ende="2026-09-26 22:00:00" geplant="nein"/>
+  <schicht name="nacht" beginn="2026-09-26 22:00:00" ende="2026-09-27 06:00:00" geplant="nein"/>
+</schichtprotokoll>

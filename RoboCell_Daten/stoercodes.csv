@@ -1,0 +1,26 @@
+code,kategorie,beschreibung
+M-101,mechanik,Greifer schließt nicht vollständig
+M-102,mechanik,Greiferfinger verschlissen
+M-120,mechanik,Zylinder erreicht Endlage nicht
+M-130,mechanik,Förderband blockiert
+E-201,elektrik,Fehler Servoverstärker
+E-202,elektrik,Motortemperatur zu hoch
+E-210,elektrik,Sicherheitskreis unterbrochen
+E-220,elektrik,Encoderfehler Roboterachse
+E-230,elektrik,Fehler Schweißstromquelle
+S-301,steuerung,Kommunikationsfehler Feldbus
+S-302,steuerung,Zykluszeitüberschreitung SPS
+S-310,steuerung,Roboterprogramm abgebrochen
+S-320,steuerung,Bildverarbeitung erkennt Teil nicht
+P-401,peripherie,Lichtvorhang unterbrochen
+P-402,peripherie,Schutztür geöffnet
+P-410,peripherie,Druckluft zu niedrig
+P-420,peripherie,Vakuum am Sauggreifer zu gering
+W-501,material,Teil falsch positioniert
+W-502,material,Teil fehlt im Werkstückträger
+W-510,material,Schraubenzuführung leer
+W-520,material,Klebstoffvorrat leer
+Q-601,qualitaet,Messwert außerhalb Toleranz
+Q-602,qualitaet,Schweißnaht fehlerhaft
+Q-610,qualitaet,Drehmoment nicht erreicht
+M-102,mechanik,Greiferbacke gebrochen

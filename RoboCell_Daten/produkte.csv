@@ -1,0 +1,22 @@
+produkt_id,linie_id,bezeichnung
+P-1102,L1,Getriebegehäus Variante A
+P-1117,L1,Getriebegehäus Variante B
+P-1126,L1,Getriebegehäus Variante C
+P-1139,L1,Getriebegehäus Variante D
+P-2104,L2,Rotorwellen Variante A
+P-2118,L2,Rotorwellen Variante B
+P-2129,L2,Rotorwellen Variante C
+P-3109,L3,Elektronikgehäus Variante A
+P-3118,L3,Elektronikgehäus Variante B
+P-3121,L3,Elektronikgehäus Variante C
+P-4109,L4,Bremssättel Variante A
+P-4117,L4,Bremssättel Variante B
+P-4122,L4,Bremssättel Variante C
+P-5107,L5,Sensormodul Variante A
+P-5118,L5,Sensormodul Variante B
+P-5121,L5,Sensormodul Variante C
+P-6105,L6,Lenkungskomponenten Variante A
+P-6111,L6,Lenkungskomponenten Variante B
+P-6125,L6,Lenkungskomponenten Variante C
+P-6139,L6,Lenkungskomponenten Variante D
+P-7111,L7,Prototyp Variante X

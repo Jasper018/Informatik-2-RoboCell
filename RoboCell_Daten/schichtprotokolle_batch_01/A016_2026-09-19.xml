@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A016" datum="2026-09-19">
+  <schicht name="frueh" beginn="2026-09-19 06:00:00" ende="2026-09-19 14:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-19 06:00:00" ende="2026-09-19 07:48:53" produkt="P-2104" gut="110" ausschuss="1"/>
+    <zustand typ="rueckstau" beginn="2026-09-19 07:48:53" ende="2026-09-19 08:00:00"/>
+    <zustand typ="produktion" beginn="2026-09-19 08:00:00" ende="2026-09-19 08:16:42" produkt="P-2104" gut="17" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-19 08:16:42" ende="2026-09-19 08:18:11"/>
+    <zustand typ="produktion" beginn="2026-09-19 08:18:11" ende="2026-09-19 08:28:08" produkt="P-2104" gut="10" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-19 08:28:08" ende="2026-09-19 08:30:00"/>
+    <zustand typ="pause" beginn="2026-09-19 08:30:00" ende="2026-09-19 08:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-19 08:45:00" ende="2026-09-19 09:33:46" produkt="P-2104" gut="52" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-19 09:33:46" ende="2026-09-19 09:40:44" code="S-320"/>
+    <zustand typ="rueckstau" beginn="2026-09-19 09:40:44" ende="2026-09-19 09:40:56"/>
+    <zustand typ="produktion" beginn="2026-09-19 09:40:56" ende="2026-09-19 10:22:53" produkt="P-2104" gut="43" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-19 10:22:53" ende="2026-09-19 10:27:34" code="S-310"/>
+    <zustand typ="produktion" beginn="2026-09-19 10:27:34" ende="2026-09-19 11:30:00" produkt="P-2104" gut="66" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-19 11:30:00" ende="2026-09-19 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-19 11:45:00" ende="2026-09-19 14:00:00" produkt="P-2104" gut="140" ausschuss="1"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-19 14:00:00" ende="2026-09-19 22:00:00" geplant="nein"/>
+  <schicht name="nacht" beginn="2026-09-19 22:00:00" ende="2026-09-20 06:00:00" geplant="nein"/>
+</schichtprotokoll>

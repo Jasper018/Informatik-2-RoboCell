@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A012" datum="2026-09-15">
+  <schicht name="frueh" beginn="2026-09-15 06:00:00" ende="2026-09-15 14:00:00" geplant="ja">
+    <zustand typ="ruesten" beginn="2026-09-15 06:00:00" ende="2026-09-15 06:15:25" produkt="P-1117"/>
+    <zustand typ="produktion" beginn="2026-09-15 06:15:25" ende="2026-09-15 07:02:45" produkt="P-1117" gut="55" ausschuss="3"/>
+    <zustand typ="materialmangel" beginn="2026-09-15 07:02:45" ende="2026-09-15 07:07:22"/>
+    <zustand typ="produktion" beginn="2026-09-15 07:07:22" ende="2026-09-15 08:30:00" produkt="P-1117" gut="105" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-15 08:30:00" ende="2026-09-15 08:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-15 08:45:00" ende="2026-09-15 11:30:00" produkt="P-1117" gut="211" ausschuss="1"/>
+    <zustand typ="pause" beginn="2026-09-15 11:30:00" ende="2026-09-15 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-15 11:45:00" ende="2026-09-15 14:00:00" produkt="P-1117" gut="167" ausschuss="3"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-15 14:00:00" ende="2026-09-15 22:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-15 14:00:00" ende="2026-09-15 14:46:57" produkt="P-1117" gut="58" ausschuss="1"/>
+    <zustand typ="materialmangel" beginn="2026-09-15 14:46:57" ende="2026-09-15 14:56:14"/>
+    <zustand typ="produktion" beginn="2026-09-15 14:56:14" ende="2026-09-15 15:34:34" produkt="P-1117" gut="49" ausschuss="1"/>
+    <zustand typ="stoerung" beginn="2026-09-15 15:34:34" ende="2026-09-15 15:46:38" code="S-310"/>
+    <zustand typ="produktion" beginn="2026-09-15 15:46:38" ende="2026-09-15 15:58:31" produkt="P-1117" gut="15" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-15 15:58:31" ende="2026-09-15 16:12:52" code="Q-602"/>
+    <zustand typ="produktion" beginn="2026-09-15 16:12:52" ende="2026-09-15 16:30:00" produkt="P-1117" gut="22" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-15 16:30:00" ende="2026-09-15 16:45:00"/>
+    <zustand typ="materialmangel" beginn="2026-09-15 16:45:00" ende="2026-09-15 18:28:49"/>
+    <zustand typ="produktion" beginn="2026-09-15 18:28:49" ende="2026-09-15 19:30:00" produkt="P-1117" gut="75" ausschuss="1"/>
+    <zustand typ="pause" beginn="2026-09-15 19:30:00" ende="2026-09-15 19:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-15 19:45:00" ende="2026-09-15 22:00:00" produkt="P-1117" gut="163" ausschuss="4"/>
+  </schicht>
+  <schicht name="nacht" beginn="2026-09-15 22:00:00" ende="2026-09-16 06:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-15 22:00:00" ende="2026-09-15 22:28:58" produkt="P-1117" gut="37" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-15 22:28:58" ende="2026-09-15 22:35:21"/>
+    <zustand typ="produktion" beginn="2026-09-15 22:35:21" ende="2026-09-16 00:30:00" produkt="P-1117" gut="139" ausschuss="3"/>
+    <zustand typ="pause" beginn="2026-09-16 00:30:00" ende="2026-09-16 00:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-16 00:45:00" ende="2026-09-16 03:21:09" produkt="P-1117" gut="203" ausschuss="1"/>
+    <zustand typ="stoerung" beginn="2026-09-16 03:21:09" ende="2026-09-16 03:24:30" code="P-401"/>
+    <zustand typ="produktion" beginn="2026-09-16 03:24:30" ende="2026-09-16 03:26:46" produkt="P-1117" gut="3" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-16 03:26:46" ende="2026-09-16 03:26:52"/>
+    <zustand typ="produktion" beginn="2026-09-16 03:26:52" ende="2026-09-16 03:30:00" produkt="P-1117" gut="3" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-16 03:30:00" ende="2026-09-16 03:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-16 03:45:00" ende="2026-09-16 05:18:59" produkt="P-1117" gut="117" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-16 05:18:59" ende="2026-09-16 05:19:07"/>
+    <zustand typ="produktion" beginn="2026-09-16 05:19:07" ende="2026-09-16 06:00:00" produkt="P-1117" gut="51" ausschuss="1"/>
+  </schicht>
+</schichtprotokoll>

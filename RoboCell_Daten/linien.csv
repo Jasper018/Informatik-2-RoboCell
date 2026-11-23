@@ -1,0 +1,7 @@
+linie_id,bezeichnung,halle,schichtmodell
+L1,Getriebegehäuse,Halle 1,3-schicht
+L2,Rotorwellen,Halle 1,3-schicht
+L3,Elektronikgehäuse,Halle 2,2-schicht
+L4,Bremssättel,Halle 2,3-schicht
+L5,Sensormodule,Halle 3,2-schicht
+L6,Lenkungskomponenten,Halle 3,3-schicht

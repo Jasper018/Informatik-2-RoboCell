@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A025" datum="2026-09-24">
+  <schicht name="frueh" beginn="2026-09-24 06:00:00" ende="2026-09-24 14:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-24 06:00:00" ende="2026-09-24 07:04:28" produkt="P-2129" gut="70" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-24 07:04:28" ende="2026-09-24 07:08:31"/>
+    <zustand typ="produktion" beginn="2026-09-24 07:08:31" ende="2026-09-24 07:25:11" produkt="P-2129" gut="17" ausschuss="1"/>
+    <zustand typ="materialmangel" beginn="2026-09-24 07:25:11" ende="2026-09-24 07:25:36"/>
+    <zustand typ="produktion" beginn="2026-09-24 07:25:36" ende="2026-09-24 08:30:00" produkt="P-2129" gut="67" ausschuss="2"/>
+    <zustand typ="pause" beginn="2026-09-24 08:30:00" ende="2026-09-24 08:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-24 08:45:00" ende="2026-09-24 08:49:32" produkt="P-2129" gut="5" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-24 08:49:32" ende="2026-09-24 08:52:43" code="W-502"/>
+    <zustand typ="produktion" beginn="2026-09-24 08:52:43" ende="2026-09-24 09:32:23" produkt="P-2129" gut="43" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-24 09:32:23" ende="2026-09-24 09:36:38"/>
+    <zustand typ="produktion" beginn="2026-09-24 09:36:38" ende="2026-09-24 11:30:00" produkt="P-2129" gut="124" ausschuss="3"/>
+    <zustand typ="pause" beginn="2026-09-24 11:30:00" ende="2026-09-24 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-24 11:45:00" ende="2026-09-24 14:00:00" produkt="P-2129" gut="148" ausschuss="2"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-24 14:00:00" ende="2026-09-24 22:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-24 14:00:00" ende="2026-09-24 15:48:58" produkt="P-2129" gut="119" ausschuss="2"/>
+    <zustand typ="rueckstau" beginn="2026-09-24 15:48:58" ende="2026-09-24 16:30:00"/>
+    <zustand typ="pause" beginn="2026-09-24 16:30:00" ende="2026-09-24 16:45:00"/>
+    <zustand typ="rueckstau" beginn="2026-09-24 16:45:00" ende="2026-09-24 16:54:56"/>
+    <zustand typ="produktion" beginn="2026-09-24 16:54:56" ende="2026-09-24 19:30:00" produkt="P-2129" gut="165" ausschuss="3"/>
+    <zustand typ="pause" beginn="2026-09-24 19:30:00" ende="2026-09-24 19:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-24 19:45:00" ende="2026-09-24 21:29:55" produkt="P-2129" gut="114" ausschuss="3"/>
+    <zustand typ="stoerung" beginn="2026-09-24 21:29:55" ende="2026-09-24 21:34:23" code="M-102"/>
+    <zustand typ="produktion" beginn="2026-09-24 21:34:23" ende="2026-09-24 22:00:00" produkt="P-2129" gut="28" ausschuss="0"/>
+  </schicht>
+  <schicht name="nacht" beginn="2026-09-24 22:00:00" ende="2026-09-25 06:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-24 22:00:00" ende="2026-09-24 22:50:44" produkt="P-2129" gut="54" ausschuss="1"/>
+    <zustand typ="stoerung" beginn="2026-09-24 22:50:44" ende="2026-09-24 23:02:52" code="M-101"/>
+    <zustand typ="produktion" beginn="2026-09-24 23:02:52" ende="2026-09-24 23:05:58" produkt="P-2129" gut="3" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-24 23:05:58" ende="2026-09-24 23:16:09"/>
+    <zustand typ="produktion" beginn="2026-09-24 23:16:09" ende="2026-09-25 00:30:00" produkt="P-2129" gut="78" ausschuss="4"/>
+    <zustand typ="pause" beginn="2026-09-25 00:30:00" ende="2026-09-25 00:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-25 00:45:00" ende="2026-09-25 00:51:36" produkt="P-2129" gut="8" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-25 00:51:36" ende="2026-09-25 00:52:21"/>
+    <zustand typ="produktion" beginn="2026-09-25 00:52:21" ende="2026-09-25 03:30:00" produkt="P-2129" gut="165" ausschuss="3"/>
+    <zustand typ="pause" beginn="2026-09-25 03:30:00" ende="2026-09-25 03:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-25 03:45:00" ende="2026-09-25 06:00:00" produkt="P-2129" gut="140" ausschuss="3"/>
+  </schicht>
+</schichtprotokoll>

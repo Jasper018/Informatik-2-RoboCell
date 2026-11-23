@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A030" datum="2026-09-25">
+  <schicht name="frueh" beginn="2026-09-25 06:00:00" ende="2026-09-25 14:00:00" geplant="ja">
+    <zustand typ="wartung" beginn="2026-09-25 06:00:00" ende="2026-09-25 08:25:20"/>
+    <zustand typ="wartung" beginn="2026-09-25 08:25:20" ende="2026-09-25 08:30:00"/>
+    <zustand typ="pause" beginn="2026-09-25 08:30:00" ende="2026-09-25 08:45:00"/>
+    <zustand typ="wartung" beginn="2026-09-25 08:45:00" ende="2026-09-25 08:50:20"/>
+    <zustand typ="wartung" beginn="2026-09-25 08:50:20" ende="2026-09-25 11:24:50"/>
+    <zustand typ="wartung" beginn="2026-09-25 11:24:50" ende="2026-09-25 11:26:10"/>
+    <zustand typ="wartung" beginn="2026-09-25 11:26:10" ende="2026-09-25 11:30:00"/>
+    <zustand typ="pause" beginn="2026-09-25 11:30:00" ende="2026-09-25 11:45:00"/>
+    <zustand typ="wartung" beginn="2026-09-25 11:45:00" ende="2026-09-25 13:36:20"/>
+    <zustand typ="wartung" beginn="2026-09-25 13:36:20" ende="2026-09-25 13:54:50"/>
+    <zustand typ="wartung" beginn="2026-09-25 13:54:50" ende="2026-09-25 14:00:00"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-25 14:00:00" ende="2026-09-25 22:00:00" geplant="ja">
+    <zustand typ="wartung" beginn="2026-09-25 14:00:00" ende="2026-09-25 16:30:00"/>
+    <zustand typ="pause" beginn="2026-09-25 16:30:00" ende="2026-09-25 16:45:00"/>
+    <zustand typ="wartung" beginn="2026-09-25 16:45:00" ende="2026-09-25 19:30:00"/>
+    <zustand typ="pause" beginn="2026-09-25 19:30:00" ende="2026-09-25 19:41:50"/>
+    <zustand typ="pause" beginn="2026-09-25 19:41:50" ende="2026-09-25 19:43:30"/>
+    <zustand typ="pause" beginn="2026-09-25 19:43:30" ende="2026-09-25 19:45:00"/>
+    <zustand typ="wartung" beginn="2026-09-25 19:45:00" ende="2026-09-25 19:52:00"/>
+    <zustand typ="wartung" beginn="2026-09-25 19:52:00" ende="2026-09-25 19:55:10"/>
+    <zustand typ="wartung" beginn="2026-09-25 19:55:10" ende="2026-09-25 22:00:00"/>
+  </schicht>
+  <schicht name="nacht" beginn="2026-09-25 22:00:00" ende="2026-09-26 06:00:00" geplant="nein"/>
+</schichtprotokoll>

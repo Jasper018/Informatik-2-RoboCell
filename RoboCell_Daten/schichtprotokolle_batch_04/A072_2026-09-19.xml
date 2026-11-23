@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A072" datum="2026-09-19">
+  <schicht name="frueh" beginn="2026-09-19 06:00:00" ende="2026-09-19 14:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-19 06:00:00" ende="2026-09-19 06:36:09" produkt="P-6139" gut="29" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-19 06:36:09" ende="2026-09-19 06:39:17"/>
+    <zustand typ="produktion" beginn="2026-09-19 06:39:17" ende="2026-09-19 08:28:14" produkt="P-6139" gut="87" ausschuss="1"/>
+    <zustand typ="ruesten" beginn="2026-09-19 08:28:14" ende="2026-09-19 08:30:00" produkt="P-6125"/>
+    <zustand typ="pause" beginn="2026-09-19 08:30:00" ende="2026-09-19 08:45:00"/>
+    <zustand typ="ruesten" beginn="2026-09-19 08:45:00" ende="2026-09-19 08:46:45" produkt="P-6125"/>
+    <zustand typ="produktion" beginn="2026-09-19 08:46:45" ende="2026-09-19 09:24:23" produkt="P-6125" gut="29" ausschuss="1"/>
+    <zustand typ="materialmangel" beginn="2026-09-19 09:24:23" ende="2026-09-19 09:43:31"/>
+    <zustand typ="produktion" beginn="2026-09-19 09:43:31" ende="2026-09-19 11:30:00" produkt="P-6125" gut="85" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-19 11:30:00" ende="2026-09-19 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-19 11:45:00" ende="2026-09-19 12:42:14" produkt="P-6125" gut="44" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-19 12:42:14" ende="2026-09-19 12:45:06" code="P-410"/>
+    <zustand typ="produktion" beginn="2026-09-19 12:45:06" ende="2026-09-19 13:49:57" produkt="P-6125" gut="52" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-19 13:49:57" ende="2026-09-19 13:58:55"/>
+    <zustand typ="produktion" beginn="2026-09-19 13:58:55" ende="2026-09-19 14:00:00" produkt="P-6125" gut="1" ausschuss="0"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-19 14:00:00" ende="2026-09-19 22:00:00" geplant="nein"/>
+  <schicht name="nacht" beginn="2026-09-19 22:00:00" ende="2026-09-20 06:00:00" geplant="nein"/>
+</schichtprotokoll>

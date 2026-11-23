@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A011" datum="2026-09-20">
+  <schicht name="frueh" beginn="2026-09-20 06:00:00" ende="2026-09-20 14:00:00" geplant="nein"/>
+  <schicht name="spaet" beginn="2026-09-20 14:00:00" ende="2026-09-20 22:00:00" geplant="nein"/>
+  <schicht name="nacht" beginn="2026-09-20 22:00:00" ende="2026-09-21 06:00:00" geplant="nein"/>
+</schichtprotokoll>

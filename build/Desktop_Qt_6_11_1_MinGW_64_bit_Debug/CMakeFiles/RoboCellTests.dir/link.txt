@@ -1,0 +1,3 @@
+C:\QT\Tools\CMake_64\bin\cmake.exe -E rm -f CMakeFiles\RoboCellTests.dir/objects.a
+C:\QT\Tools\mingw1310_64\bin\ar.exe qc CMakeFiles\RoboCellTests.dir/objects.a @CMakeFiles\RoboCellTests.dir\objects1.rsp
+C:\QT\Tools\mingw1310_64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\RoboCellTests.dir/objects.a -Wl,--no-whole-archive -o RoboCellTests.exe -Wl,--out-implib,libRoboCellTests.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\RoboCellTests.dir\linkLibs.rsp

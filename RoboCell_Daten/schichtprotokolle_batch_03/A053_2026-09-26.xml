@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A053" datum="2026-09-26">
+  <schicht name="frueh" beginn="2026-09-26 06:00:00" ende="2026-09-26 14:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-26 06:00:00" ende="2026-09-26 06:31:47" produkt="P-4109" gut="24" ausschuss="1"/>
+    <zustand typ="stoerung" beginn="2026-09-26 06:31:47" ende="2026-09-26 06:35:16" code="W-501"/>
+    <zustand typ="produktion" beginn="2026-09-26 06:35:16" ende="2026-09-26 08:01:43" produkt="P-4109" gut="65" ausschuss="0"/>
+    <zustand typ="ruesten" beginn="2026-09-26 08:01:43" ende="2026-09-26 08:30:00" produkt="P-4117"/>
+    <zustand typ="pause" beginn="2026-09-26 08:30:00" ende="2026-09-26 08:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-26 08:45:00" ende="2026-09-26 10:16:00" produkt="P-4117" gut="70" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-26 10:16:00" ende="2026-09-26 10:18:45" code="P-402"/>
+    <zustand typ="produktion" beginn="2026-09-26 10:18:45" ende="2026-09-26 10:50:19" produkt="P-4117" gut="24" ausschuss="1"/>
+    <zustand typ="stoerung" beginn="2026-09-26 10:50:19" ende="2026-09-26 10:51:16" code="S-320"/>
+    <zustand typ="produktion" beginn="2026-09-26 10:51:16" ende="2026-09-26 11:09:32" produkt="P-4117" gut="14" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-26 11:09:32" ende="2026-09-26 11:20:42" code="P-402"/>
+    <zustand typ="produktion" beginn="2026-09-26 11:20:42" ende="2026-09-26 11:30:00" produkt="P-4117" gut="7" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-26 11:30:00" ende="2026-09-26 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-26 11:45:00" ende="2026-09-26 12:28:37" produkt="P-4117" gut="33" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-26 12:28:37" ende="2026-09-26 12:33:30" code="M-102"/>
+    <zustand typ="produktion" beginn="2026-09-26 12:33:30" ende="2026-09-26 13:12:05" produkt="P-4117" gut="30" ausschuss="1"/>
+    <zustand typ="stoerung" beginn="2026-09-26 13:12:05" ende="2026-09-26 13:17:22" code="P-402"/>
+    <zustand typ="produktion" beginn="2026-09-26 13:17:22" ende="2026-09-26 14:00:00" produkt="P-4117" gut="33" ausschuss="0"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-26 14:00:00" ende="2026-09-26 22:00:00" geplant="nein"/>
+  <schicht name="nacht" beginn="2026-09-26 22:00:00" ende="2026-09-27 06:00:00" geplant="nein"/>
+</schichtprotokoll>

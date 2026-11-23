@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A030" datum="2026-09-24">
+  <schicht name="frueh" beginn="2026-09-24 06:00:00" ende="2026-09-24 14:00:00" geplant="ja">
+    <zustand typ="wartung" beginn="2026-09-24 06:00:00" ende="2026-09-24 08:30:00"/>
+    <zustand typ="pause" beginn="2026-09-24 08:30:00" ende="2026-09-24 08:45:00"/>
+    <zustand typ="wartung" beginn="2026-09-24 08:45:00" ende="2026-09-24 09:36:40"/>
+    <zustand typ="wartung" beginn="2026-09-24 09:36:40" ende="2026-09-24 09:57:00"/>
+    <zustand typ="wartung" beginn="2026-09-24 09:57:00" ende="2026-09-24 11:30:00"/>
+    <zustand typ="pause" beginn="2026-09-24 11:30:00" ende="2026-09-24 11:45:00"/>
+    <zustand typ="wartung" beginn="2026-09-24 11:45:00" ende="2026-09-24 12:48:20"/>
+    <zustand typ="wartung" beginn="2026-09-24 12:48:20" ende="2026-09-24 12:55:40"/>
+    <zustand typ="wartung" beginn="2026-09-24 12:55:40" ende="2026-09-24 14:00:00"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-24 14:00:00" ende="2026-09-24 22:00:00" geplant="ja">
+    <zustand typ="wartung" beginn="2026-09-24 14:00:00" ende="2026-09-24 14:09:10"/>
+    <zustand typ="wartung" beginn="2026-09-24 14:09:10" ende="2026-09-24 14:16:30"/>
+    <zustand typ="wartung" beginn="2026-09-24 14:16:30" ende="2026-09-24 16:30:00"/>
+    <zustand typ="pause" beginn="2026-09-24 16:30:00" ende="2026-09-24 16:45:00"/>
+    <zustand typ="wartung" beginn="2026-09-24 16:45:00" ende="2026-09-24 17:01:50"/>
+    <zustand typ="wartung" beginn="2026-09-24 17:01:50" ende="2026-09-24 17:02:30"/>
+    <zustand typ="wartung" beginn="2026-09-24 17:02:30" ende="2026-09-24 18:22:00"/>
+    <zustand typ="wartung" beginn="2026-09-24 18:22:00" ende="2026-09-24 19:16:50"/>
+    <zustand typ="wartung" beginn="2026-09-24 19:16:50" ende="2026-09-24 19:30:00"/>
+    <zustand typ="pause" beginn="2026-09-24 19:30:00" ende="2026-09-24 19:41:30"/>
+    <zustand typ="pause" beginn="2026-09-24 19:41:30" ende="2026-09-24 19:45:00"/>
+    <zustand typ="wartung" beginn="2026-09-24 19:45:00" ende="2026-09-24 19:47:50"/>
+    <zustand typ="wartung" beginn="2026-09-24 19:47:50" ende="2026-09-24 22:00:00"/>
+  </schicht>
+  <schicht name="nacht" beginn="2026-09-24 22:00:00" ende="2026-09-25 06:00:00" geplant="nein"/>
+</schichtprotokoll>

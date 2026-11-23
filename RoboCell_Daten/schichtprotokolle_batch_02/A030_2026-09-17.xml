@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A030" datum="2026-09-17">
+  <schicht name="frueh" beginn="2026-09-17 06:00:00" ende="2026-09-17 14:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-17 06:00:00" ende="2026-09-17 06:51:38" produkt="P-3118" gut="65" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-17 06:51:38" ende="2026-09-17 06:54:54"/>
+    <zustand typ="produktion" beginn="2026-09-17 06:54:54" ende="2026-09-17 08:30:00" produkt="P-3118" gut="119" ausschuss="1"/>
+    <zustand typ="pause" beginn="2026-09-17 08:30:00" ende="2026-09-17 08:44:10"/>
+    <zustand typ="pause" beginn="2026-09-17 08:44:10" ende="2026-09-17 08:45:00"/>
+    <zustand typ="stoerung" beginn="2026-09-17 08:45:00" ende="2026-09-17 08:47:42" code="M-102"/>
+    <zustand typ="produktion" beginn="2026-09-17 08:47:42" ende="2026-09-17 11:30:00" produkt="P-3118" gut="202" ausschuss="3"/>
+    <zustand typ="pause" beginn="2026-09-17 11:30:00" ende="2026-09-17 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-17 11:45:00" ende="2026-09-17 11:52:50" produkt="P-3118" gut="10" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-17 11:52:50" ende="2026-09-17 11:57:10"/>
+    <zustand typ="stoerung" beginn="2026-09-17 11:57:10" ende="2026-09-17 11:58:31" code="S-320"/>
+    <zustand typ="rueckstau" beginn="2026-09-17 11:58:31" ende="2026-09-17 12:01:28"/>
+    <zustand typ="produktion" beginn="2026-09-17 12:01:28" ende="2026-09-17 12:08:31" produkt="P-3118" gut="9" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-17 12:08:31" ende="2026-09-17 12:09:05"/>
+    <zustand typ="produktion" beginn="2026-09-17 12:09:05" ende="2026-09-17 12:25:36" produkt="P-3118" gut="19" ausschuss="2"/>
+    <zustand typ="rueckstau" beginn="2026-09-17 12:25:36" ende="2026-09-17 12:25:45"/>
+    <zustand typ="produktion" beginn="2026-09-17 12:25:45" ende="2026-09-17 14:00:00" produkt="P-3118" gut="114" ausschuss="6"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-17 14:00:00" ende="2026-09-17 22:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-17 14:00:00" ende="2026-09-17 14:13:04" produkt="P-3118" gut="16" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-17 14:13:04" ende="2026-09-17 14:13:54"/>
+    <zustand typ="produktion" beginn="2026-09-17 14:13:54" ende="2026-09-17 15:17:05" produkt="P-3118" gut="77" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-17 15:17:05" ende="2026-09-17 15:23:16"/>
+    <zustand typ="produktion" beginn="2026-09-17 15:23:16" ende="2026-09-17 15:54:24" produkt="P-3118" gut="40" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-17 15:54:24" ende="2026-09-17 15:58:05"/>
+    <zustand typ="produktion" beginn="2026-09-17 15:58:05" ende="2026-09-17 16:30:00" produkt="P-3118" gut="38" ausschuss="1"/>
+    <zustand typ="pause" beginn="2026-09-17 16:30:00" ende="2026-09-17 16:43:50"/>
+    <zustand typ="pause" beginn="2026-09-17 16:43:50" ende="2026-09-17 16:45:00"/>
+    <zustand typ="stoerung" beginn="2026-09-17 16:45:00" ende="2026-09-17 16:47:45" code="M-101"/>
+    <zustand typ="produktion" beginn="2026-09-17 16:47:45" ende="2026-09-17 19:30:00" produkt="P-3118" gut="198" ausschuss="6"/>
+    <zustand typ="pause" beginn="2026-09-17 19:30:00" ende="2026-09-17 19:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-17 19:45:00" ende="2026-09-17 19:48:46" produkt="P-3118" gut="4" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-17 19:48:46" ende="2026-09-17 19:50:07"/>
+    <zustand typ="produktion" beginn="2026-09-17 19:50:07" ende="2026-09-17 19:56:01" produkt="P-3118" gut="7" ausschuss="1"/>
+    <zustand typ="materialmangel" beginn="2026-09-17 19:56:01" ende="2026-09-17 19:56:56"/>
+    <zustand typ="produktion" beginn="2026-09-17 19:56:56" ende="2026-09-17 22:00:00" produkt="P-3118" gut="151" ausschuss="4"/>
+  </schicht>
+  <schicht name="nacht" beginn="2026-09-17 22:00:00" ende="2026-09-18 06:00:00" geplant="nein"/>
+</schichtprotokoll>

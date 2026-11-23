@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A025" datum="2026-09-22">
+  <schicht name="frueh" beginn="2026-09-22 06:00:00" ende="2026-09-22 14:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-22 06:00:00" ende="2026-09-22 07:17:51" produkt="P-2104" gut="80" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-22 07:17:51" ende="2026-09-22 07:19:05" code="S-320"/>
+    <zustand typ="produktion" beginn="2026-09-22 07:19:05" ende="2026-09-22 07:57:27" produkt="P-2104" gut="40" ausschuss="1"/>
+    <zustand typ="stoerung" beginn="2026-09-22 07:57:27" ende="2026-09-22 08:11:27" code="S-320"/>
+    <zustand typ="produktion" beginn="2026-09-22 08:11:27" ende="2026-09-22 08:30:00" produkt="P-2104" gut="20" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-22 08:30:00" ende="2026-09-22 08:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-22 08:45:00" ende="2026-09-22 09:28:07" produkt="P-2104" gut="44" ausschuss="1"/>
+    <zustand typ="rueckstau" beginn="2026-09-22 09:28:07" ende="2026-09-22 09:29:12"/>
+    <zustand typ="produktion" beginn="2026-09-22 09:29:12" ende="2026-09-22 10:08:49" produkt="P-2104" gut="41" ausschuss="0"/>
+    <zustand typ="ruesten" beginn="2026-09-22 10:08:49" ende="2026-09-22 10:27:16" produkt="P-2129"/>
+    <zustand typ="produktion" beginn="2026-09-22 10:27:16" ende="2026-09-22 10:42:31" produkt="P-2129" gut="14" ausschuss="2"/>
+    <zustand typ="stoerung" beginn="2026-09-22 10:42:31" ende="2026-09-22 10:46:52" code="P-420"/>
+    <zustand typ="produktion" beginn="2026-09-22 10:46:52" ende="2026-09-22 11:30:00" produkt="P-2129" gut="43" ausschuss="2"/>
+    <zustand typ="pause" beginn="2026-09-22 11:30:00" ende="2026-09-22 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-22 11:45:00" ende="2026-09-22 11:57:03" produkt="P-2129" gut="13" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-22 11:57:03" ende="2026-09-22 12:01:00"/>
+    <zustand typ="produktion" beginn="2026-09-22 12:01:00" ende="2026-09-22 13:48:47" produkt="P-2129" gut="114" ausschuss="3"/>
+    <zustand typ="materialmangel" beginn="2026-09-22 13:48:47" ende="2026-09-22 13:54:02"/>
+    <zustand typ="produktion" beginn="2026-09-22 13:54:02" ende="2026-09-22 14:00:00" produkt="P-2129" gut="6" ausschuss="0"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-22 14:00:00" ende="2026-09-22 22:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-22 14:00:00" ende="2026-09-22 14:29:04" produkt="P-2129" gut="30" ausschuss="1"/>
+    <zustand typ="materialmangel" beginn="2026-09-22 14:29:04" ende="2026-09-22 14:30:20"/>
+    <zustand typ="produktion" beginn="2026-09-22 14:30:20" ende="2026-09-22 16:30:00" produkt="P-2129" gut="124" ausschuss="2"/>
+    <zustand typ="pause" beginn="2026-09-22 16:30:00" ende="2026-09-22 16:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-22 16:45:00" ende="2026-09-22 17:45:09" produkt="P-2129" gut="62" ausschuss="1"/>
+    <zustand typ="materialmangel" beginn="2026-09-22 17:45:09" ende="2026-09-22 17:50:28"/>
+    <zustand typ="produktion" beginn="2026-09-22 17:50:28" ende="2026-09-22 18:16:47" produkt="P-2129" gut="27" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-22 18:16:47" ende="2026-09-22 18:17:13"/>
+    <zustand typ="produktion" beginn="2026-09-22 18:17:13" ende="2026-09-22 19:30:00" produkt="P-2129" gut="79" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-22 19:30:00" ende="2026-09-22 19:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-22 19:45:00" ende="2026-09-22 22:00:00" produkt="P-2129" gut="141" ausschuss="4"/>
+  </schicht>
+  <schicht name="nacht" beginn="2026-09-22 22:00:00" ende="2026-09-23 06:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-22 22:00:00" ende="2026-09-23 00:27:47" produkt="P-2129" gut="149" ausschuss="4"/>
+    <zustand typ="stoerung" beginn="2026-09-23 00:27:47" ende="2026-09-23 00:30:00" code="S-320"/>
+    <zustand typ="pause" beginn="2026-09-23 00:30:00" ende="2026-09-23 00:40:30"/>
+    <zustand typ="pause" beginn="2026-09-23 00:40:30" ende="2026-09-23 00:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-23 00:45:00" ende="2026-09-23 00:47:12" produkt="P-2129" gut="2" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-23 00:47:12" ende="2026-09-23 00:49:14"/>
+    <zustand typ="produktion" beginn="2026-09-23 00:49:14" ende="2026-09-23 01:10:14" produkt="P-2129" gut="22" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-23 01:10:14" ende="2026-09-23 01:15:23"/>
+    <zustand typ="produktion" beginn="2026-09-23 01:15:23" ende="2026-09-23 03:11:35" produkt="P-2129" gut="122" ausschuss="2"/>
+    <zustand typ="stoerung" beginn="2026-09-23 03:11:35" ende="2026-09-23 03:14:14" code="M-102"/>
+    <zustand typ="produktion" beginn="2026-09-23 03:14:14" ende="2026-09-23 03:30:00" produkt="P-2129" gut="17" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-23 03:30:00" ende="2026-09-23 03:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-23 03:45:00" ende="2026-09-23 04:11:57" produkt="P-2129" gut="29" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-23 04:11:57" ende="2026-09-23 04:18:50"/>
+    <zustand typ="produktion" beginn="2026-09-23 04:18:50" ende="2026-09-23 04:28:47" produkt="P-2129" gut="10" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-23 04:28:47" ende="2026-09-23 04:33:20"/>
+    <zustand typ="produktion" beginn="2026-09-23 04:33:20" ende="2026-09-23 06:00:00" produkt="P-2129" gut="93" ausschuss="2"/>
+  </schicht>
+</schichtprotokoll>

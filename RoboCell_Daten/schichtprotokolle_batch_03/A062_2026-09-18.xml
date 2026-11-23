@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A062" datum="2026-09-18">
+  <schicht name="frueh" beginn="2026-09-18 06:00:00" ende="2026-09-18 14:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-18 06:00:00" ende="2026-09-18 07:21:38" produkt="P-5107" gut="77" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-18 07:21:38" ende="2026-09-18 07:45:33"/>
+    <zustand typ="produktion" beginn="2026-09-18 07:45:33" ende="2026-09-18 08:30:00" produkt="P-5107" gut="41" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-18 08:30:00" ende="2026-09-18 08:45:00"/>
+    <zustand typ="rueckstau" beginn="2026-09-18 08:45:00" ende="2026-09-18 09:02:48"/>
+    <zustand typ="produktion" beginn="2026-09-18 09:02:48" ende="2026-09-18 09:10:58" produkt="P-5107" gut="8" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-18 09:10:58" ende="2026-09-18 09:11:21"/>
+    <zustand typ="produktion" beginn="2026-09-18 09:11:21" ende="2026-09-18 11:30:00" produkt="P-5107" gut="133" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-18 11:30:00" ende="2026-09-18 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-18 11:45:00" ende="2026-09-18 11:57:35" produkt="P-5107" gut="11" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-18 11:57:35" ende="2026-09-18 11:58:13"/>
+    <zustand typ="produktion" beginn="2026-09-18 11:58:13" ende="2026-09-18 12:08:49" produkt="P-5107" gut="11" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-18 12:08:49" ende="2026-09-18 12:08:53"/>
+    <zustand typ="produktion" beginn="2026-09-18 12:08:53" ende="2026-09-18 12:53:53" produkt="P-5107" gut="42" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-18 12:53:53" ende="2026-09-18 13:00:49"/>
+    <zustand typ="produktion" beginn="2026-09-18 13:00:49" ende="2026-09-18 13:53:24" produkt="P-5107" gut="49" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-18 13:53:24" ende="2026-09-18 13:57:35"/>
+    <zustand typ="produktion" beginn="2026-09-18 13:57:35" ende="2026-09-18 14:00:00" produkt="P-5107" gut="2" ausschuss="0"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-18 14:00:00" ende="2026-09-18 22:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-18 14:00:00" ende="2026-09-18 14:11:32" produkt="P-5107" gut="11" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-18 14:11:32" ende="2026-09-18 14:12:13"/>
+    <zustand typ="produktion" beginn="2026-09-18 14:12:13" ende="2026-09-18 15:26:50" produkt="P-5107" gut="70" ausschuss="1"/>
+    <zustand typ="rueckstau" beginn="2026-09-18 15:26:50" ende="2026-09-18 15:43:11"/>
+    <zustand typ="produktion" beginn="2026-09-18 15:43:11" ende="2026-09-18 16:14:53" produkt="P-5107" gut="30" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-18 16:14:53" ende="2026-09-18 16:17:43"/>
+    <zustand typ="produktion" beginn="2026-09-18 16:17:43" ende="2026-09-18 16:30:00" produkt="P-5107" gut="11" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-18 16:30:00" ende="2026-09-18 16:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-18 16:45:00" ende="2026-09-18 17:10:21" produkt="P-5107" gut="24" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-18 17:10:21" ende="2026-09-18 17:10:48"/>
+    <zustand typ="produktion" beginn="2026-09-18 17:10:48" ende="2026-09-18 17:45:53" produkt="P-5107" gut="34" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-18 17:45:53" ende="2026-09-18 17:57:00"/>
+    <zustand typ="produktion" beginn="2026-09-18 17:57:00" ende="2026-09-18 19:28:34" produkt="P-5107" gut="86" ausschuss="2"/>
+    <zustand typ="materialmangel" beginn="2026-09-18 19:28:34" ende="2026-09-18 19:30:00"/>
+    <zustand typ="pause" beginn="2026-09-18 19:30:00" ende="2026-09-18 19:45:00"/>
+    <zustand typ="materialmangel" beginn="2026-09-18 19:45:00" ende="2026-09-18 19:59:24"/>
+    <zustand typ="produktion" beginn="2026-09-18 19:59:24" ende="2026-09-18 20:03:27" produkt="P-5107" gut="4" ausschuss="0"/>
+    <zustand typ="materialmangel" beginn="2026-09-18 20:03:27" ende="2026-09-18 20:07:03"/>
+    <zustand typ="produktion" beginn="2026-09-18 20:07:03" ende="2026-09-18 22:00:00" produkt="P-5107" gut="106" ausschuss="1"/>
+  </schicht>
+  <schicht name="nacht" beginn="2026-09-18 22:00:00" ende="2026-09-19 06:00:00" geplant="nein"/>
+</schichtprotokoll>

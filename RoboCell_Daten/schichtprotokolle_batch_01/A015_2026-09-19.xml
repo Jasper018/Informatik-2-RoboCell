@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A015" datum="2026-09-19">
+  <schicht name="frueh" beginn="2026-09-19 06:00:00" ende="2026-09-19 14:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-19 06:00:00" ende="2026-09-19 07:50:51" produkt="P-2104" gut="123" ausschuss="1"/>
+    <zustand typ="rueckstau" beginn="2026-09-19 07:50:51" ende="2026-09-19 08:00:07"/>
+    <zustand typ="produktion" beginn="2026-09-19 08:00:07" ende="2026-09-19 08:30:00" produkt="P-2104" gut="29" ausschuss="2"/>
+    <zustand typ="pause" beginn="2026-09-19 08:30:00" ende="2026-09-19 08:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-19 08:45:00" ende="2026-09-19 09:35:11" produkt="P-2104" gut="55" ausschuss="1"/>
+    <zustand typ="rueckstau" beginn="2026-09-19 09:35:11" ende="2026-09-19 09:40:53"/>
+    <zustand typ="produktion" beginn="2026-09-19 09:40:53" ende="2026-09-19 10:26:25" produkt="P-2104" gut="48" ausschuss="0"/>
+    <zustand typ="rueckstau" beginn="2026-09-19 10:26:25" ende="2026-09-19 10:27:37"/>
+    <zustand typ="produktion" beginn="2026-09-19 10:27:37" ende="2026-09-19 11:30:00" produkt="P-2104" gut="67" ausschuss="2"/>
+    <zustand typ="pause" beginn="2026-09-19 11:30:00" ende="2026-09-19 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-19 11:45:00" ende="2026-09-19 14:00:00" produkt="P-2104" gut="143" ausschuss="1"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-19 14:00:00" ende="2026-09-19 22:00:00" geplant="nein"/>
+  <schicht name="nacht" beginn="2026-09-19 22:00:00" ende="2026-09-20 06:00:00" geplant="nein"/>
+</schichtprotokoll>

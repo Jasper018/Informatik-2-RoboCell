@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schichtprotokoll version="1.0" anlage_id="A072" datum="2026-09-26">
+  <schicht name="frueh" beginn="2026-09-26 06:00:00" ende="2026-09-26 14:00:00" geplant="ja">
+    <zustand typ="produktion" beginn="2026-09-26 06:00:00" ende="2026-09-26 06:29:06" produkt="P-6125" gut="22" ausschuss="0"/>
+    <zustand typ="stoerung" beginn="2026-09-26 06:29:06" ende="2026-09-26 06:37:07" code="M-120"/>
+    <zustand typ="produktion" beginn="2026-09-26 06:37:07" ende="2026-09-26 08:30:00" produkt="P-6125" gut="89" ausschuss="1"/>
+    <zustand typ="pause" beginn="2026-09-26 08:30:00" ende="2026-09-26 08:30:40"/>
+    <zustand typ="pause" beginn="2026-09-26 08:30:40" ende="2026-09-26 08:32:10"/>
+    <zustand typ="pause" beginn="2026-09-26 08:32:10" ende="2026-09-26 08:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-26 08:45:00" ende="2026-09-26 10:25:16" produkt="P-6125" gut="76" ausschuss="1"/>
+    <zustand typ="stoerung" beginn="2026-09-26 10:25:16" ende="2026-09-26 11:04:45" code="M-120"/>
+    <zustand typ="produktion" beginn="2026-09-26 11:04:45" ende="2026-09-26 11:30:00" produkt="P-6125" gut="19" ausschuss="0"/>
+    <zustand typ="pause" beginn="2026-09-26 11:30:00" ende="2026-09-26 11:45:00"/>
+    <zustand typ="produktion" beginn="2026-09-26 11:45:00" ende="2026-09-26 13:16:59" produkt="P-6125" gut="70" ausschuss="1"/>
+    <zustand typ="materialmangel" beginn="2026-09-26 13:16:59" ende="2026-09-26 13:35:57"/>
+    <zustand typ="produktion" beginn="2026-09-26 13:35:57" ende="2026-09-26 13:41:32" produkt="P-6125" gut="4" ausschuss="1"/>
+    <zustand typ="stoerung" beginn="2026-09-26 13:41:32" ende="2026-09-26 13:54:12" code="Q-601"/>
+    <zustand typ="produktion" beginn="2026-09-26 13:54:12" ende="2026-09-26 14:00:00" produkt="P-6125" gut="4" ausschuss="0"/>
+  </schicht>
+  <schicht name="spaet" beginn="2026-09-26 14:00:00" ende="2026-09-26 22:00:00" geplant="nein"/>
+  <schicht name="nacht" beginn="2026-09-26 22:00:00" ende="2026-09-27 06:00:00" geplant="nein"/>
+</schichtprotokoll>

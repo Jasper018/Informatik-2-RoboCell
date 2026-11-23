@@ -1,0 +1,3 @@
+C:\QT\Tools\CMake_64\bin\cmake.exe -E rm -f CMakeFiles\RoboCell.dir/objects.a
+C:\QT\Tools\mingw1310_64\bin\ar.exe qc CMakeFiles\RoboCell.dir/objects.a @CMakeFiles\RoboCell.dir\objects1.rsp
+C:\QT\Tools\mingw1310_64\bin\g++.exe -g -mwindows -Wl,--whole-archive CMakeFiles\RoboCell.dir/objects.a -Wl,--no-whole-archive -o RoboCell.exe -Wl,--out-implib,libRoboCell.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\RoboCell.dir\linkLibs.rsp
