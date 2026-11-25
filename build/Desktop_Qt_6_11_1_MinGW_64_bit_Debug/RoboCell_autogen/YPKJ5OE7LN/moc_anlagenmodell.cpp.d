@@ -5,6 +5,7 @@ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_
   C:/QT/6.11.1/mingw_64/include/QtCore/QDate \
   C:/QT/6.11.1/mingw_64/include/QtCore/QDateTime \
   C:/QT/6.11.1/mingw_64/include/QtCore/QList \
+  C:/QT/6.11.1/mingw_64/include/QtCore/QMap \
   C:/QT/6.11.1/mingw_64/include/QtCore/QSortFilterProxyModel \
   C:/QT/6.11.1/mingw_64/include/QtCore/QString \
   C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
@@ -354,5 +355,6 @@ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_
   C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h \
   C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
   C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
+  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/logic/oeeberechnung.h \
   C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
   C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/problem.h

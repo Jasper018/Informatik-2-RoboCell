@@ -131,18 +131,25 @@ MainWindow::MainWindow(Datenverwaltung* daten, Benutzerverwaltung* benutzer, QWi
     m_filterModell = new AnlagenFilterModell(this);
     m_filterModell->setSourceModel(m_anlagenModell);
 
+    auto tabelleVorbereiten = [](QTableView* view) {
+        view->setAlternatingRowColors(true);
+        view->setWordWrap(false);
+        view->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+        view->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+        view->horizontalHeader()->setStretchLastSection(true);
+        view->verticalHeader()->setVisible(false);
+        view->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+        view->verticalHeader()->setDefaultSectionSize(28);
+    };
+
     m_anlagenView = new QTableView(tabAnlagen);
     m_anlagenView->setModel(m_filterModell);
     m_anlagenView->setSortingEnabled(true);
     m_anlagenView->sortByColumn(AnlagenModell::SpAnlageId, Qt::AscendingOrder);
     m_anlagenView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_anlagenView->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_anlagenView->setAlternatingRowColors(true);
-    m_anlagenView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_anlagenView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     m_anlagenView->setContextMenuPolicy(Qt::CustomContextMenu);
-    m_anlagenView->horizontalHeader()->setStretchLastSection(true);
-    m_anlagenView->verticalHeader()->setVisible(false);
+    tabelleVorbereiten(m_anlagenView);
     anlagenLayout->addWidget(m_anlagenView, 1);
 
     QHBoxLayout* fussLeiste = new QHBoxLayout();
@@ -184,20 +191,12 @@ MainWindow::MainWindow(Datenverwaltung* daten, Benutzerverwaltung* benutzer, QWi
     m_stoercodeTabelle = new QTableWidget(paretoTeiler);
     m_stoercodeTabelle->setColumnCount(3);
     m_stoercodeTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_stoercodeTabelle->setAlternatingRowColors(true);
-    m_stoercodeTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_stoercodeTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_stoercodeTabelle->horizontalHeader()->setStretchLastSection(true);
-    m_stoercodeTabelle->verticalHeader()->setVisible(false);
+    tabelleVorbereiten(m_stoercodeTabelle);
 
     m_paretoTabelle = new QTableWidget(paretoTeiler);
     m_paretoTabelle->setColumnCount(6);
     m_paretoTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_paretoTabelle->setAlternatingRowColors(true);
-    m_paretoTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_paretoTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_paretoTabelle->horizontalHeader()->setStretchLastSection(true);
-    m_paretoTabelle->verticalHeader()->setVisible(false);
+    tabelleVorbereiten(m_paretoTabelle);
 
     paretoTeiler->addWidget(m_stoercodeTabelle);
     paretoTeiler->addWidget(m_paretoTabelle);
@@ -225,11 +224,7 @@ MainWindow::MainWindow(Datenverwaltung* daten, Benutzerverwaltung* benutzer, QWi
     m_linienTabelle = new QTableWidget(linienBox);
     m_linienTabelle->setColumnCount(6);
     m_linienTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_linienTabelle->setAlternatingRowColors(true);
-    m_linienTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_linienTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_linienTabelle->horizontalHeader()->setStretchLastSection(true);
-    m_linienTabelle->verticalHeader()->setVisible(false);
+    tabelleVorbereiten(m_linienTabelle);
     linienBoxLayout->addWidget(m_linienUeberschrift);
     linienBoxLayout->addWidget(m_linienTabelle, 1);
 
@@ -240,11 +235,7 @@ MainWindow::MainWindow(Datenverwaltung* daten, Benutzerverwaltung* benutzer, QWi
     m_produkteTabelle = new QTableWidget(prodBox);
     m_produkteTabelle->setColumnCount(4);
     m_produkteTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_produkteTabelle->setAlternatingRowColors(true);
-    m_produkteTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_produkteTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_produkteTabelle->horizontalHeader()->setStretchLastSection(true);
-    m_produkteTabelle->verticalHeader()->setVisible(false);
+    tabelleVorbereiten(m_produkteTabelle);
     prodBoxLayout->addWidget(m_produkteUeberschrift);
     prodBoxLayout->addWidget(m_produkteTabelle, 1);
 
@@ -266,11 +257,7 @@ MainWindow::MainWindow(Datenverwaltung* daten, Benutzerverwaltung* benutzer, QWi
     m_wartungenTabelle = new QTableWidget(wartBox);
     m_wartungenTabelle->setColumnCount(7);
     m_wartungenTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_wartungenTabelle->setAlternatingRowColors(true);
-    m_wartungenTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_wartungenTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_wartungenTabelle->horizontalHeader()->setStretchLastSection(true);
-    m_wartungenTabelle->verticalHeader()->setVisible(false);
+    tabelleVorbereiten(m_wartungenTabelle);
     wartBoxLayout->addWidget(m_wartungenTabelle, 1);
     stammTeiler->addWidget(wartBox);
 
@@ -284,7 +271,7 @@ MainWindow::MainWindow(Datenverwaltung* daten, Benutzerverwaltung* benutzer, QWi
     QVBoxLayout* flagsLayout = new QVBoxLayout(tabFlags);
     m_flagZusammenfassung = new QLabel(tabFlags);
     m_flagZusammenfassung->setWordWrap(true);
-    m_flagZusammenfassung->setProperty("meldung", "info");
+    m_flagZusammenfassung->setProperty("hinweis", true);
     flagsLayout->addWidget(m_flagZusammenfassung);
 
     QHBoxLayout* flagFilterZeile = new QHBoxLayout();
@@ -309,11 +296,7 @@ MainWindow::MainWindow(Datenverwaltung* daten, Benutzerverwaltung* benutzer, QWi
     m_flagTabelle->setColumnCount(5);
     m_flagTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_flagTabelle->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_flagTabelle->setAlternatingRowColors(true);
-    m_flagTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_flagTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_flagTabelle->horizontalHeader()->setStretchLastSection(true);
-    m_flagTabelle->verticalHeader()->setVisible(false);
+    tabelleVorbereiten(m_flagTabelle);
     flagsLayout->addWidget(m_flagTabelle, 1);
     m_tabs->addTab(tabFlags, QString());
 
@@ -360,6 +343,9 @@ MainWindow::MainWindow(Datenverwaltung* daten, Benutzerverwaltung* benutzer, QWi
     connect(m_flagTabelle, &QTableWidget::cellDoubleClicked, this, &MainWindow::slotFlagDoppelklick);
 
     connect(m_daten, &Datenverwaltung::datensatzGeladen, this, &MainWindow::slotDatenGeaendert);
+    connect(m_daten, &Datenverwaltung::pruefFortschritt, this, [this](int aktuell, int gesamt) {
+        m_statusFlags->setText(tr("Protokollprüfung: %1 / %2").arg(aktuell).arg(gesamt));
+    });
     connect(m_daten, &Datenverwaltung::anlageGeaendert, this, &MainWindow::slotDatenGeaendert);
     connect(m_daten, &Datenverwaltung::wartungHinzugefuegt, this, &MainWindow::slotDatenGeaendert);
     connect(m_benutzer, &Benutzerverwaltung::benutzerGeaendert, this, &MainWindow::slotRollenAktualisieren);
@@ -367,7 +353,7 @@ MainWindow::MainWindow(Datenverwaltung* daten, Benutzerverwaltung* benutzer, QWi
     texteAktualisieren();
     allesFuellen();
     slotRollenAktualisieren();
-    m_anlagenView->resizeColumnsToContents();
+    slotSpaltenAnpassen();
 
     Fensterhilfe::geometrieSicherWiederherstellen(this, Einstellungen::fensterGeometrie(), 1240, 800);
 }
@@ -719,19 +705,34 @@ void MainWindow::statusLeisteAktualisieren()
     m_statusOrdner->setText(tr("Daten: %1").arg(m_daten->ordner()));
     m_statusBenutzer->setText(tr("Angemeldet: %1 (%2)")
                                   .arg(m_benutzer->aktuellerName(), m_benutzer->rollenName()));
-    m_statusFlags->setText(tr("Flags: %1 Fehler, %2 Warnungen")
-                               .arg(m_daten->anzahlProbleme(Schweregrad::Fehler))
-                               .arg(m_daten->anzahlProbleme(Schweregrad::Warnung)));
+    m_statusFlags->setText(m_daten->pruefungLaeuft()
+                               ? tr("Protokollprüfung läuft...")
+                               : tr("Flags: %1 Fehler, %2 Warnungen")
+                                     .arg(m_daten->anzahlProbleme(Schweregrad::Fehler))
+                                     .arg(m_daten->anzahlProbleme(Schweregrad::Warnung)));
     m_statusCache->setText(tr("Cache: %1/%2 (Treffer %3)")
                                .arg(m_daten->cacheGroesse())
                                .arg(Einstellungen::cacheGroesse())
                                .arg(m_daten->cacheTreffer()));
 }
 
+static void tabelleSpaltenSicherAnpassen(QTableView* view)
+{
+    if (!view || !view->model()) return;
+    view->resizeColumnsToContents();
+    const int spalten = view->model()->columnCount();
+    for (int c = 0; c < spalten; c++) {
+        const int kopfBreite = view->horizontalHeader()->sectionSizeHint(c);
+        const int breit = std::max(view->columnWidth(c), kopfBreite);
+        view->setColumnWidth(c, std::clamp(breit + 16, 60, 420));
+    }
+}
+
 void MainWindow::stammdatenTabsFuellen()
 {
     // Linien
     const QList<Linie>& linien = m_daten->linien();
+    m_linienTabelle->setUpdatesEnabled(false);
     m_linienTabelle->setRowCount(linien.size());
     for (int i = 0; i < linien.size(); i++) {
         const Linie& l = linien[i];
@@ -755,10 +756,12 @@ void MainWindow::stammdatenTabsFuellen()
         m_linienTabelle->setItem(i, 5, new QTableWidgetItem(
             oeeAnzahl > 0 ? QString("%1 %").arg(summeOee / oeeAnzahl * 100.0, 0, 'f', 1) : "-"));
     }
-    m_linienTabelle->resizeColumnsToContents();
+    m_linienTabelle->setUpdatesEnabled(true);
+    tabelleSpaltenSicherAnpassen(m_linienTabelle);
 
     // Produkte
     const QList<Produkt>& produkte = m_daten->produkte();
+    m_produkteTabelle->setUpdatesEnabled(false);
     m_produkteTabelle->setRowCount(produkte.size());
     for (int i = 0; i < produkte.size(); i++) {
         const Produkt& p = produkte[i];
@@ -769,15 +772,17 @@ void MainWindow::stammdatenTabsFuellen()
         QTableWidgetItem* flagItem = new QTableWidgetItem(
             p.probleme.isEmpty() ? tr("OK") : p.probleme.first().text());
         if (!p.probleme.isEmpty()) {
-            flagItem->setBackground(Farben::FEHLER_HINTERGRUND);
-            flagItem->setForeground(Farben::FEHLER_TEXT);
+            flagItem->setBackground(Farben::fehlerHintergrund());
+            flagItem->setForeground(Farben::fehlerText());
         }
         m_produkteTabelle->setItem(i, 3, flagItem);
     }
-    m_produkteTabelle->resizeColumnsToContents();
+    m_produkteTabelle->setUpdatesEnabled(true);
+    tabelleSpaltenSicherAnpassen(m_produkteTabelle);
 
     // Wartungen
     const QList<Wartung>& wartungen = m_daten->wartungen();
+    m_wartungenTabelle->setUpdatesEnabled(false);
     m_wartungenTabelle->setRowCount(wartungen.size());
     for (int i = 0; i < wartungen.size(); i++) {
         const Wartung& w = wartungen[i];
@@ -795,27 +800,31 @@ void MainWindow::stammdatenTabsFuellen()
         }
         QTableWidgetItem* bemItem = new QTableWidgetItem(text);
         if (!w.probleme.isEmpty()) {
-            bemItem->setBackground(Farben::FEHLER_HINTERGRUND);
-            bemItem->setForeground(Farben::FEHLER_TEXT);
+            bemItem->setBackground(Farben::fehlerHintergrund());
+            bemItem->setForeground(Farben::fehlerText());
         }
         m_wartungenTabelle->setItem(i, 6, bemItem);
     }
-    m_wartungenTabelle->resizeColumnsToContents();
+    m_wartungenTabelle->setUpdatesEnabled(true);
+    tabelleSpaltenSicherAnpassen(m_wartungenTabelle);
 }
 
 void MainWindow::slotParetoAktualisieren()
 {
     const QList<Stoercode>& codes = m_daten->stoercodes();
+    m_stoercodeTabelle->setUpdatesEnabled(false);
     m_stoercodeTabelle->setRowCount(codes.size());
     for (int i = 0; i < codes.size(); i++) {
         m_stoercodeTabelle->setItem(i, 0, new QTableWidgetItem(codes[i].code));
         m_stoercodeTabelle->setItem(i, 1, new QTableWidgetItem(codes[i].kategorie));
         m_stoercodeTabelle->setItem(i, 2, new QTableWidgetItem(codes[i].beschreibung));
     }
-    m_stoercodeTabelle->resizeColumnsToContents();
+    m_stoercodeTabelle->setUpdatesEnabled(true);
+    tabelleSpaltenSicherAnpassen(m_stoercodeTabelle);
 
     const QString linieId = m_paretoLinieCombo->currentData().toString();
     const QList<ParetoEintrag> liste = m_daten->pareto(linieId);
+    m_paretoTabelle->setUpdatesEnabled(false);
     m_paretoTabelle->setRowCount(liste.size());
     for (int i = 0; i < liste.size(); i++) {
         const ParetoEintrag& e = liste[i];
@@ -831,7 +840,8 @@ void MainWindow::slotParetoAktualisieren()
                 .arg(e.minuten, 0, 'f', 1)
                 .arg(e.kumuliertProzent, 0, 'f', 1)));
     }
-    m_paretoTabelle->resizeColumnsToContents();
+    m_paretoTabelle->setUpdatesEnabled(true);
+    tabelleSpaltenSicherAnpassen(m_paretoTabelle);
 }
 
 void MainWindow::flagTabelleFuellen()
@@ -854,8 +864,10 @@ void MainWindow::slotFlagFilterGeaendert()
     const QString dateiFilter = m_flagDateiCombo->currentData().toString();
     const QString suchFilter = m_flagSucheEdit->text().trimmed();
 
-    m_flagTabelle->setRowCount(0);
-    for (const Problem& p : m_daten->alleProbleme()) {
+    QList<Problem> treffer;
+    const QList<Problem>& alle = m_daten->alleProbleme();
+    treffer.reserve(alle.size());
+    for (const Problem& p : alle) {
         if (gradFilter >= 0 && int(p.grad) != gradFilter) continue;
         if (!dateiFilter.isEmpty() && p.datei != dateiFilter) continue;
         const QString beschreibung = p.text();
@@ -865,25 +877,29 @@ void MainWindow::slotFlagFilterGeaendert()
             && !beschreibung.contains(suchFilter, Qt::CaseInsensitive)) {
             continue;
         }
+        treffer.append(p);
+    }
 
-        const int r = m_flagTabelle->rowCount();
-        m_flagTabelle->insertRow(r);
-
+    m_flagTabelle->setUpdatesEnabled(false);
+    m_flagTabelle->setRowCount(treffer.size());
+    for (int r = 0; r < treffer.size(); r++) {
+        const Problem& p = treffer[r];
         QTableWidgetItem* gradItem = new QTableWidgetItem(p.gradText());
         if (p.grad == Schweregrad::Fehler) {
-            gradItem->setBackground(Farben::FEHLER_HINTERGRUND);
-            gradItem->setForeground(Farben::FEHLER_TEXT);
+            gradItem->setBackground(Farben::fehlerHintergrund());
+            gradItem->setForeground(Farben::fehlerText());
         } else if (p.grad == Schweregrad::Warnung) {
-            gradItem->setBackground(Farben::WARN_HINTERGRUND);
-            gradItem->setForeground(Farben::WARN_TEXT);
+            gradItem->setBackground(Farben::warnHintergrund());
+            gradItem->setForeground(Farben::warnText());
         }
         m_flagTabelle->setItem(r, 0, gradItem);
         m_flagTabelle->setItem(r, 1, new QTableWidgetItem(p.datei));
         m_flagTabelle->setItem(r, 2, new QTableWidgetItem(p.zeile > 0 ? QString::number(p.zeile) : "-"));
         m_flagTabelle->setItem(r, 3, new QTableWidgetItem(p.objektId));
-        m_flagTabelle->setItem(r, 4, new QTableWidgetItem(beschreibung));
+        m_flagTabelle->setItem(r, 4, new QTableWidgetItem(p.text()));
     }
-    m_flagTabelle->resizeColumnsToContents();
+    m_flagTabelle->setUpdatesEnabled(true);
+    tabelleSpaltenSicherAnpassen(m_flagTabelle);
 }
 
 void MainWindow::slotFlagDoppelklick(int zeile, int)
@@ -1033,7 +1049,29 @@ void MainWindow::slotFilterZuruecksetzen()
 
 void MainWindow::slotSpaltenAnpassen()
 {
-    m_anlagenView->resizeColumnsToContents();
+    switch (m_tabs->currentIndex()) {
+    case 0:
+        tabelleSpaltenSicherAnpassen(m_anlagenView);
+        break;
+    case 1:
+        m_linienAnsicht->spaltenAnpassen();
+        break;
+    case 2:
+        tabelleSpaltenSicherAnpassen(m_stoercodeTabelle);
+        tabelleSpaltenSicherAnpassen(m_paretoTabelle);
+        break;
+    case 3:
+        tabelleSpaltenSicherAnpassen(m_linienTabelle);
+        tabelleSpaltenSicherAnpassen(m_produkteTabelle);
+        tabelleSpaltenSicherAnpassen(m_wartungenTabelle);
+        break;
+    case 4:
+        tabelleSpaltenSicherAnpassen(m_flagTabelle);
+        break;
+    default:
+        tabelleSpaltenSicherAnpassen(m_anlagenView);
+        break;
+    }
 }
 
 void MainWindow::slotFlagsTabZeigen()
@@ -1048,12 +1086,12 @@ void MainWindow::slotOrdnerOeffnen()
     if (ordner.isEmpty()) return;
 
     Einstellungen::setDatenordner(ordner);
-    m_daten->datensatzLaden(ordner);
+    m_daten->datensatzLadenHintergrund(ordner);
 }
 
 void MainWindow::slotNeuLaden()
 {
-    m_daten->datensatzLaden(m_daten->ordner());
+    m_daten->datensatzLadenHintergrund(m_daten->ordner());
 }
 
 void MainWindow::slotSqliteLaden()
@@ -1108,11 +1146,19 @@ void MainWindow::slotCsvExportieren()
 void MainWindow::slotEinstellungenOeffnen()
 {
     const QString alterOrdner = Einstellungen::datenordner();
+    const bool warDunkel = Farben::dunkelmodus();
     EinstellungenDialog dlg(m_daten, this);
     if (dlg.exec() == QDialog::Accepted) {
+        if (Farben::dunkelmodus() != warDunkel) {
+            m_anlagenModell->farbenAktualisieren();
+            m_linienAnsicht->themaAktualisieren();
+            stammdatenTabsFuellen();
+            slotFlagFilterGeaendert();
+            flagLeisteAktualisieren();
+        }
         const QString neuerOrdner = Einstellungen::datenordner();
         if (!neuerOrdner.isEmpty() && neuerOrdner != alterOrdner && neuerOrdner != m_daten->ordner()) {
-            m_daten->datensatzLaden(neuerOrdner);
+            m_daten->datensatzLadenHintergrund(neuerOrdner);
         }
         statusLeisteAktualisieren();
     }
@@ -1178,7 +1224,7 @@ void MainWindow::slotUeberProgramm()
 void MainWindow::slotDatenGeaendert()
 {
     allesFuellen();
-    m_anlagenView->resizeColumnsToContents();
+    tabelleSpaltenSicherAnpassen(m_anlagenView);
 }
 
 void MainWindow::slotRollenAktualisieren()

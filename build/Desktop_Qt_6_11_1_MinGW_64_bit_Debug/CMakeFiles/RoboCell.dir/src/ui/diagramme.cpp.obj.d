@@ -408,6 +408,7 @@ CMakeFiles/RoboCell.dir/src/ui/diagramme.cpp.obj: \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/problem.h \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/farben.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/QColor \
+ C:/QT/6.11.1/mingw_64/include/QtGui/QPalette \
  C:/QT/6.11.1/mingw_64/include/QtGui/QMouseEvent \
  C:/QT/6.11.1/mingw_64/include/QtGui/qevent.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qiodevice.h \

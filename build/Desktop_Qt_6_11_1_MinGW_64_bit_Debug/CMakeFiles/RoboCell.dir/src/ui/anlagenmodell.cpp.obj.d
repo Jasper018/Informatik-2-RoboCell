@@ -344,20 +344,12 @@ CMakeFiles/RoboCell.dir/src/ui/anlagenmodell.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qalloc.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/q23utility.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/q20utility.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QList \
  C:/QT/6.11.1/mingw_64/include/QtCore/QSortFilterProxyModel \
  C:/QT/6.11.1/mingw_64/include/QtCore/qsortfilterproxymodel.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qabstractproxymodel.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qregularexpression.h \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/QString \
- C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
- C:/QT/6.11.1/mingw_64/include/QtCore/QDate \
- C:/QT/6.11.1/mingw_64/include/QtCore/qdatetime.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qcalendar.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qlocale.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/QDateTime \
- C:/QT/6.11.1/mingw_64/include/QtCore/QList \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/problem.h \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/logic/oeeberechnung.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QCoreApplication \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreapplication.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreevent.h \
@@ -367,6 +359,16 @@ CMakeFiles/RoboCell.dir/src/ui/anlagenmodell.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qdeadlinetimer.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qnativeinterface.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QDate \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qdatetime.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qcalendar.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qlocale.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QDateTime \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QMap \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QString \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/problem.h \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/farben.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/QColor \
  C:/QT/6.11.1/mingw_64/include/QtGui/qcolor.h \
@@ -375,20 +377,15 @@ CMakeFiles/RoboCell.dir/src/ui/anlagenmodell.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtGui/qtguiexports.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qrgb.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qrgba64.h \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/io/datenverwaltung.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/QObject \
- C:/QT/6.11.1/mingw_64/include/QtCore/QMap \
- C:/QT/6.11.1/mingw_64/include/QtCore/QSet \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/protokollcache.h \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/logic/oeeberechnung.h \
- C:/QT/6.11.1/mingw_64/include/QtGui/QBrush \
+ C:/QT/6.11.1/mingw_64/include/QtGui/QPalette \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpalette.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs_win.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qbrush.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qpoint.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcheckedint_impl.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qimage.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qpaintdevice.h \
- C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs.h \
- C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs_win.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qrect.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qmargins.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qsize.h \
@@ -401,6 +398,11 @@ CMakeFiles/RoboCell.dir/src/ui/anlagenmodell.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/q20iterator.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qline.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qpixmap.h \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/io/datenverwaltung.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QObject \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QSet \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/protokollcache.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/QBrush \
  C:/QT/6.11.1/mingw_64/include/QtGui/QFont \
  C:/QT/6.11.1/mingw_64/include/QtGui/qfont.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qendian.h

@@ -396,16 +396,12 @@ CMakeFiles/RoboCell.dir/src/ui/mainwindow.cpp.obj: \
  C:\Users\marlo\Documents\antigravity\Informatik-2-RoboCell-1\src\ui\anlagenmodell.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QAbstractTableModel \
  C:/QT/6.11.1/mingw_64/include/QtCore/qabstractitemmodel.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QList \
  C:/QT/6.11.1/mingw_64/include/QtCore/QSortFilterProxyModel \
  C:/QT/6.11.1/mingw_64/include/QtCore/qsortfilterproxymodel.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qabstractproxymodel.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qregularexpression.h \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/QString \
- C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
- C:/QT/6.11.1/mingw_64/include/QtCore/QDateTime \
- C:/QT/6.11.1/mingw_64/include/QtCore/QList \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/problem.h \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/logic/oeeberechnung.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QCoreApplication \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreapplication.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreevent.h \
@@ -415,6 +411,12 @@ CMakeFiles/RoboCell.dir/src/ui/mainwindow.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qdeadlinetimer.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qnativeinterface.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QDateTime \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QMap \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QString \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/problem.h \
  C:\Users\marlo\Documents\antigravity\Informatik-2-RoboCell-1\src\ui\anmeldedialog.h \
  C:\Users\marlo\Documents\antigravity\Informatik-2-RoboCell-1\src\ui\bearbeitendialoge.h \
  C:\Users\marlo\Documents\antigravity\Informatik-2-RoboCell-1\src\ui\einstellungendialog.h \
@@ -427,12 +429,11 @@ CMakeFiles/RoboCell.dir/src/ui/mainwindow.cpp.obj: \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/einstellungen.h \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/farben.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/QColor \
+ C:/QT/6.11.1/mingw_64/include/QtGui/QPalette \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/sprache.h \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/io/datenverwaltung.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/QMap \
  C:/QT/6.11.1/mingw_64/include/QtCore/QSet \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/protokollcache.h \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/logic/oeeberechnung.h \
  C:/QT/6.11.1/mingw_64/include/QtWidgets/QAbstractItemView \
  C:/QT/6.11.1/mingw_64/include/QtWidgets/qabstractitemview.h \
  C:/QT/6.11.1/mingw_64/include/QtWidgets/qabstractscrollarea.h \

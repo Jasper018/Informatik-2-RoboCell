@@ -1,6 +1,5 @@
 #include <QApplication>
 #include <QFont>
-#include <QPalette>
 #include <QStyleFactory>
 #include "core/benutzerverwaltung.h"
 #include "core/einstellungen.h"
@@ -17,19 +16,9 @@ int main(int argc, char* argv[])
     app.setOrganizationName("DHBW_TMT25");
     app.setStyle(QStyleFactory::create("Fusion"));
 
-    // Hoher Kontrast (>= 8:1) fuer die gesamte Anwendung, inkl. Platzhaltertext
-    QPalette pal = app.palette();
-    pal.setColor(QPalette::Window, Farben::HINTERGRUND);
-    pal.setColor(QPalette::WindowText, Farben::TEXT);
-    pal.setColor(QPalette::Base, Farben::HINTERGRUND);
-    pal.setColor(QPalette::AlternateBase, Farben::ZEBRA);
-    pal.setColor(QPalette::Text, Farben::TEXT);
-    pal.setColor(QPalette::PlaceholderText, Farben::HINWEIS_TEXT);
-    pal.setColor(QPalette::Button, Farben::AKZENT);
-    pal.setColor(QPalette::ButtonText, Farben::AKZENT_TEXT);
-    pal.setColor(QPalette::Highlight, Farben::AKZENT);
-    pal.setColor(QPalette::HighlightedText, Farben::AKZENT_TEXT);
-    app.setPalette(pal);
+    // Hoher Kontrast (>= 8:1) im gewaehlten Modus (Hell oder Dunkel)
+    Farben::setDunkelmodus(Einstellungen::dunkelmodus());
+    app.setPalette(Farben::anwendungsPalette());
     app.setStyleSheet(Farben::styleSheet());
 
     QFont schrift = app.font();
@@ -38,20 +27,21 @@ int main(int argc, char* argv[])
 
     Sprache::setzen(Einstellungen::sprache());
 
+    // Datensatz sofort waehrend der Anmeldung im Hintergrund laden und pruefen,
+    // damit nach der Anmeldung keine Wartezeit entsteht.
+    Datenverwaltung daten;
+    daten.setCacheGroesse(Einstellungen::cacheGroesse());
+    const QString ordner = Einstellungen::datenordner().isEmpty()
+        ? Datenverwaltung::standardOrdner()
+        : Einstellungen::datenordner();
+    daten.datensatzLadenHintergrund(ordner);
+
     // Anmeldung mit den im Hintergrund gespeicherten Profilen
     Benutzerverwaltung benutzer;
     AnmeldeDialog anmeldung(&benutzer);
     if (anmeldung.exec() != QDialog::Accepted) {
         return 0;
     }
-
-    // Datensatz laden (dabei werden CSV-Dateien und XML-Protokolle automatisch geprueft)
-    Datenverwaltung daten;
-    daten.setCacheGroesse(Einstellungen::cacheGroesse());
-    const QString ordner = Einstellungen::datenordner().isEmpty()
-        ? Datenverwaltung::standardOrdner()
-        : Einstellungen::datenordner();
-    daten.datensatzLaden(ordner);
 
     MainWindow fenster(&daten, &benutzer);
     fenster.show();

@@ -3,63 +3,59 @@
 
 #include <QColor>
 #include <QList>
+#include <QPalette>
 #include <QString>
 #include "model/datentypen.h"
 
-// Zentrale Farbpalette der Anwendung.
+// Zentrale Farbpalette der Anwendung (Heller Modus und Dunkler Modus).
 // Jede Textfarbe und jede Diagrammfarbe erreicht gegen ihren Hintergrund ein
 // Kontrastverhaeltnis von mindestens 8:1 (Formel der WCAG 2.x). Die Paare
 // werden in alleFarbpaare() aufgelistet und im Test geprueft.
 namespace Farben {
 
-// Grundfarben
-inline const QColor HINTERGRUND("#ffffff");
-inline const QColor TEXT("#111111");
-inline const QColor ZEBRA("#f0f0f0");             // jede zweite Tabellenzeile
-inline const QColor HINWEIS_TEXT("#3d3d3d");      // Nebentexte, Erklaerungen
-inline const QColor RAHMEN("#4a4a4a");
-inline const QColor AKZENT("#0b3d91");            // Buttons, Auswahl
-inline const QColor AKZENT_HOVER("#082a66");
-inline const QColor AKZENT_TEXT("#ffffff");
-inline const QColor KOPF("#1f2937");              // Menueleiste, Tabellenkopf
-inline const QColor KOPF_TEXT("#ffffff");
-inline const QColor DEAKTIV_HINTERGRUND("#e6e6e6");
-inline const QColor DEAKTIV_TEXT("#3a3a3a");
-inline const QColor TOOLTIP_HINTERGRUND("#1a1a1a");
-inline const QColor TOOLTIP_TEXT("#ffffff");
+bool dunkelmodus();
+void setDunkelmodus(bool aktiv);
+
+// Grundfarben je nach aktivem Modus
+QColor hintergrund();
+QColor text();
+QColor zebra();              // jede zweite Tabellenzeile
+QColor hinweisText();        // Nebentexte, Erklaerungen
+QColor rahmen();
+QColor akzent();             // Buttons, Auswahl
+QColor akzentHover();
+QColor akzentText();
+QColor kopf();               // Menueleiste, Tabellenkopf
+QColor kopfText();
+QColor deaktivHintergrund();
+QColor deaktivText();
+QColor tooltipHintergrund();
+QColor tooltipText();
 
 // Meldungen (Hintergrund / Text)
-inline const QColor OK_HINTERGRUND("#d4f0d4");
-inline const QColor OK_TEXT("#052e16");
-inline const QColor WARN_HINTERGRUND("#ffe8a6");
-inline const QColor WARN_TEXT("#3b2300");
-inline const QColor FEHLER_HINTERGRUND("#ffd0d0");
-inline const QColor FEHLER_TEXT("#4a0404");
-inline const QColor INFO_HINTERGRUND("#d6e8ff");
-inline const QColor INFO_TEXT("#0a2540");
+QColor okHintergrund();
+QColor okText();
+QColor warnHintergrund();
+QColor warnText();
+QColor fehlerHintergrund();
+QColor fehlerText();
 
-// Fortschrittsbalken der Kennzahlen (heller Balken, dunkler Text)
-inline const QColor BALKEN_V("#a8c8ff");
-inline const QColor BALKEN_L("#ffd27a");
-inline const QColor BALKEN_Q("#9ee59e");
-inline const QColor BALKEN_OEE("#c4c4c4");
+// Fortschrittsbalken der Kennzahlen (Balken / Lesetext ist text())
+QColor balkenV();
+QColor balkenL();
+QColor balkenQ();
+QColor balkenOee();
 
-// Zustandsfarben (dunkel, damit sie auf weissem Grund 8:1 erreichen)
-inline const QColor PRODUKTION("#14532d");
-inline const QColor RUESTEN("#1e3a8a");
-inline const QColor STOERUNG("#7f1d1d");
-inline const QColor MATERIALMANGEL("#78350f");
-inline const QColor RUECKSTAU("#581c87");
-inline const QColor WARTUNG("#0b4a46");
-inline const QColor PAUSE("#374151");
-inline const QColor UNBEKANNT("#000000");
+// Zustandsfarben und passender Kontrasttext darauf
+QColor zustandFarbe(ZustandTyp typ);
+QColor zustandTextFarbe();
 
 // Linien in den Diagrammen
-inline const QColor LINIE_V("#0b3d91");
-inline const QColor LINIE_L("#78350f");
-inline const QColor LINIE_Q("#14532d");
-inline const QColor LINIE_OEE("#111111");
-inline const QColor LINIE_AUSSCHUSS("#7f1d1d");
+QColor linieV();
+QColor linieL();
+QColor linieQ();
+QColor linieOee();
+QColor linieAusschuss();
 
 // Ein Farbpaar (Vordergrund auf Hintergrund) zur Kontrastpruefung
 struct Farbpaar {
@@ -75,12 +71,11 @@ double helligkeit(const QColor& farbe);
 double kontrast(const QColor& a, const QColor& b);
 
 // Alle Text- und Diagrammfarben mit ihrem jeweiligen Hintergrund
+QList<Farbpaar> alleFarbpaare(bool dunkel);
 QList<Farbpaar> alleFarbpaare();
 
-// Farbe eines Betriebszustands aus der zentralen Palette
-QColor zustandFarbe(ZustandTyp typ);
-
-// Gemeinsames Style Sheet der Anwendung
+// Gemeinsames Style Sheet und Palette der Anwendung
+QPalette anwendungsPalette();
 QString styleSheet();
 
 } // namespace Farben

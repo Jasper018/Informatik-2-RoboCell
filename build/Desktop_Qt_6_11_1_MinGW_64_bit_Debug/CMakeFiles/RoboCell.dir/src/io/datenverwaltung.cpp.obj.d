@@ -410,6 +410,7 @@ CMakeFiles/RoboCell.dir/src/io/datenverwaltung.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qtimezone.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QFile \
  C:/QT/6.11.1/mingw_64/include/QtCore/QFileInfo \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QMetaObject \
  C:/QT/6.11.1/mingw_64/include/QtCore/QRegularExpression \
  C:/QT/6.11.1/mingw_64/include/QtCore/qregularexpression.h \
  C:/QT/6.11.1/mingw_64/include/QtSql/QSqlDatabase \
@@ -422,4 +423,13 @@ CMakeFiles/RoboCell.dir/src/io/datenverwaltung.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtSql/qsqlerror.h \
  C:/QT/6.11.1/mingw_64/include/QtSql/QSqlQuery \
  C:/QT/6.11.1/mingw_64/include/QtSql/qsqlquery.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/QTextStream
+ C:/QT/6.11.1/mingw_64/include/QtCore/QTextStream \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QThread \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qthread.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/future \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/mutex \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_mutex.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unique_lock.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/condition_variable \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/atomic_futex.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_thread.h

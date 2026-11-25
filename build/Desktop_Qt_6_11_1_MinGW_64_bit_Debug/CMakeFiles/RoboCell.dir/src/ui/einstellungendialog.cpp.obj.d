@@ -389,18 +389,16 @@ CMakeFiles/RoboCell.dir/src/ui/einstellungendialog.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/QByteArray \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/einstellungen.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QString \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/sprache.h \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/io/datenverwaltung.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/QObject \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/farben.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/QColor \
  C:/QT/6.11.1/mingw_64/include/QtCore/QList \
- C:/QT/6.11.1/mingw_64/include/QtCore/QMap \
- C:/QT/6.11.1/mingw_64/include/QtCore/QSet \
+ C:/QT/6.11.1/mingw_64/include/QtGui/QPalette \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
  C:/QT/6.11.1/mingw_64/include/QtCore/QDate \
  C:/QT/6.11.1/mingw_64/include/QtCore/qdatetime.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcalendar.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qlocale.h \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
  C:/QT/6.11.1/mingw_64/include/QtCore/QDateTime \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/problem.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QCoreApplication \
@@ -412,6 +410,11 @@ CMakeFiles/RoboCell.dir/src/ui/einstellungendialog.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qdeadlinetimer.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qnativeinterface.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/sprache.h \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/io/datenverwaltung.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QObject \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QMap \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QSet \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/protokollcache.h \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/logic/oeeberechnung.h \
  C:/QT/6.11.1/mingw_64/include/QtWidgets/QApplication \

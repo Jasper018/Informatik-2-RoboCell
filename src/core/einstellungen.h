@@ -19,6 +19,9 @@ void setSchriftgroesse(int punkt);
 int cacheGroesse();                      // Anzahl Protokolle im LRU-Cache
 void setCacheGroesse(int anzahl);
 
+bool dunkelmodus();
+void setDunkelmodus(bool aktiv);
+
 QByteArray fensterGeometrie();
 void setFensterGeometrie(const QByteArray& daten);
 

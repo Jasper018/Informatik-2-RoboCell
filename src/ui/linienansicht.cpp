@@ -40,14 +40,17 @@ LinienAnsichtWidget::LinienAnsichtWidget(Datenverwaltung* daten, QWidget* parent
 
     m_zeitSlider = new QSlider(Qt::Horizontal, this);
     m_zeitSlider->setRange(0, 24 * 60 - 1);   // 06:00 bis 05:59 Folgetag
+    m_zeitSlider->setSingleStep(15);
+    m_zeitSlider->setPageStep(60);
+    m_zeitSlider->setTickPosition(QSlider::TicksBelow);
+    m_zeitSlider->setTickInterval(120);
     m_zeitSlider->setValue(180);               // 09:00 Uhr
-    m_zeitSlider->setEnabled(false);
 
     m_uhrzeitWertLabel = new QLabel("09:00", this);
     QFont uhrSchrift = font();
     uhrSchrift.setBold(true);
     m_uhrzeitWertLabel->setFont(uhrSchrift);
-    m_uhrzeitWertLabel->setMinimumWidth(48);
+    m_uhrzeitWertLabel->setMinimumWidth(72);
 
     steuer->addWidget(m_linieLabel, 0, 0);
     steuer->addWidget(m_linieCombo, 0, 1);
@@ -73,7 +76,7 @@ LinienAnsichtWidget::LinienAnsichtWidget(Datenverwaltung* daten, QWidget* parent
     teiler->setChildrenCollapsible(false);
 
     m_szene = new QGraphicsScene(this);
-    m_szene->setBackgroundBrush(Farben::HINTERGRUND);
+    m_szene->setBackgroundBrush(Farben::hintergrund());
     m_szene->installEventFilter(this);
 
     m_ansicht = new QGraphicsView(m_szene, this);
@@ -88,10 +91,13 @@ LinienAnsichtWidget::LinienAnsichtWidget(Datenverwaltung* daten, QWidget* parent
     m_engpassTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_engpassTabelle->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_engpassTabelle->setAlternatingRowColors(true);
+    m_engpassTabelle->setWordWrap(false);
     m_engpassTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     m_engpassTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     m_engpassTabelle->horizontalHeader()->setStretchLastSection(true);
     m_engpassTabelle->verticalHeader()->setVisible(false);
+    m_engpassTabelle->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    m_engpassTabelle->verticalHeader()->setDefaultSectionSize(28);
     teiler->addWidget(m_engpassTabelle);
 
     teiler->setStretchFactor(0, 3);
@@ -109,6 +115,7 @@ LinienAnsichtWidget::LinienAnsichtWidget(Datenverwaltung* daten, QWidget* parent
     });
 
     texteAktualisieren();
+    uhrzeitLabelAktualisieren(m_zeitSlider->value());
 }
 
 void LinienAnsichtWidget::changeEvent(QEvent* ereignis)
@@ -141,7 +148,19 @@ void LinienAnsichtWidget::texteAktualisieren()
         tr("Verursachter Mangel / Rückstau"), tr("Engpass-Bewertung")
     });
 
+    engpassTabelleFuellen();
     szeneZeichnen();
+}
+
+void LinienAnsichtWidget::uhrzeitLabelAktualisieren(int minutenAbSechs)
+{
+    const QDate tag = m_tagCombo->currentData().toDate();
+    const QDateTime basis(tag.isValid() ? tag : QDate(2026, 9, 14), QTime(6, 0, 0));
+    QString anzeige = basis.addSecs(minutenAbSechs * 60).toString("HH:mm");
+    if (minutenAbSechs >= 18 * 60) {
+        anzeige += " (+1)";
+    }
+    m_uhrzeitWertLabel->setText(anzeige);
 }
 
 void LinienAnsichtWidget::aktualisieren()
@@ -169,60 +188,74 @@ void LinienAnsichtWidget::aktualisieren()
     if (dIdx >= 0) m_tagCombo->setCurrentIndex(dIdx);
     m_tagCombo->blockSignals(false);
 
+    m_cacheLinieId.clear();
+    m_cacheTag = QDate();
+    datenCacheAktualisieren();
+    engpassTabelleFuellen();
     szeneZeichnen();
 }
 
-void LinienAnsichtWidget::slotAuswahlGeaendert()
+void LinienAnsichtWidget::spaltenAnpassen()
 {
-    m_zeitSlider->setEnabled(m_modusCombo->currentIndex() == 1);
-    szeneZeichnen();
-}
-
-void LinienAnsichtWidget::slotZeitGeaendert(int minutenAbSechs)
-{
-    const QDate tag = m_tagCombo->currentData().toDate();
-    const QDateTime basis(tag.isValid() ? tag : QDate(2026, 9, 14), QTime(6, 0, 0));
-    m_uhrzeitWertLabel->setText(basis.addSecs(minutenAbSechs * 60).toString("HH:mm"));
-    if (m_modusCombo->currentIndex() == 1) {
-        szeneZeichnen();
+    m_engpassTabelle->resizeColumnsToContents();
+    for (int c = 0; c < m_engpassTabelle->columnCount(); c++) {
+        const int aktuell = m_engpassTabelle->columnWidth(c);
+        m_engpassTabelle->setColumnWidth(c, std::clamp(aktuell + 16, 65, 340));
     }
 }
 
-void LinienAnsichtWidget::szeneZeichnen()
+void LinienAnsichtWidget::themaAktualisieren()
 {
-    m_szene->clear();
+    m_szene->setBackgroundBrush(Farben::hintergrund());
+    engpassTabelleFuellen();
+    szeneZeichnen();
+}
+
+void LinienAnsichtWidget::datenCacheAktualisieren()
+{
+    m_stationen.clear();
+    m_engpaesse.clear();
+    m_engpassMap.clear();
+    m_hauptEngpassId.clear();
+    m_protokolle.clear();
+
+    if (!m_daten || m_linieCombo->count() == 0) return;
+
+    m_cacheLinieId = m_linieCombo->currentData().toString();
+    m_cacheTag = m_tagCombo->currentData().toDate();
+
+    for (const Anlage& a : m_daten->anlagen()) {
+        if (a.linieId == m_cacheLinieId) m_stationen.append(a);
+    }
+    std::sort(m_stationen.begin(), m_stationen.end(), [](const Anlage& x, const Anlage& y) {
+        return x.position < y.position;
+    });
+
+    m_engpaesse = m_daten->engpass(m_cacheLinieId, m_cacheTag);
+    for (const EngpassEintrag& e : m_engpaesse) {
+        m_engpassMap.insert(e.anlageId, e);
+        if (e.hauptEngpass) m_hauptEngpassId = e.anlageId;
+    }
+
+    for (const Anlage& a : m_stationen) {
+        m_protokolle.insert(a.anlageId, m_daten->protokoll(a.anlageId, m_cacheTag));
+    }
+}
+
+void LinienAnsichtWidget::engpassTabelleFuellen()
+{
     m_engpassTabelle->setRowCount(0);
     if (!m_daten || m_linieCombo->count() == 0) {
         m_engpassBanner->setText(tr("Keine Linien geladen."));
         return;
     }
 
-    const QString linieId = m_linieCombo->currentData().toString();
-    const QDate tag = m_tagCombo->currentData().toDate();
-    const int modus = m_modusCombo->currentIndex();
-
-    QList<Anlage> stationen;
-    for (const Anlage& a : m_daten->anlagen()) {
-        if (a.linieId == linieId) stationen.append(a);
-    }
-    std::sort(stationen.begin(), stationen.end(), [](const Anlage& x, const Anlage& y) {
-        return x.position < y.position;
-    });
-
-    const QList<EngpassEintrag> engpaesse = m_daten->engpass(linieId, tag);
-    QMap<QString, EngpassEintrag> engpassMap;
-    QString hauptId;
-    for (const EngpassEintrag& e : engpaesse) {
-        engpassMap.insert(e.anlageId, e);
-        if (e.hauptEngpass) hauptId = e.anlageId;
-    }
-
-    if (!hauptId.isEmpty()) {
-        const EngpassEintrag& pb = engpassMap[hauptId];
+    if (!m_hauptEngpassId.isEmpty() && m_engpassMap.contains(m_hauptEngpassId)) {
+        const EngpassEintrag& pb = m_engpassMap[m_hauptEngpassId];
         m_engpassBanner->setText(tr("Haupt-Engpass der Linie %1 am %2: %3 (%4) - "
                                     "Soll-Takt: %5 s, Störzeit: %6 min, Nachbarverluste: %7 min. "
                                     "Doppelklick auf einen Kasten öffnet die Anlage.")
-                                     .arg(linieId, tag.toString("dd.MM.yyyy"), pb.anlageId, pb.bezeichnung)
+                                     .arg(m_cacheLinieId, m_cacheTag.toString("dd.MM.yyyy"), pb.anlageId, pb.bezeichnung)
                                      .arg(pb.sollTaktzeitS, 0, 'f', 1)
                                      .arg(pb.stoerzeitMin, 0, 'f', 1)
                                      .arg(pb.verursachterMangelMin + pb.verursachterRueckstauMin, 0, 'f', 1));
@@ -230,15 +263,15 @@ void LinienAnsichtWidget::szeneZeichnen()
         m_engpassBanner->setText(tr("Keine Stationen in dieser Linie vorhanden."));
     }
 
-    // Engpass-Tabelle fuellen
-    m_engpassTabelle->setRowCount(engpaesse.size());
-    for (int r = 0; r < engpaesse.size(); r++) {
-        const EngpassEintrag& b = engpaesse[r];
+    m_engpassTabelle->setUpdatesEnabled(false);
+    m_engpassTabelle->setRowCount(m_engpaesse.size());
+    for (int r = 0; r < m_engpaesse.size(); r++) {
+        const EngpassEintrag& b = m_engpaesse[r];
         auto zelle = [&](const QString& txt) {
             QTableWidgetItem* it = new QTableWidgetItem(txt);
             if (b.hauptEngpass) {
-                it->setBackground(Farben::WARN_HINTERGRUND);
-                it->setForeground(Farben::WARN_TEXT);
+                it->setBackground(Farben::warnHintergrund());
+                it->setForeground(Farben::warnText());
                 QFont f = it->font();
                 f.setBold(true);
                 it->setFont(f);
@@ -257,44 +290,81 @@ void LinienAnsichtWidget::szeneZeichnen()
             ? tr("Haupt-Engpass (%1)").arg(b.score, 0, 'f', 1)
             : QString::number(b.score, 'f', 1)));
     }
-    m_engpassTabelle->resizeColumnsToContents();
+    m_engpassTabelle->setUpdatesEnabled(true);
+    spaltenAnpassen();
+}
 
-    // Kaesten in Materialflussrichtung zeichnen (hoher Kontrast: weisser Kasten, farbiger Kopf)
+void LinienAnsichtWidget::slotAuswahlGeaendert()
+{
+    const QString linieId = m_linieCombo->currentData().toString();
+    const QDate tag = m_tagCombo->currentData().toDate();
+    if (linieId != m_cacheLinieId || tag != m_cacheTag) {
+        datenCacheAktualisieren();
+        engpassTabelleFuellen();
+    }
+    uhrzeitLabelAktualisieren(m_zeitSlider->value());
+    szeneZeichnen();
+}
+
+void LinienAnsichtWidget::slotZeitGeaendert(int minutenAbSechs)
+{
+    uhrzeitLabelAktualisieren(minutenAbSechs);
+    if (m_modusCombo->currentIndex() != 1) {
+        m_modusCombo->blockSignals(true);
+        m_modusCombo->setCurrentIndex(1);
+        m_modusCombo->blockSignals(false);
+    }
+    szeneZeichnen();
+}
+
+void LinienAnsichtWidget::szeneZeichnen()
+{
+    m_szene->clear();
+    m_szene->setBackgroundBrush(Farben::hintergrund());
+    if (!m_daten || m_stationen.isEmpty()) {
+        return;
+    }
+
+    const int modus = m_modusCombo->currentIndex();
+    const QDate tag = m_cacheTag;
+
+    // Kaesten in Materialflussrichtung zeichnen
     const int boxW = 165;
     const int boxH = 92;
     const int kopfH = 24;
     const int lueckeX = 34;
     const int lueckeY = 38;
     const int jeReihe = 6;
-    const QDateTime abfrageZeit = QDateTime(tag, QTime(6, 0, 0)).addSecs(m_zeitSlider->value() * 60);
+    const QDateTime abfrageZeit = QDateTime(tag.isValid() ? tag : QDate(2026, 9, 14), QTime(6, 0, 0))
+                                      .addSecs(m_zeitSlider->value() * 60);
 
-    for (int i = 0; i < stationen.size(); i++) {
-        const Anlage& a = stationen[i];
+    for (int i = 0; i < m_stationen.size(); i++) {
+        const Anlage& a = m_stationen[i];
         const int reihe = i / jeReihe;
         const int spalte = i % jeReihe;
         const double x = 16 + spalte * (boxW + lueckeX);
         const double y = 16 + reihe * (boxH + lueckeY);
 
         const OeeKennzahlen dm = m_daten->tageskennzahlen(a.anlageId, tag);
-        QColor kopfBg = Farben::KOPF;
-        QColor kopfFg = Farben::KOPF_TEXT;
+        QColor kopfBg = Farben::kopf();
+        QColor kopfFg = Farben::kopfText();
         QString statusZeile;
 
         if (modus == 0) {
             if (!dm.gueltig) {
-                kopfBg = Farben::ZEBRA;
-                kopfFg = Farben::TEXT;
+                kopfBg = Farben::zebra();
+                kopfFg = Farben::text();
                 statusZeile = tr("Keine Schicht");
             } else {
-                if (dm.oee >= 0.80) { kopfBg = Farben::OK_HINTERGRUND; kopfFg = Farben::OK_TEXT; }
-                else if (dm.oee >= 0.70) { kopfBg = Farben::WARN_HINTERGRUND; kopfFg = Farben::WARN_TEXT; }
-                else { kopfBg = Farben::FEHLER_HINTERGRUND; kopfFg = Farben::FEHLER_TEXT; }
+                if (dm.oee >= 0.80) { kopfBg = Farben::okHintergrund(); kopfFg = Farben::okText(); }
+                else if (dm.oee >= 0.70) { kopfBg = Farben::warnHintergrund(); kopfFg = Farben::warnText(); }
+                else { kopfBg = Farben::fehlerHintergrund(); kopfFg = Farben::fehlerText(); }
                 statusZeile = QString("OEE: %1 %  |  V: %2 %")
                     .arg(dm.oee * 100.0, 0, 'f', 1)
                     .arg(dm.verfuegbarkeit * 100.0, 0, 'f', 0);
             }
         } else if (modus == 1) {
-            std::shared_ptr<Schichtprotokoll> p = m_daten->protokoll(a.anlageId, tag);
+            std::shared_ptr<Schichtprotokoll> p = m_protokolle.value(a.anlageId);
             ZustandTyp aktiverTyp = ZustandTyp::Unbekannt;
             bool gefunden = false;
             if (p && p->geladen) {
@@ -312,42 +382,43 @@ void LinienAnsichtWidget::szeneZeichnen()
             }
             if (gefunden) {
                 kopfBg = Farben::zustandFarbe(aktiverTyp);
-                kopfFg = Farben::KOPF_TEXT;
+                kopfFg = Farben::zustandTextFarbe();
                 statusZeile = zustandName(aktiverTyp);
             } else {
-                kopfBg = Farben::ZEBRA;
-                kopfFg = Farben::TEXT;
+                kopfBg = Farben::zebra();
+                kopfFg = Farben::text();
                 statusZeile = tr("Schichtfrei");
             }
         } else {
-            const EngpassEintrag bn = engpassMap.value(a.anlageId);
+            const EngpassEintrag bn = m_engpassMap.value(a.anlageId);
             if (bn.hauptEngpass) {
-                kopfBg = Farben::STOERUNG;
-                kopfFg = Farben::KOPF_TEXT;
+                kopfBg = Farben::fehlerHintergrund();
+                kopfFg = Farben::fehlerText();
                 statusZeile = tr("Engpass (%1 s)").arg(a.sollTaktzeitS, 0, 'f', 1);
             } else {
-                kopfBg = Farben::INFO_HINTERGRUND;
-                kopfFg = Farben::INFO_TEXT;
+                kopfBg = Farben::zebra();
+                kopfFg = Farben::text();
                 statusZeile = tr("Score: %1").arg(bn.score, 0, 'f', 1);
             }
         }
 
         // Pfeil zur naechsten Station in derselben Reihe
-        if (i + 1 < stationen.size() && (i + 1) / jeReihe == reihe) {
+        if (i + 1 < m_stationen.size() && (i + 1) / jeReihe == reihe) {
             const double px1 = x + boxW;
             const double py = y + boxH / 2.0;
             const double px2 = px1 + lueckeX;
-            m_szene->addLine(px1, py, px2, py, QPen(Farben::TEXT, 2));
+            m_szene->addLine(px1, py, px2, py, QPen(Farben::text(), 2));
             QPolygonF spitze;
             spitze << QPointF(px2, py) << QPointF(px2 - 8, py - 5) << QPointF(px2 - 8, py + 5);
-            m_szene->addPolygon(spitze, QPen(Farben::TEXT), QBrush(Farben::TEXT));
+            m_szene->addPolygon(spitze, QPen(Farben::text()), QBrush(Farben::text()));
         }
 
-        const bool istEngpass = engpassMap.value(a.anlageId).hauptEngpass;
+        const bool istEngpass = m_engpassMap.value(a.anlageId).hauptEngpass;
+        const QColor engpassRahmen = istEngpass ? Farben::fehlerText() : Farben::rahmen();
         QGraphicsRectItem* kasten = m_szene->addRect(
             QRectF(x, y, boxW, boxH),
-            QPen(istEngpass ? Farben::STOERUNG : Farben::RAHMEN, istEngpass ? 3.0 : 1.5),
-            QBrush(Farben::HINTERGRUND)
+            QPen(engpassRahmen, istEngpass ? 3.0 : 1.5),
+            QBrush(Farben::hintergrund())
         );
         kasten->setData(0, a.anlageId);
         kasten->setCursor(Qt::PointingHandCursor);
@@ -355,7 +426,7 @@ void LinienAnsichtWidget::szeneZeichnen()
 
         QGraphicsRectItem* kopf = m_szene->addRect(
             QRectF(x, y, boxW, kopfH),
-            QPen(istEngpass ? Farben::STOERUNG : Farben::RAHMEN, 1.0),
+            QPen(engpassRahmen, 1.0),
             QBrush(kopfBg)
         );
         kopf->setData(0, a.anlageId);
@@ -378,7 +449,7 @@ void LinienAnsichtWidget::szeneZeichnen()
                 .arg(a.sollTaktzeitS, 0, 'f', 1)
         );
         inhaltTxt->setPos(x + 6, y + kopfH + 4);
-        inhaltTxt->setDefaultTextColor(Farben::TEXT);
+        inhaltTxt->setDefaultTextColor(Farben::text());
         QFont klein = font();
         klein.setPointSize(std::max(8, font().pointSize() - 1));
         inhaltTxt->setFont(klein);

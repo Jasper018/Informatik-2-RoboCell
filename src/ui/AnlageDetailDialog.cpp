@@ -175,23 +175,25 @@ AnlageDetailDialog::AnlageDetailDialog(const QString& anlageId, Datenverwaltung*
     QSplitter* tab2Teiler = new QSplitter(Qt::Horizontal, m_tabs);
     tab2Teiler->setChildrenCollapsible(false);
 
+    auto tabelleEinrichten = [](QTableWidget* tab) {
+        tab->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        tab->setAlternatingRowColors(true);
+        tab->setWordWrap(false);
+        tab->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+        tab->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+        tab->horizontalHeader()->setStretchLastSection(true);
+        tab->verticalHeader()->setVisible(false);
+        tab->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+        tab->verticalHeader()->setDefaultSectionSize(28);
+    };
+
     m_zustandTabelle = new QTableWidget(tab2Teiler);
     m_zustandTabelle->setColumnCount(4);
-    m_zustandTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_zustandTabelle->setAlternatingRowColors(true);
-    m_zustandTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_zustandTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_zustandTabelle->horizontalHeader()->setStretchLastSection(true);
-    m_zustandTabelle->verticalHeader()->setVisible(false);
+    tabelleEinrichten(m_zustandTabelle);
 
     m_schichtTabelle = new QTableWidget(tab2Teiler);
     m_schichtTabelle->setColumnCount(7);
-    m_schichtTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_schichtTabelle->setAlternatingRowColors(true);
-    m_schichtTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_schichtTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_schichtTabelle->horizontalHeader()->setStretchLastSection(true);
-    m_schichtTabelle->verticalHeader()->setVisible(false);
+    tabelleEinrichten(m_schichtTabelle);
 
     tab2Teiler->addWidget(m_zustandTabelle);
     tab2Teiler->addWidget(m_schichtTabelle);
@@ -209,12 +211,7 @@ AnlageDetailDialog::AnlageDetailDialog(const QString& anlageId, Datenverwaltung*
     m_trendChart = new TrendDiagrammWidget(trendTeiler);
     m_trendTabelle = new QTableWidget(trendTeiler);
     m_trendTabelle->setColumnCount(8);
-    m_trendTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_trendTabelle->setAlternatingRowColors(true);
-    m_trendTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_trendTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_trendTabelle->horizontalHeader()->setStretchLastSection(true);
-    m_trendTabelle->verticalHeader()->setVisible(false);
+    tabelleEinrichten(m_trendTabelle);
     trendTeiler->addWidget(m_trendChart);
     trendTeiler->addWidget(m_trendTabelle);
     trendTeiler->setStretchFactor(0, 3);
@@ -227,12 +224,7 @@ AnlageDetailDialog::AnlageDetailDialog(const QString& anlageId, Datenverwaltung*
     QVBoxLayout* wartLayout = new QVBoxLayout(tabWart);
     m_wartungTabelle = new QTableWidget(tabWart);
     m_wartungTabelle->setColumnCount(6);
-    m_wartungTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_wartungTabelle->setAlternatingRowColors(true);
-    m_wartungTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_wartungTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_wartungTabelle->horizontalHeader()->setStretchLastSection(true);
-    m_wartungTabelle->verticalHeader()->setVisible(false);
+    tabelleEinrichten(m_wartungTabelle);
     wartLayout->addWidget(m_wartungTabelle);
     m_tabs->addTab(tabWart, QString());
 
@@ -241,12 +233,7 @@ AnlageDetailDialog::AnlageDetailDialog(const QString& anlageId, Datenverwaltung*
     QVBoxLayout* flagLayout = new QVBoxLayout(tabFlags);
     m_flagTabelle = new QTableWidget(tabFlags);
     m_flagTabelle->setColumnCount(4);
-    m_flagTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_flagTabelle->setAlternatingRowColors(true);
-    m_flagTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_flagTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    m_flagTabelle->horizontalHeader()->setStretchLastSection(true);
-    m_flagTabelle->verticalHeader()->setVisible(false);
+    tabelleEinrichten(m_flagTabelle);
     flagLayout->addWidget(m_flagTabelle);
     m_tabs->addTab(tabFlags, QString());
 
@@ -419,6 +406,7 @@ void AnlageDetailDialog::tagLaden(const QDate& datum)
 
     auto meldungSetzen = [&](const QString& art, const QString& text) {
         m_protokollBanner->setProperty("meldung", art);
+        m_protokollBanner->setProperty("hinweis", art.isEmpty());
         m_protokollBanner->style()->unpolish(m_protokollBanner);
         m_protokollBanner->style()->polish(m_protokollBanner);
         m_protokollBanner->setText(text);
@@ -463,8 +451,8 @@ void AnlageDetailDialog::tagLaden(const QDate& datum)
         meldungSetzen(hatFehler ? "fehler" : "warn",
                       tr("Protokoll-Flags (%1): ").arg(flags.size()) + texte.join("  |  "));
     } else if (!dm.hatGeplanteSchicht) {
-        meldungSetzen("info", tr("Am %1 waren keine Schichten geplant (geplant=\"nein\").")
-                                  .arg(datum.toString("dd.MM.yyyy")));
+        meldungSetzen(QString(), tr("Am %1 waren keine Schichten geplant (geplant=\"nein\").")
+                                     .arg(datum.toString("dd.MM.yyyy")));
     } else {
         m_protokollBanner->hide();
     }
@@ -602,11 +590,11 @@ void AnlageDetailDialog::flagsFuellen()
         const Problem& p = liste[i];
         QTableWidgetItem* gradItem = new QTableWidgetItem(p.gradText());
         if (p.grad == Schweregrad::Fehler) {
-            gradItem->setBackground(Farben::FEHLER_HINTERGRUND);
-            gradItem->setForeground(Farben::FEHLER_TEXT);
+            gradItem->setBackground(Farben::fehlerHintergrund());
+            gradItem->setForeground(Farben::fehlerText());
         } else if (p.grad == Schweregrad::Warnung) {
-            gradItem->setBackground(Farben::WARN_HINTERGRUND);
-            gradItem->setForeground(Farben::WARN_TEXT);
+            gradItem->setBackground(Farben::warnHintergrund());
+            gradItem->setForeground(Farben::warnText());
         }
         m_flagTabelle->setItem(i, 0, gradItem);
         m_flagTabelle->setItem(i, 1, new QTableWidgetItem(p.datei));

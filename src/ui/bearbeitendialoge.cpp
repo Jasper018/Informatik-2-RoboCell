@@ -33,16 +33,6 @@ AnlageBearbeitenDialog::AnlageBearbeitenDialog(const Anlage& anlage, Datenverwal
     QVBoxLayout* haupt = new QVBoxLayout(this);
     haupt->setSpacing(10);
 
-    QLabel* rollenHinweis = new QLabel(this);
-    rollenHinweis->setWordWrap(true);
-    rollenHinweis->setProperty("meldung", "info");
-    if (vollzugriff) {
-        rollenHinweis->setText(tr("Rolle Administrator: Alle Stammdaten dieser Anlage dürfen geändert werden."));
-    } else {
-        rollenHinweis->setText(tr("Rolle Instandhaltung: Sie dürfen den Status dieser Anlage ändern. Weitere Stammdaten erfordern Administratorrechte."));
-    }
-    haupt->addWidget(rollenHinweis);
-
     // Formular liegt in einer QScrollArea, damit es auf kleinen Bildschirmen scrollt
     QScrollArea* scroll = new QScrollArea(this);
     scroll->setWidgetResizable(true);

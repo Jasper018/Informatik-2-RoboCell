@@ -1,7 +1,13 @@
 #ifndef LINIENANSICHT_H
 #define LINIENANSICHT_H
 
+#include <QDate>
+#include <QList>
+#include <QMap>
 #include <QWidget>
+#include <memory>
+#include "logic/oeeberechnung.h"
+#include "model/datentypen.h"
 
 class QComboBox;
 class QEvent;
@@ -20,6 +26,8 @@ public:
     explicit LinienAnsichtWidget(Datenverwaltung* daten, QWidget* parent = nullptr);
 
     void aktualisieren();
+    void spaltenAnpassen();
+    void themaAktualisieren();
 
 signals:
     void anlageDoppelklick(const QString& anlageId);
@@ -34,6 +42,9 @@ private slots:
 
 private:
     void texteAktualisieren();
+    void uhrzeitLabelAktualisieren(int minutenAbSechs);
+    void datenCacheAktualisieren();
+    void engpassTabelleFuellen();
     void szeneZeichnen();
 
     Datenverwaltung* m_daten = nullptr;
@@ -52,6 +63,15 @@ private:
     QGraphicsScene* m_szene = nullptr;
     QGraphicsView* m_ansicht = nullptr;
     QTableWidget* m_engpassTabelle = nullptr;
+
+    // Zwischengespeicherte Daten der ausgewaehlten Linie und des Tages
+    QString m_cacheLinieId;
+    QDate m_cacheTag;
+    QList<Anlage> m_stationen;
+    QList<EngpassEintrag> m_engpaesse;
+    QMap<QString, EngpassEintrag> m_engpassMap;
+    QString m_hauptEngpassId;
+    QMap<QString, std::shared_ptr<Schichtprotokoll>> m_protokolle;
 };
 
 #endif // LINIENANSICHT_H

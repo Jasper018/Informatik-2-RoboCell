@@ -8,12 +8,13 @@ AnlagenModell::AnlagenModell(Datenverwaltung* daten, QObject* parent)
     : QAbstractTableModel(parent)
     , m_daten(daten)
 {
+    cacheNeuBauen();
 }
 
 int AnlagenModell::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid() || !m_daten) return 0;
-    return m_daten->anlagen().size();
+    return m_zeilen.size();
 }
 
 int AnlagenModell::columnCount(const QModelIndex& parent) const
@@ -22,9 +23,31 @@ int AnlagenModell::columnCount(const QModelIndex& parent) const
     return SpaltenAnzahl;
 }
 
+void AnlagenModell::cacheNeuBauen()
+{
+    m_zeilen.clear();
+    if (!m_daten) return;
+    const QList<Anlage>& anlagen = m_daten->anlagen();
+    m_zeilen.reserve(anlagen.size());
+    for (const Anlage& a : anlagen) {
+        ZeilenCache z;
+        z.bericht = m_daten->trendbericht(a.anlageId);
+        z.fehlerAnz = m_daten->anlagenProblemAnzahl(a.anlageId, Schweregrad::Fehler);
+        z.warnAnz = m_daten->anlagenProblemAnzahl(a.anlageId, Schweregrad::Warnung);
+        z.hatFlag = (z.fehlerAnz + z.warnAnz) > 0;
+        z.herstellerModell = a.hersteller + " " + a.modell;
+        z.oeeText = (z.bericht.gueltigeTage > 0)
+            ? QString("%1 %").arg(z.bericht.mittelOee * 100.0, 0, 'f', 1)
+            : QString("-");
+        z.stoerzeitText = QString("%1").arg(z.bericht.stoerzeitSek / 60.0, 0, 'f', 0);
+        m_zeilen.append(z);
+    }
+}
+
 void AnlagenModell::aktualisieren()
 {
     beginResetModel();
+    cacheNeuBauen();
     endResetModel();
 }
 
@@ -33,6 +56,14 @@ void AnlagenModell::spracheAktualisieren()
     emit headerDataChanged(Qt::Horizontal, 0, SpaltenAnzahl - 1);
     if (rowCount() > 0) {
         emit dataChanged(index(0, 0), index(rowCount() - 1, SpaltenAnzahl - 1));
+    }
+}
+
+void AnlagenModell::farbenAktualisieren()
+{
+    if (rowCount() > 0) {
+        emit dataChanged(index(0, 0), index(rowCount() - 1, SpaltenAnzahl - 1),
+                         {Qt::BackgroundRole, Qt::ForegroundRole});
     }
 }
 
@@ -62,21 +93,20 @@ QVariant AnlagenModell::data(const QModelIndex& index, int role) const
     if (!index.isValid() || !m_daten) return QVariant();
     const int zeile = index.row();
     const int spalte = index.column();
-    if (zeile < 0 || zeile >= m_daten->anlagen().size()) return QVariant();
+    if (zeile < 0 || zeile >= m_zeilen.size() || zeile >= m_daten->anlagen().size()) {
+        return QVariant();
+    }
 
     const Anlage& a = m_daten->anlagen().at(zeile);
-    const Trendbericht bericht = m_daten->trendbericht(a.anlageId);
-    const int fehlerAnz = m_daten->anlagenProblemAnzahl(a.anlageId, Schweregrad::Fehler);
-    const int warnAnz = m_daten->anlagenProblemAnzahl(a.anlageId, Schweregrad::Warnung);
-    const bool hatFlag = (fehlerAnz + warnAnz) > 0;
+    const ZeilenCache& z = m_zeilen.at(zeile);
 
     if (role == AnlageIdRolle) return a.anlageId;
     if (role == LinieIdRolle) return a.linieId;
     if (role == TypRolle) return int(a.typ);
     if (role == StatusRolle) return int(a.status);
     if (role == BaujahrRolle) return a.baujahr;
-    if (role == AuffaelligRolle) return bericht.auffaellig;
-    if (role == HatFlagRolle) return hatFlag;
+    if (role == AuffaelligRolle) return z.bericht.auffaellig;
+    if (role == HatFlagRolle) return z.hatFlag;
 
     if (role == SortierWertRolle) {
         switch (spalte) {
@@ -85,13 +115,13 @@ QVariant AnlagenModell::data(const QModelIndex& index, int role) const
         case SpPosition: return a.position;
         case SpBezeichnung: return a.bezeichnung;
         case SpTyp: return anlagenTypName(a.typ, a.typRoh);
-        case SpHerstellerModell: return a.hersteller + " " + a.modell;
+        case SpHerstellerModell: return z.herstellerModell;
         case SpBaujahr: return a.baujahr;
         case SpSollTakt: return a.sollTaktzeitS;
         case SpStatus: return int(a.status);
-        case SpMittelOee: return bericht.gueltigeTage > 0 ? bericht.mittelOee : -1.0;
-        case SpStoerzeitMin: return bericht.stoerzeitSek / 60.0;
-        case SpFlags: return fehlerAnz * 100 + warnAnz * 10 + (bericht.auffaellig ? 1 : 0);
+        case SpMittelOee: return z.bericht.gueltigeTage > 0 ? z.bericht.mittelOee : -1.0;
+        case SpStoerzeitMin: return z.bericht.stoerzeitSek / 60.0;
+        case SpFlags: return z.fehlerAnz * 100 + z.warnAnz * 10 + (z.bericht.auffaellig ? 1 : 0);
         }
     }
 
@@ -102,21 +132,17 @@ QVariant AnlagenModell::data(const QModelIndex& index, int role) const
         case SpPosition: return a.position;
         case SpBezeichnung: return a.bezeichnung;
         case SpTyp: return anlagenTypName(a.typ, a.typRoh);
-        case SpHerstellerModell: return a.hersteller + " " + a.modell;
+        case SpHerstellerModell: return z.herstellerModell;
         case SpBaujahr: return a.baujahr;
         case SpSollTakt: return QString::number(a.sollTaktzeitS, 'f', 1);
         case SpStatus: return anlagenStatusName(a.status, a.statusRoh);
-        case SpMittelOee:
-            return (bericht.gueltigeTage > 0)
-                ? QString("%1 %").arg(bericht.mittelOee * 100.0, 0, 'f', 1)
-                : QString("-");
-        case SpStoerzeitMin:
-            return QString("%1").arg(bericht.stoerzeitSek / 60.0, 0, 'f', 0);
+        case SpMittelOee: return z.oeeText;
+        case SpStoerzeitMin: return z.stoerzeitText;
         case SpFlags: {
             QStringList teile;
-            if (fehlerAnz > 0) teile.append(tr("Fehler (%1)").arg(fehlerAnz));
-            if (warnAnz > 0) teile.append(tr("Warnung (%1)").arg(warnAnz));
-            if (bericht.auffaellig) teile.append(tr("Auffällig"));
+            if (z.fehlerAnz > 0) teile.append(tr("Fehler (%1)").arg(z.fehlerAnz));
+            if (z.warnAnz > 0) teile.append(tr("Warnung (%1)").arg(z.warnAnz));
+            if (z.bericht.auffaellig) teile.append(tr("Auffällig"));
             if (a.bearbeitet) teile.append(tr("Bearbeitet"));
             return teile.isEmpty() ? tr("OK") : teile.join(", ");
         }
@@ -133,48 +159,46 @@ QVariant AnlagenModell::data(const QModelIndex& index, int role) const
         }
     }
 
-    // Alle Hintergrund-/Vordergrundpaare stammen aus Farben (>= 11,5:1 Kontrast)
+    // Alle Hintergrund-/Vordergrundpaare stammen aus der aktiven Palette (>= 8:1 Kontrast)
     if (role == Qt::BackgroundRole) {
         if (spalte == SpStatus) {
             switch (a.status) {
-            case AnlagenStatus::InBetrieb: return QBrush(Farben::OK_HINTERGRUND);
-            case AnlagenStatus::Stoerung: return QBrush(Farben::FEHLER_HINTERGRUND);
-            case AnlagenStatus::Wartung: return QBrush(Farben::WARN_HINTERGRUND);
-            case AnlagenStatus::Umbau: return QBrush(Farben::INFO_HINTERGRUND);
-            default: return QBrush(Farben::FEHLER_HINTERGRUND);
+            case AnlagenStatus::InBetrieb: return QBrush(Farben::okHintergrund());
+            case AnlagenStatus::Stoerung: return QBrush(Farben::fehlerHintergrund());
+            case AnlagenStatus::Wartung:
+            case AnlagenStatus::Umbau: return QBrush(Farben::warnHintergrund());
+            default: return QBrush(Farben::fehlerHintergrund());
             }
         }
-        if (spalte == SpMittelOee && bericht.gueltigeTage > 0) {
-            if (bericht.mittelOee >= 0.80) return QBrush(Farben::OK_HINTERGRUND);
-            if (bericht.mittelOee >= 0.70) return QBrush(Farben::WARN_HINTERGRUND);
-            return QBrush(Farben::FEHLER_HINTERGRUND);
+        if (spalte == SpMittelOee && z.bericht.gueltigeTage > 0) {
+            if (z.bericht.mittelOee >= 0.80) return QBrush(Farben::okHintergrund());
+            if (z.bericht.mittelOee >= 0.70) return QBrush(Farben::warnHintergrund());
+            return QBrush(Farben::fehlerHintergrund());
         }
         if (spalte == SpFlags) {
-            if (fehlerAnz > 0) return QBrush(Farben::FEHLER_HINTERGRUND);
-            if (warnAnz > 0 || bericht.auffaellig) return QBrush(Farben::WARN_HINTERGRUND);
-            if (a.bearbeitet) return QBrush(Farben::INFO_HINTERGRUND);
+            if (z.fehlerAnz > 0) return QBrush(Farben::fehlerHintergrund());
+            if (z.warnAnz > 0 || z.bericht.auffaellig) return QBrush(Farben::warnHintergrund());
         }
     }
 
     if (role == Qt::ForegroundRole) {
         if (spalte == SpStatus) {
             switch (a.status) {
-            case AnlagenStatus::InBetrieb: return QBrush(Farben::OK_TEXT);
-            case AnlagenStatus::Stoerung: return QBrush(Farben::FEHLER_TEXT);
-            case AnlagenStatus::Wartung: return QBrush(Farben::WARN_TEXT);
-            case AnlagenStatus::Umbau: return QBrush(Farben::INFO_TEXT);
-            default: return QBrush(Farben::FEHLER_TEXT);
+            case AnlagenStatus::InBetrieb: return QBrush(Farben::okText());
+            case AnlagenStatus::Stoerung: return QBrush(Farben::fehlerText());
+            case AnlagenStatus::Wartung:
+            case AnlagenStatus::Umbau: return QBrush(Farben::warnText());
+            default: return QBrush(Farben::fehlerText());
             }
         }
-        if (spalte == SpMittelOee && bericht.gueltigeTage > 0) {
-            if (bericht.mittelOee >= 0.80) return QBrush(Farben::OK_TEXT);
-            if (bericht.mittelOee >= 0.70) return QBrush(Farben::WARN_TEXT);
-            return QBrush(Farben::FEHLER_TEXT);
+        if (spalte == SpMittelOee && z.bericht.gueltigeTage > 0) {
+            if (z.bericht.mittelOee >= 0.80) return QBrush(Farben::okText());
+            if (z.bericht.mittelOee >= 0.70) return QBrush(Farben::warnText());
+            return QBrush(Farben::fehlerText());
         }
         if (spalte == SpFlags) {
-            if (fehlerAnz > 0) return QBrush(Farben::FEHLER_TEXT);
-            if (warnAnz > 0 || bericht.auffaellig) return QBrush(Farben::WARN_TEXT);
-            if (a.bearbeitet) return QBrush(Farben::INFO_TEXT);
+            if (z.fehlerAnz > 0) return QBrush(Farben::fehlerText());
+            if (z.warnAnz > 0 || z.bericht.auffaellig) return QBrush(Farben::warnText());
         }
     }
 
@@ -203,7 +227,7 @@ QVariant AnlagenModell::data(const QModelIndex& index, int role) const
                 zeilen.append(tr(" - ... und %1 weitere").arg(probs.size() - limit));
             }
         }
-        const QStringList trendHinweise = bericht.hinweise();
+        const QStringList trendHinweise = z.bericht.hinweise();
         if (!trendHinweise.isEmpty()) {
             zeilen.append(tr("14-Tage-Trend:"));
             for (const QString& h : trendHinweise) {

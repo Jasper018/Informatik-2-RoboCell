@@ -1,5 +1,12 @@
 C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/RoboCell_autogen/YPKJ5OE7LN/moc_linienansicht.cpp: C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/ui/linienansicht.h \
   C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/RoboCell_autogen/moc_predefs.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/QCoreApplication \
+  C:/QT/6.11.1/mingw_64/include/QtCore/QDate \
+  C:/QT/6.11.1/mingw_64/include/QtCore/QDateTime \
+  C:/QT/6.11.1/mingw_64/include/QtCore/QList \
+  C:/QT/6.11.1/mingw_64/include/QtCore/QMap \
+  C:/QT/6.11.1/mingw_64/include/QtCore/QString \
+  C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
   C:/QT/6.11.1/mingw_64/include/QtCore/q17memory.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/q20bit.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/q20functional.h \
@@ -9,6 +16,7 @@ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_
   C:/QT/6.11.1/mingw_64/include/QtCore/q20utility.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/q23type_traits.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/q23utility.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/qabstracteventdispatcher.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qalgorithms.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qalloc.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qanystringview.h \
@@ -19,11 +27,13 @@ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_
   C:/QT/6.11.1/mingw_64/include/QtCore/qatomic.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qatomic_cxx11.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qbasicatomic.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/qbasictimer.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qbindingstorage.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qbytearray.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qbytearrayalgorithms.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qbytearraylist.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qbytearrayview.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/qcalendar.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qchar.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qcheckedint_impl.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qcompare.h \
@@ -36,10 +46,16 @@ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_
   C:/QT/6.11.1/mingw_64/include/QtCore/qcontainerinfo.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qcontainertools_impl.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qcontiguouscache.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreapplication.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreevent.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qdarwinhelpers.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qdatastream.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/qdatetime.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/qdeadlinetimer.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qdebug.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qendian.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/qeventloop.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qexceptionhandling.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qflags.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qfloat16.h \
@@ -57,6 +73,7 @@ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_
   C:/QT/6.11.1/mingw_64/include/QtCore/qlatin1stringview.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qline.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qlist.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/qlocale.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qlogging.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qmalloc.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qmap.h \
@@ -66,6 +83,7 @@ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_
   C:/QT/6.11.1/mingw_64/include/QtCore/qmetatype.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qminmax.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qnamespace.h \
+  C:/QT/6.11.1/mingw_64/include/QtCore/qnativeinterface.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qnumeric.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qobject.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qobject_impl.h \
@@ -372,4 +390,7 @@ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_
   C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/sys/types.h \
   C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h \
   C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
-  C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h
+  C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
+  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/logic/oeeberechnung.h \
+  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
+  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/problem.h

@@ -4,11 +4,13 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QMetaObject>
 #include <QRegularExpression>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QTextStream>
+#include <QThread>
 #include <algorithm>
 
 // Spalten der Tabellen (Reihenfolge wie in den CSV-Dateien)
@@ -29,6 +31,35 @@ static const int BAUJAHR_MIN = 1980;
 Datenverwaltung::Datenverwaltung(QObject* parent)
     : QObject(parent), m_cache(60)
 {
+}
+
+Datenverwaltung::~Datenverwaltung()
+{
+    hintergrundPruefungStoppen();
+}
+
+void Datenverwaltung::hintergrundPruefungStoppen()
+{
+    ++m_ladeLaufId;
+    for (QThread* t : m_ladeThreads) {
+        if (!t) continue;
+        t->requestInterruption();
+        t->wait();
+        delete t;
+    }
+    m_ladeThreads.clear();
+    m_offeneThreads = 0;
+    m_fertigGeprueft = 0;
+    m_pruefungLaeuft = false;
+}
+
+void Datenverwaltung::wartenAufPruefung()
+{
+    if (!m_pruefungLaeuft) return;
+    for (QThread* t : m_ladeThreads) {
+        if (t) t->wait();
+    }
+    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 QString Datenverwaltung::standardOrdner()
@@ -184,8 +215,9 @@ void Datenverwaltung::leereAlles()
     m_cache.leeren();
 }
 
-bool Datenverwaltung::datensatzLaden(const QString& ordner)
+bool Datenverwaltung::stammUndIndexAusOrdnerLaden(const QString& ordner)
 {
+    hintergrundPruefungStoppen();
     leereAlles();
     m_ordner = ordner;
 
@@ -204,14 +236,186 @@ bool Datenverwaltung::datensatzLaden(const QString& ordner)
     positionenPruefen();
 
     indexLaden();
+    return true;
+}
+
+bool Datenverwaltung::datensatzLaden(const QString& ordner)
+{
+    if (!stammUndIndexAusOrdnerLaden(ordner)) {
+        return false;
+    }
+
     protokolleAutomatischPruefen();
     problemeSammeln();
     emit datensatzGeladen();
     return !m_anlagen.isEmpty();
 }
 
+namespace {
+struct ProtokollPruefAufgabe {
+    QString schl;
+    ProtokollIndexEintrag eintrag;
+    PruefKontext kontext;
+    double sollTaktzeitS = 0.0;
+};
+
+struct ProtokollPruefErgebnis {
+    QString schl;
+    QList<Problem> probleme;
+    OeeKennzahlen kennzahlen;
+    bool hatKennzahlen = false;
+};
+} // namespace
+
+bool Datenverwaltung::datensatzLadenHintergrund(const QString& ordner)
+{
+    if (!stammUndIndexAusOrdnerLaden(ordner)) {
+        return false;
+    }
+
+    // Stammdaten sofort bereitstellen; Protokoll-XMLs laufen parallel im Hintergrund
+    problemeSammeln();
+    emit datensatzGeladen();
+
+    const int gesamt = m_index.size();
+    if (gesamt == 0) {
+        emit pruefungAbgeschlossen();
+        return !m_anlagen.isEmpty();
+    }
+
+    QList<ProtokollPruefAufgabe> aufgaben;
+    aufgaben.reserve(gesamt);
+    for (auto it = m_index.begin(); it != m_index.end(); ++it) {
+        const ProtokollIndexEintrag& e = it.value();
+        const Anlage* anlage = findeAnlage(e.anlageId);
+
+        ProtokollPruefAufgabe a;
+        a.schl = it.key();
+        a.eintrag = e;
+        a.kontext.objektId = e.anlageId + " " + e.datum.toString("yyyy-MM-dd");
+        a.kontext.anlageLinie = (anlage && m_linienIds.contains(anlage->linieId)) ? anlage->linieId : QString();
+        a.kontext.produkte = m_produktIds;
+        a.kontext.stoercodes = m_stoercodeIds;
+        a.kontext.produktLinie = m_produktLinie;
+        a.sollTaktzeitS = anlage ? anlage->sollTaktzeitS : 0.0;
+        aufgaben.append(a);
+    }
+
+    const int laufId = m_ladeLaufId;
+    const QString basisOrdner = m_ordner;
+    const int kernAnzahl = std::clamp(QThread::idealThreadCount(), 2, 4);
+    const int workerAnzahl = std::min(gesamt, kernAnzahl);
+    const int blockGroesse = (gesamt + workerAnzahl - 1) / workerAnzahl;
+
+    m_offeneThreads = workerAnzahl;
+    m_fertigGeprueft = 0;
+    m_pruefungLaeuft = true;
+
+    for (int w = 0; w < workerAnzahl; w++) {
+        const int start = w * blockGroesse;
+        const int ende = std::min(gesamt, start + blockGroesse);
+        if (start >= ende) {
+            m_offeneThreads--;
+            continue;
+        }
+        const QList<ProtokollPruefAufgabe> teilAufgaben = aufgaben.mid(start, ende - start);
+
+        QThread* thread = QThread::create([this, laufId, gesamt, basisOrdner, teilAufgaben]() {
+            QList<ProtokollPruefErgebnis> ergebnisse;
+            ergebnisse.reserve(teilAufgaben.size());
+            const int anzahl = teilAufgaben.size();
+            int seitLetztemUpdate = 0;
+
+            for (int i = 0; i < anzahl; i++) {
+                if (QThread::currentThread()->isInterruptionRequested()) {
+                    return;
+                }
+                const ProtokollPruefAufgabe& a = teilAufgaben[i];
+                ProtokollPruefErgebnis r;
+                r.schl = a.schl;
+                for (const Problem& pAlt : a.eintrag.probleme) {
+                    if (pAlt.code == "FK_ANLAGE") {
+                        r.probleme.append(pAlt);
+                    }
+                }
+
+                auto prot = Protokollleser::lesen(QDir(basisOrdner).filePath(a.eintrag.pfad), a.kontext);
+                r.probleme.append(prot->probleme);
+
+                if (prot->geladen) {
+                    if (prot->anlageId != a.eintrag.anlageId || prot->datum != a.eintrag.datum) {
+                        r.probleme.append(neuesProblem(Schweregrad::Fehler, "XML_KOPF", a.eintrag.pfad, 0, a.kontext.objektId,
+                            {prot->anlageId, prot->datum.toString("yyyy-MM-dd"),
+                             a.eintrag.anlageId, a.eintrag.datum.toString("yyyy-MM-dd")}));
+                    }
+                    if (prot->anzahlZustaende() != a.eintrag.anzahlZustaende) {
+                        r.probleme.append(neuesProblem(Schweregrad::Warnung, "XML_ANZAHL", a.eintrag.pfad, 0, a.kontext.objektId,
+                            {QString::number(a.eintrag.anzahlZustaende), QString::number(prot->anzahlZustaende())}));
+                    }
+                    OeeKennzahlen k = OeeBerechnung::tag(*prot, a.sollTaktzeitS);
+                    k.anlageId = a.eintrag.anlageId;
+                    k.datum = a.eintrag.datum;
+                    k.verlauf.clear();
+                    r.kennzahlen = k;
+                    r.hatKennzahlen = true;
+                }
+                ergebnisse.append(r);
+
+                seitLetztemUpdate++;
+                if (seitLetztemUpdate >= 25 || i + 1 == anzahl) {
+                    const int delta = seitLetztemUpdate;
+                    seitLetztemUpdate = 0;
+                    QMetaObject::invokeMethod(this, [this, laufId, delta, gesamt]() {
+                        if (laufId != m_ladeLaufId) return;
+                        m_fertigGeprueft = std::min(gesamt, m_fertigGeprueft + delta);
+                        emit pruefFortschritt(m_fertigGeprueft, gesamt);
+                    }, Qt::QueuedConnection);
+                }
+            }
+
+            QMetaObject::invokeMethod(this, [this, laufId, ergebnisse]() {
+                if (laufId != m_ladeLaufId) return;
+                for (const ProtokollPruefErgebnis& r : ergebnisse) {
+                    if (!m_index.contains(r.schl)) continue;
+                    ProtokollIndexEintrag& e = m_index[r.schl];
+                    e.probleme = r.probleme;
+                    e.geprueft = true;
+                    if (r.hatKennzahlen) {
+                        m_kennzahlen.insert(r.schl, r.kennzahlen);
+                    }
+                    m_geprueft++;
+                }
+
+                m_offeneThreads--;
+                if (m_offeneThreads <= 0) {
+                    for (QThread* t : m_ladeThreads) {
+                        if (t) {
+                            t->wait();
+                            delete t;
+                        }
+                    }
+                    m_ladeThreads.clear();
+                    m_trends.clear();
+                    problemeSammeln();
+                    m_pruefungLaeuft = false;
+                    emit pruefungAbgeschlossen();
+                    emit datensatzGeladen();
+                }
+            }, Qt::QueuedConnection);
+        });
+        m_ladeThreads.append(thread);
+    }
+
+    for (QThread* thread : m_ladeThreads) {
+        thread->start();
+    }
+
+    return !m_anlagen.isEmpty();
+}
+
 bool Datenverwaltung::datensatzAusSqliteLaden(const QString& sqlitePfad)
 {
+    hintergrundPruefungStoppen();
     leereAlles();
     m_ordner = QFileInfo(sqlitePfad).absolutePath();
 
@@ -722,6 +926,7 @@ QList<Wartung> Datenverwaltung::wartungenVonAnlage(const QString& anlageId) cons
 
 bool Datenverwaltung::anlageAendern(const Anlage& neu)
 {
+    wartenAufPruefung();
     for (Anlage& a : m_anlagen) {
         if (a.anlageId != neu.anlageId) continue;
 

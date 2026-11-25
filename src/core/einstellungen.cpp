@@ -47,6 +47,16 @@ void Einstellungen::setCacheGroesse(int anzahl)
     einstellungen().setValue("cacheGroesse", anzahl);
 }
 
+bool Einstellungen::dunkelmodus()
+{
+    return einstellungen().value("dunkelmodus", false).toBool();
+}
+
+void Einstellungen::setDunkelmodus(bool aktiv)
+{
+    einstellungen().setValue("dunkelmodus", aktiv);
+}
+
 QByteArray Einstellungen::fensterGeometrie()
 {
     return einstellungen().value("fensterGeometrie").toByteArray();

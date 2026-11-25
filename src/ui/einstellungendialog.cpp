@@ -1,6 +1,7 @@
 #include "einstellungendialog.h"
 #include "fensterhilfe.h"
 #include "core/einstellungen.h"
+#include "core/farben.h"
 #include "core/sprache.h"
 #include "io/datenverwaltung.h"
 #include <QApplication>
@@ -36,6 +37,14 @@ EinstellungenDialog::EinstellungenDialog(Datenverwaltung* daten, QWidget* parent
     // Gruppe Darstellung
     m_darstellungGruppe = new QGroupBox(inhalt);
     QFormLayout* darForm = new QFormLayout(m_darstellungGruppe);
+
+    m_themaLabel = new QLabel(m_darstellungGruppe);
+    m_themaCombo = new QComboBox(m_darstellungGruppe);
+    m_themaCombo->addItem(QString(), false);
+    m_themaCombo->addItem(QString(), true);
+    m_themaCombo->setCurrentIndex(Einstellungen::dunkelmodus() ? 1 : 0);
+    darForm->addRow(m_themaLabel, m_themaCombo);
+
     m_spracheLabel = new QLabel(m_darstellungGruppe);
     m_spracheCombo = new QComboBox(m_darstellungGruppe);
     m_spracheCombo->addItem("Deutsch", "de");
@@ -73,17 +82,13 @@ EinstellungenDialog::EinstellungenDialog(Datenverwaltung* daten, QWidget* parent
     datForm->addRow(m_cacheLabel, m_cacheSpin);
 
     m_cacheInfoLabel = new QLabel(m_datenGruppe);
+    m_cacheInfoLabel->setProperty("hinweis", true);
     m_cacheLeerenBtn = new QPushButton(m_datenGruppe);
     QHBoxLayout* cacheZeile = new QHBoxLayout();
     cacheZeile->addWidget(m_cacheInfoLabel, 1);
     cacheZeile->addWidget(m_cacheLeerenBtn);
     datForm->addRow(QString(), cacheZeile);
     inhaltLayout->addWidget(m_datenGruppe);
-
-    m_kontrastHinweis = new QLabel(inhalt);
-    m_kontrastHinweis->setWordWrap(true);
-    m_kontrastHinweis->setProperty("meldung", "info");
-    inhaltLayout->addWidget(m_kontrastHinweis);
 
     inhaltLayout->addStretch();
     scroll->setWidget(inhalt);
@@ -106,7 +111,7 @@ EinstellungenDialog::EinstellungenDialog(Datenverwaltung* daten, QWidget* parent
 
     texteAktualisieren();
     cacheAnzeigeAktualisieren();
-    Fensterhilfe::fensterAnBildschirmAnpassen(this, 560, 420, 0.90);
+    Fensterhilfe::fensterAnBildschirmAnpassen(this, 560, 400, 0.90);
 }
 
 void EinstellungenDialog::changeEvent(QEvent* ereignis)
@@ -123,6 +128,9 @@ void EinstellungenDialog::texteAktualisieren()
     setWindowTitle(tr("Einstellungen"));
     m_darstellungGruppe->setTitle(tr("Darstellung"));
     m_datenGruppe->setTitle(tr("Datenbasis und Cache"));
+    m_themaLabel->setText(tr("Farbmodus:"));
+    m_themaCombo->setItemText(0, tr("Heller Modus"));
+    m_themaCombo->setItemText(1, tr("Dunkler Modus"));
     m_spracheLabel->setText(tr("Sprache:"));
     m_schriftLabel->setText(tr("Schriftgröße:"));
     m_ordnerLabel->setText(tr("Standard-Datenordner:"));
@@ -131,7 +139,6 @@ void EinstellungenDialog::texteAktualisieren()
     m_standardOrdnerBtn->setText(tr("Automatisch"));
     m_cacheLabel->setText(tr("Protokoll-Cache (Anzahl Tage):"));
     m_cacheLeerenBtn->setText(tr("Cache leeren"));
-    m_kontrastHinweis->setText(tr("Alle Oberflächen- und Diagrammfarben sind auf ein Kontrastverhältnis von mindestens 8:1 ausgelegt."));
     m_abbrechenBtn->setText(tr("Abbrechen"));
     m_okBtn->setText(tr("Übernehmen"));
 }
@@ -169,15 +176,25 @@ void EinstellungenDialog::slotCacheLeeren()
 
 void EinstellungenDialog::slotUebernehmen()
 {
+    const bool dunklerModus = m_themaCombo->currentData().toBool();
     const QString neueSprache = m_spracheCombo->currentData().toString();
     const int neueSchrift = m_schriftSpin->value();
     const int neuerCache = m_cacheSpin->value();
     const QString neuerOrdner = m_ordnerEdit->text().trimmed();
 
+    Einstellungen::setDunkelmodus(dunklerModus);
     Einstellungen::setSprache(neueSprache);
     Einstellungen::setSchriftgroesse(neueSchrift);
     Einstellungen::setDatenordner(neuerOrdner);
     Einstellungen::setCacheGroesse(neuerCache);
+
+    if (Farben::dunkelmodus() != dunklerModus) {
+        Farben::setDunkelmodus(dunklerModus);
+        if (qApp) {
+            qApp->setPalette(Farben::anwendungsPalette());
+            qApp->setStyleSheet(Farben::styleSheet());
+        }
+    }
 
     QFont f = QApplication::font();
     f.setPointSize(neueSchrift);

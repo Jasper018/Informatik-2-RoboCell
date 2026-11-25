@@ -12,7 +12,7 @@ class QPushButton;
 class QSpinBox;
 class Datenverwaltung;
 
-// Einstellungsdialog (Sprache, Schriftgroesse, Standard-Datenordner, Cache)
+// Einstellungsdialog (Farbmodus, Sprache, Schriftgroesse, Standard-Datenordner, Cache)
 class EinstellungenDialog : public QDialog {
     Q_OBJECT
 
@@ -36,6 +36,8 @@ private:
 
     QGroupBox* m_darstellungGruppe = nullptr;
     QGroupBox* m_datenGruppe = nullptr;
+    QLabel* m_themaLabel = nullptr;
+    QComboBox* m_themaCombo = nullptr;
     QLabel* m_spracheLabel = nullptr;
     QComboBox* m_spracheCombo = nullptr;
     QLabel* m_schriftLabel = nullptr;
@@ -48,7 +50,6 @@ private:
     QSpinBox* m_cacheSpin = nullptr;
     QLabel* m_cacheInfoLabel = nullptr;
     QPushButton* m_cacheLeerenBtn = nullptr;
-    QLabel* m_kontrastHinweis = nullptr;
     QPushButton* m_abbrechenBtn = nullptr;
     QPushButton* m_okBtn = nullptr;
 };

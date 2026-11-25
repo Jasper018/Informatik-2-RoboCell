@@ -1,16 +1,16 @@
 CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:\Users\marlo\Documents\antigravity\Informatik-2-RoboCell-1\src\ui\linienansicht.cpp \
  C:\Users\marlo\Documents\antigravity\Informatik-2-RoboCell-1\src\ui\linienansicht.h \
- C:/QT/6.11.1/mingw_64/include/QtWidgets/QWidget \
- C:/QT/6.11.1/mingw_64/include/QtWidgets/qwidget.h \
- C:/QT/6.11.1/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
- C:/QT/6.11.1/mingw_64/include/QtGui/qtguiglobal.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qglobal.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/type_traits \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QDate \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qdatetime.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qcalendar.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/limits \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/os_defines.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/cpu_defines.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/pstl_config.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qglobal.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/type_traits \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cstddef \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
  C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/stddef.h \
@@ -65,7 +65,6 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qtversion.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qtypeinfo.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcontainerfwd.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/limits \
  C:/QT/6.11.1/mingw_64/include/QtCore/qsysinfo.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qlogging.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qflags.h \
@@ -152,13 +151,8 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qtresource.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qttranslation.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qversiontagging.h \
- C:/QT/6.11.1/mingw_64/include/QtGui/qtgui-config.h \
- C:/QT/6.11.1/mingw_64/include/QtGui/qtguiexports.h \
- C:/QT/6.11.1/mingw_64/include/QtWidgets/qtwidgets-config.h \
- C:/QT/6.11.1/mingw_64/include/QtWidgets/qtwidgetsexports.h \
- C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qobjectdefs.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qnamespace.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qlocale.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qvariant.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcompare.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qstdlibdetection.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcomparehelpers.h \
@@ -189,14 +183,23 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/vector.tcc \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/array \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/compare \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qmetatype.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qbytearray.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qrefcount.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qnamespace.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qtmetamacros.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qobjectdefs_impl.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qfunctionaltools_impl.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/memory \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_raw_storage_iter.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/align.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unique_ptr.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/shared_ptr.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qarraydata.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qpair.h \
+ C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/string.h \
+ C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/sec_api/string_s.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qarraydatapointer.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qarraydataops.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qcontainertools_impl.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qxptype_traits.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/q23type_traits.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cstring \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iterator \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stream_iterator.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iosfwd \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stringfwd.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/postypes.h \
@@ -207,8 +210,17 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/_mingw_stat64.h \
  C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/swprintf.inl \
  C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/sec_api/wchar_s.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/shared_ptr_base.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/allocated_ptr.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/streambuf_iterator.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/streambuf \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/localefwd.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++locale.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/clocale \
+ C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/locale.h \
+ C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/stdio.h \
+ C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cctype \
+ C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/ctype.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/ios_base.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ext/atomicity.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/gthr.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/gthr-default.h \
@@ -226,40 +238,6 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/pthread_compat.h \
  C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/pthread_unistd.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/atomic_word.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ext/concurrence.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/shared_ptr_atomic.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward/auto_ptr.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/glue_memory_defs.h \
- C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs_win.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qobject.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qstring.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qchar.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qstringview.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qbytearray.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qrefcount.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qarraydata.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qpair.h \
- C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/string.h \
- C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/sec_api/string_s.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qarraydatapointer.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qarraydataops.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qcontainertools_impl.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qxptype_traits.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/q23type_traits.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cstring \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iterator \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stream_iterator.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/streambuf_iterator.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/streambuf \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/localefwd.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++locale.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/clocale \
- C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/locale.h \
- C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/stdio.h \
- C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cctype \
- C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/ctype.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/ios_base.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/locale_classes.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/string \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/char_traits.h \
@@ -278,6 +256,17 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/error_constants.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/stdexcept \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/streambuf.tcc \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/memory \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_raw_storage_iter.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/align.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unique_ptr.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/shared_ptr.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/shared_ptr_base.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/allocated_ptr.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ext/concurrence.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/shared_ptr_atomic.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward/auto_ptr.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/glue_memory_defs.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/q20functional.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/q20memory.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/q17memory.h \
@@ -287,7 +276,18 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/_mingw_stdarg.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qbytearrayview.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qstringfwd.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qdatastream.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qobjectdefs.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qobjectdefs_impl.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qfunctionaltools_impl.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qchar.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qstringview.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qstringalgorithms.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qiodevicebase.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qscopedpointer.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qfloat16.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qhashfunctions.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qstring.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qlatin1stringview.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qanystringview.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qutf8stringview.h \
@@ -295,23 +295,12 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qstringbuilder.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qstringconverter.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qstringconverter_base.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qlist.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qhashfunctions.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/numeric \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_numeric.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/glue_numeric_defs.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qiterator.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qbytearraylist.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qstringlist.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qmath.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qalgorithms.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/q20bit.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qstringmatcher.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qscopedpointer.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qmetatype.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qdatastream.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qiodevicebase.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qfloat16.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qmath.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qtformat_impl.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qiterable.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qtaggedpointer.h \
@@ -325,16 +314,52 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_tree.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_map.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_multimap.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qobject_impl.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qbindingstorage.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qdebug.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qtextstream.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qcontiguouscache.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/climits \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qsharedpointer.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qshareddata.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qsharedpointer_impl.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/chrono \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/chrono.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ratio \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ctime \
- C:/QT/6.11.1/mingw_64/include/QtCore/qmargins.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qcheckedint_impl.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/set \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_set.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_multiset.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/unordered_set \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unordered_set.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qlist.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qiterator.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qbytearraylist.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qstringlist.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qstringmatcher.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qmap.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qshareddata_impl.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qset.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qhash.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qvarlengtharray.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qalloc.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/q23utility.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/q20utility.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qobject.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qobject_impl.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qbindingstorage.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QList \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QMap \
+ C:/QT/6.11.1/mingw_64/include/QtWidgets/QWidget \
+ C:/QT/6.11.1/mingw_64/include/QtWidgets/qwidget.h \
+ C:/QT/6.11.1/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qtguiglobal.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qtgui-config.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qtguiexports.h \
+ C:/QT/6.11.1/mingw_64/include/QtWidgets/qtwidgets-config.h \
+ C:/QT/6.11.1/mingw_64/include/QtWidgets/qtwidgetsexports.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs_win.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qmargins.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qcheckedint_impl.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qaction.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qkeysequence.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qicon.h \
@@ -346,7 +371,6 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtGui/qcolor.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qrgb.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qrgba64.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qshareddata.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qimage.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qpixelformat.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qtransform.h \
@@ -356,24 +380,6 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cassert \
  C:/QT/6.11.1/mingw_64/include/QtCore/q20iterator.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qline.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qvariant.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qdebug.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qtextstream.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qcontiguouscache.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/climits \
- C:/QT/6.11.1/mingw_64/include/QtCore/qsharedpointer.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qsharedpointer_impl.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/set \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_set.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_multiset.h \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/unordered_set \
- C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unordered_set.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qmap.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qshareddata_impl.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qset.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qhash.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qvarlengtharray.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qalloc.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qpalette.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qbrush.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qfont.h \
@@ -384,18 +390,7 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtWidgets/qsizepolicy.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qcursor.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qbitmap.h \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/farben.h \
- C:/QT/6.11.1/mingw_64/include/QtGui/QColor \
- C:/QT/6.11.1/mingw_64/include/QtCore/QList \
- C:/QT/6.11.1/mingw_64/include/QtCore/QString \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
- C:/QT/6.11.1/mingw_64/include/QtCore/QDate \
- C:/QT/6.11.1/mingw_64/include/QtCore/qdatetime.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qcalendar.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qlocale.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/QDateTime \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/problem.h \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/logic/oeeberechnung.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QCoreApplication \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreapplication.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreevent.h \
@@ -405,12 +400,18 @@ CMakeFiles/RoboCell.dir/src/ui/linienansicht.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qdeadlinetimer.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qnativeinterface.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcoreapplication_platform.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QDateTime \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QString \
+ C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/problem.h \
+ C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/farben.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/QColor \
+ C:/QT/6.11.1/mingw_64/include/QtGui/QPalette \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/io/datenverwaltung.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QObject \
- C:/QT/6.11.1/mingw_64/include/QtCore/QMap \
  C:/QT/6.11.1/mingw_64/include/QtCore/QSet \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/core/protokollcache.h \
- C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/logic/oeeberechnung.h \
  C:/QT/6.11.1/mingw_64/include/QtWidgets/QAbstractItemView \
  C:/QT/6.11.1/mingw_64/include/QtWidgets/qabstractitemview.h \
  C:/QT/6.11.1/mingw_64/include/QtWidgets/qabstractscrollarea.h \

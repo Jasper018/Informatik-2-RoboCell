@@ -12,6 +12,8 @@
 #include "core/protokollcache.h"
 #include "logic/oeeberechnung.h"
 
+class QThread;
+
 // Eine Zeile einer CSV-Datei (oder SQLite-Tabelle) mit ihrer Zeilennummer
 struct TabellenZeile {
     int nummer = 0;
@@ -27,12 +29,16 @@ class Datenverwaltung : public QObject {
 
 public:
     explicit Datenverwaltung(QObject* parent = nullptr);
+    ~Datenverwaltung() override;
 
     // Sucht den Ordner RoboCell_Daten relativ zum Programm
     static QString standardOrdner();
 
-    // Laedt und prueft einen kompletten Datensatz
+    // Laedt und prueft einen kompletten Datensatz (synchron oder im Hintergrund)
     bool datensatzLaden(const QString& ordner);
+    bool datensatzLadenHintergrund(const QString& ordner);
+    bool pruefungLaeuft() const { return m_pruefungLaeuft; }
+    void wartenAufPruefung();
     bool datensatzAusSqliteLaden(const QString& sqlitePfad);
     bool inSqliteSpeichern(const QString& sqlitePfad, QString* fehler = nullptr) const;
     bool csvExportieren(const QString& zielOrdner, QString* fehler = nullptr) const;
@@ -85,6 +91,7 @@ public:
 
 signals:
     void pruefFortschritt(int aktuell, int gesamt);
+    void pruefungAbgeschlossen();
     void datensatzGeladen();
     void anlageGeaendert(const QString& anlageId);
     void wartungHinzugefuegt(const QString& anlageId);
@@ -112,6 +119,8 @@ private:
     void positionenPruefen();
     void problemeSammeln();
     void kennzahlenNeuBerechnen(const QString& anlageId);
+    bool stammUndIndexAusOrdnerLaden(const QString& ordner);
+    void hintergrundPruefungStoppen();
 
     bool zahlLesen(const QString& text, const QString& feld, double* wert, QList<Problem>* probleme,
                    const QString& quelle, int zeile, const QString& id) const;
@@ -141,6 +150,12 @@ private:
     QList<Problem> m_dateiProbleme;   // Probleme, die zu keinem Objekt gehoeren
     QList<Problem> m_probleme;        // alle Probleme (Gesamtliste)
     int m_geprueft = 0;
+
+    QList<QThread*> m_ladeThreads;
+    bool m_pruefungLaeuft = false;
+    int m_ladeLaufId = 0;
+    int m_offeneThreads = 0;
+    int m_fertigGeprueft = 0;
 
     ProtokollCache m_cache;
 };

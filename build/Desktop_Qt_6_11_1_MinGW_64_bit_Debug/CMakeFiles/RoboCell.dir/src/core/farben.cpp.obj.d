@@ -300,6 +300,36 @@ CMakeFiles/RoboCell.dir/src/core/farben.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qstringmatcher.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qrgba64.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QList \
+ C:/QT/6.11.1/mingw_64/include/QtGui/QPalette \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpalette.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qobjectdefs.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qobjectdefs_impl.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qfunctionaltools_impl.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs_win.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qbrush.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qpoint.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qcheckedint_impl.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/q23utility.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/q20utility.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qscopedpointer.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qimage.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpaintdevice.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qrect.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qmargins.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qsize.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpixelformat.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qtransform.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpolygon.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qregion.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qdatastream.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qiodevicebase.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qspan.h \
+ C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cassert \
+ C:/QT/6.11.1/mingw_64/include/QtCore/q20iterator.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qline.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpixmap.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qshareddata.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QString \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
@@ -309,12 +339,6 @@ CMakeFiles/RoboCell.dir/src/core/farben.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qlocale.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qvariant.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qmetatype.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qdatastream.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qobjectdefs.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qobjectdefs_impl.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qfunctionaltools_impl.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qiodevicebase.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qscopedpointer.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qfloat16.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qmath.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qtformat_impl.h \
@@ -335,7 +359,6 @@ CMakeFiles/RoboCell.dir/src/core/farben.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qcontiguouscache.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/climits \
  C:/QT/6.11.1/mingw_64/include/QtCore/qsharedpointer.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/qshareddata.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qsharedpointer_impl.h \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/chrono \
  C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/chrono.h \
@@ -352,8 +375,6 @@ CMakeFiles/RoboCell.dir/src/core/farben.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtCore/qhash.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qvarlengtharray.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qalloc.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/q23utility.h \
- C:/QT/6.11.1/mingw_64/include/QtCore/q20utility.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qobject.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qobject_impl.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qbindingstorage.h \

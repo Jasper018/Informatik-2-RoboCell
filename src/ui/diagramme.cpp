@@ -36,8 +36,8 @@ void ZustandsLeisteWidget::paintEvent(QPaintEvent*)
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing, true);
 
-    p.fillRect(rect(), Farben::HINTERGRUND);
-    p.setPen(Farben::RAHMEN);
+    p.fillRect(rect(), Farben::hintergrund());
+    p.setPen(Farben::rahmen());
     p.drawRect(rect().adjusted(0, 0, -1, -1));
 
     m_balken.clear();
@@ -45,7 +45,7 @@ void ZustandsLeisteWidget::paintEvent(QPaintEvent*)
     QFont titelSchrift = font();
     titelSchrift.setBold(true);
     p.setFont(titelSchrift);
-    p.setPen(Farben::TEXT);
+    p.setPen(Farben::text());
     p.drawText(12, 22, tr("Zustandsverlauf je Schicht (Zeitleiste)"));
 
     // Legende mit automatischem Zeilenumbruch bei schmalen Fenstern
@@ -67,9 +67,9 @@ void ZustandsLeisteWidget::paintEvent(QPaintEvent*)
             ly += 18;
         }
         p.setBrush(Farben::zustandFarbe(legende[i]));
-        p.setPen(Farben::TEXT);
+        p.setPen(Farben::text());
         p.drawRect(lx, ly, 12, 12);
-        p.setPen(Farben::TEXT);
+        p.setPen(Farben::text());
         p.drawText(lx + 16, ly + 10, text);
         lx += breite;
     }
@@ -78,7 +78,7 @@ void ZustandsLeisteWidget::paintEvent(QPaintEvent*)
 
     if (!m_protokoll || !m_protokoll->geladen) {
         p.setFont(titelSchrift);
-        p.setPen(Farben::FEHLER_TEXT);
+        p.setPen(Farben::fehlerText());
         const QString meldung = (!m_protokoll || m_protokoll->probleme.isEmpty())
             ? tr("Kein Schichtprotokoll geladen.")
             : m_protokoll->probleme.first().text();
@@ -100,17 +100,17 @@ void ZustandsLeisteWidget::paintEvent(QPaintEvent*)
         QFont zeilenSchrift = font();
         zeilenSchrift.setBold(true);
         p.setFont(zeilenSchrift);
-        p.setPen(Farben::TEXT);
+        p.setPen(Farben::text());
         p.drawText(QRect(12, y, links - 18, balkenHoehe), Qt::AlignVCenter | Qt::AlignLeft, titel);
 
         const QRectF hintergrund(links, y, verfuegbar, balkenHoehe);
-        p.setBrush(Farben::ZEBRA);
-        p.setPen(Farben::RAHMEN);
+        p.setBrush(Farben::zebra());
+        p.setPen(Farben::rahmen());
         p.drawRect(hintergrund);
 
         if (!s.geplant || s.zustaende.isEmpty()) {
             p.setFont(kleinSchrift);
-            p.setPen(Farben::HINWEIS_TEXT);
+            p.setPen(Farben::hinweisText());
             p.drawText(hintergrund, Qt::AlignCenter,
                        s.geplant ? tr("Keine Zustandseinträge") : tr("Nicht geplant"));
             continue;
@@ -131,7 +131,7 @@ void ZustandsLeisteWidget::paintEvent(QPaintEvent*)
             p.drawRect(r);
 
             if (!z.plausibel || z.typ == ZustandTyp::Unbekannt) {
-                p.setPen(QPen(Farben::TEXT, 2));
+                p.setPen(QPen(Farben::text(), 2));
                 p.setBrush(Qt::NoBrush);
                 p.drawRect(r.adjusted(1, 1, -1, -1));
             }
@@ -145,7 +145,7 @@ void ZustandsLeisteWidget::paintEvent(QPaintEvent*)
 
         // Zeitmarkierungen alle 2 Stunden
         p.setFont(kleinSchrift);
-        p.setPen(Farben::HINWEIS_TEXT);
+        p.setPen(Farben::hinweisText());
         for (int h = 0; h <= 8; h += 2) {
             const double hx = links + (h / 8.0) * verfuegbar;
             p.drawLine(QPointF(hx, y + balkenHoehe), QPointF(hx, y + balkenHoehe + 3));
@@ -207,19 +207,19 @@ void StueckzahlDiagrammWidget::paintEvent(QPaintEvent*)
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing, true);
 
-    p.fillRect(rect(), Farben::HINTERGRUND);
-    p.setPen(Farben::RAHMEN);
+    p.fillRect(rect(), Farben::hintergrund());
+    p.setPen(Farben::rahmen());
     p.drawRect(rect().adjusted(0, 0, -1, -1));
 
     QFont titelSchrift = font();
     titelSchrift.setBold(true);
     p.setFont(titelSchrift);
-    p.setPen(Farben::TEXT);
+    p.setPen(Farben::text());
     p.drawText(12, 22, tr("Kumulierte Stückzahlen über die Zeit"));
 
     if (m_punkte.size() < 2) {
         p.setFont(font());
-        p.setPen(Farben::HINWEIS_TEXT);
+        p.setPen(Farben::hinweisText());
         p.drawText(rect().adjusted(16, 32, -16, -12), Qt::AlignCenter,
                    tr("Keine Produktionsdaten für diesen Tag vorhanden."));
         return;
@@ -230,16 +230,16 @@ void StueckzahlDiagrammWidget::paintEvent(QPaintEvent*)
     kleinSchrift.setPointSize(std::max(8, font().pointSize() - 1));
     p.setFont(kleinSchrift);
 
-    p.setPen(QPen(Farben::LINIE_Q, 3));
+    p.setPen(QPen(Farben::linieQ(), 3));
     p.drawLine(14, 38, 30, 38);
-    p.setPen(Farben::TEXT);
+    p.setPen(Farben::text());
     const QString gutLbl = tr("Gutteile (gesamt: %1)").arg(m_punkte.last().gut);
     p.drawText(35, 42, gutLbl);
 
     const int x2 = 45 + p.fontMetrics().horizontalAdvance(gutLbl) + 18;
-    p.setPen(QPen(Farben::LINIE_AUSSCHUSS, 2, Qt::DashLine));
+    p.setPen(QPen(Farben::linieAusschuss(), 2, Qt::DashLine));
     p.drawLine(x2, 38, x2 + 16, 38);
-    p.setPen(Farben::TEXT);
+    p.setPen(Farben::text());
     p.drawText(x2 + 21, 42, tr("Ausschuss (gesamt: %1)").arg(m_punkte.last().ausschuss));
 
     const int links = 58, rechts = 24, oben = 54, unten = 32;
@@ -260,16 +260,16 @@ void StueckzahlDiagrammWidget::paintEvent(QPaintEvent*)
     for (int i = 0; i <= 4; i++) {
         const double anteil = i / 4.0;
         const double y = feld.bottom() - anteil * feld.height();
-        p.setPen(QPen(Farben::RAHMEN, 1, Qt::DotLine));
+        p.setPen(QPen(Farben::rahmen(), 1, Qt::DotLine));
         p.drawLine(QPointF(feld.left(), y), QPointF(feld.right(), y));
-        p.setPen(Farben::TEXT);
+        p.setPen(Farben::text());
         p.drawText(QRectF(4, y - 8, links - 10, 16), Qt::AlignRight | Qt::AlignVCenter,
                    QString::number(int(std::round(anteil * maxWert))));
     }
     for (int i = 0; i <= 4; i++) {
         const double anteil = i / 4.0;
         const double x = feld.left() + anteil * feld.width();
-        p.setPen(Farben::TEXT);
+        p.setPen(Farben::text());
         p.drawText(QRectF(x - 24, feld.bottom() + 4, 48, 18), Qt::AlignCenter,
                    start.addSecs(qint64(anteil * gesamtSek)).toString("HH:mm"));
     }
@@ -291,9 +291,9 @@ void StueckzahlDiagrammWidget::paintEvent(QPaintEvent*)
     }
 
     p.setBrush(Qt::NoBrush);
-    p.setPen(QPen(Farben::LINIE_Q, 2.5));
+    p.setPen(QPen(Farben::linieQ(), 2.5));
     p.drawPath(gutPfad);
-    p.setPen(QPen(Farben::LINIE_AUSSCHUSS, 2.0, Qt::DashLine));
+    p.setPen(QPen(Farben::linieAusschuss(), 2.0, Qt::DashLine));
     p.drawPath(ausschussPfad);
 }
 
@@ -342,8 +342,8 @@ void TrendDiagrammWidget::paintEvent(QPaintEvent*)
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing, true);
 
-    p.fillRect(rect(), Farben::HINTERGRUND);
-    p.setPen(Farben::RAHMEN);
+    p.fillRect(rect(), Farben::hintergrund());
+    p.setPen(Farben::rahmen());
     p.drawRect(rect().adjusted(0, 0, -1, -1));
 
     m_treffer.clear();
@@ -351,15 +351,15 @@ void TrendDiagrammWidget::paintEvent(QPaintEvent*)
     QFont titelSchrift = font();
     titelSchrift.setBold(true);
     p.setFont(titelSchrift);
-    p.setPen(Farben::TEXT);
+    p.setPen(Farben::text());
     p.drawText(12, 22, tr("14-Tage-Trend: Verfügbarkeit (V), Leistungsgrad (L), Qualität (Q) und OEE"));
 
     struct Reihe { QString name; QColor farbe; Qt::PenStyle stil; };
     const Reihe reihen[4] = {
-        {tr("OEE"), Farben::LINIE_OEE, Qt::SolidLine},
-        {tr("Verfügbarkeit (V)"), Farben::LINIE_V, Qt::SolidLine},
-        {tr("Leistung (L)"), Farben::LINIE_L, Qt::DashLine},
-        {tr("Qualität (Q)"), Farben::LINIE_Q, Qt::DotLine}
+        {tr("OEE"), Farben::linieOee(), Qt::SolidLine},
+        {tr("Verfügbarkeit (V)"), Farben::linieV(), Qt::SolidLine},
+        {tr("Leistung (L)"), Farben::linieL(), Qt::DashLine},
+        {tr("Qualität (Q)"), Farben::linieQ(), Qt::DotLine}
     };
 
     QFont kleinSchrift = font();
@@ -376,13 +376,13 @@ void TrendDiagrammWidget::paintEvent(QPaintEvent*)
         }
         p.setPen(QPen(reihen[i].farbe, 3, reihen[i].stil));
         p.drawLine(lx, ly, lx + 16, ly);
-        p.setPen(Farben::TEXT);
+        p.setPen(Farben::text());
         p.drawText(lx + 22, ly + 4, reihen[i].name);
         lx += breite;
     }
 
     if (m_tage.isEmpty()) {
-        p.setPen(Farben::HINWEIS_TEXT);
+        p.setPen(Farben::hinweisText());
         p.drawText(rect().adjusted(16, ly + 16, -16, -12), Qt::AlignCenter,
                    tr("Keine 14-Tage-Daten verfügbar."));
         return;
@@ -394,9 +394,9 @@ void TrendDiagrammWidget::paintEvent(QPaintEvent*)
 
     for (int pct = 0; pct <= 100; pct += 25) {
         const double y = feld.bottom() - (pct / 100.0) * feld.height();
-        p.setPen(QPen(Farben::RAHMEN, 1, Qt::DotLine));
+        p.setPen(QPen(Farben::rahmen(), 1, Qt::DotLine));
         p.drawLine(QPointF(feld.left(), y), QPointF(feld.right(), y));
-        p.setPen(Farben::TEXT);
+        p.setPen(Farben::text());
         p.drawText(QRectF(4, y - 8, links - 8, 16), Qt::AlignRight | Qt::AlignVCenter,
                    QString("%1 %").arg(pct));
     }
@@ -430,7 +430,7 @@ void TrendDiagrammWidget::paintEvent(QPaintEvent*)
         p.drawPath(pfad);
     }
 
-    p.setPen(Farben::TEXT);
+    p.setPen(Farben::text());
     for (int i = 0; i < n; i++) {
         const double x = feld.left() + (n > 1 ? double(i) / (n - 1) * feld.width() : feld.width() / 2.0);
         m_treffer.append({x, m_tage[i]});

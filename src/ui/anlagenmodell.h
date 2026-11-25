@@ -2,12 +2,15 @@
 #define ANLAGENMODELL_H
 
 #include <QAbstractTableModel>
+#include <QList>
 #include <QSortFilterProxyModel>
+#include "logic/oeeberechnung.h"
 #include "model/datentypen.h"
 
 class Datenverwaltung;
 
 // Tabellenmodell fuer die Anlagenliste (QTableView + QAbstractTableModel)
+// Helt fuer fluessiges Scrollen einen vorab berechneten Zeilen-Cache vor.
 class AnlagenModell : public QAbstractTableModel {
     Q_OBJECT
 
@@ -48,9 +51,23 @@ public:
 
     void aktualisieren();
     void spracheAktualisieren();
+    void farbenAktualisieren();
 
 private:
+    struct ZeilenCache {
+        Trendbericht bericht;
+        int fehlerAnz = 0;
+        int warnAnz = 0;
+        bool hatFlag = false;
+        QString herstellerModell;
+        QString oeeText;
+        QString stoerzeitText;
+    };
+
+    void cacheNeuBauen();
+
     Datenverwaltung* m_daten = nullptr;
+    QList<ZeilenCache> m_zeilen;
 };
 
 // Filter- und Sortiermodell fuer die Anlagenliste

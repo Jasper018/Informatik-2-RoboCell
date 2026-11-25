@@ -412,6 +412,24 @@ CMakeFiles/RoboCellTests.dir/tests/test_main.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtGui/qtguiexports.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qrgb.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/qrgba64.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/QPalette \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpalette.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs_win.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qbrush.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qpoint.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qcheckedint_impl.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qimage.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpaintdevice.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qrect.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qmargins.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qsize.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpixelformat.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qtransform.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpolygon.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qregion.h \
+ C:/QT/6.11.1/mingw_64/include/QtCore/qline.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpixmap.h \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
  C:/QT/6.11.1/mingw_64/include/QtCore/QDateTime \

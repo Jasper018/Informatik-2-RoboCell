@@ -387,9 +387,6 @@ CMakeFiles/RoboCell.dir/src/main.cpp.obj: \
  C:/QT/6.11.1/mingw_64/include/QtGui/QFont \
  C:/QT/6.11.1/mingw_64/include/QtGui/qfont.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/qendian.h \
- C:/QT/6.11.1/mingw_64/include/QtGui/QPalette \
- C:/QT/6.11.1/mingw_64/include/QtGui/qpalette.h \
- C:/QT/6.11.1/mingw_64/include/QtGui/qbrush.h \
  C:/QT/6.11.1/mingw_64/include/QtWidgets/QStyleFactory \
  C:/QT/6.11.1/mingw_64/include/QtWidgets/qstylefactory.h \
  C:\Users\marlo\Documents\antigravity\Informatik-2-RoboCell-1\src\core/benutzerverwaltung.h \
@@ -400,6 +397,9 @@ CMakeFiles/RoboCell.dir/src/main.cpp.obj: \
  C:\Users\marlo\Documents\antigravity\Informatik-2-RoboCell-1\src\core/einstellungen.h \
  C:\Users\marlo\Documents\antigravity\Informatik-2-RoboCell-1\src\core/farben.h \
  C:/QT/6.11.1/mingw_64/include/QtGui/QColor \
+ C:/QT/6.11.1/mingw_64/include/QtGui/QPalette \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qpalette.h \
+ C:/QT/6.11.1/mingw_64/include/QtGui/qbrush.h \
  C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/src/model/datentypen.h \
  C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
  C:/QT/6.11.1/mingw_64/include/QtCore/QDate \
