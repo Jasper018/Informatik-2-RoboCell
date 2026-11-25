@@ -1,13 +1,6 @@
-C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/YPKJ5OE7LN/moc_AnlageDetailDialog.cpp: C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/AnlageDetailDialog.h \
+C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/YPKJ5OE7LN/moc_anlagedetaildialog.cpp: C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/anlagedetaildialog.h \
   C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/moc_predefs.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/QDate \
-  C:/QT/6.11.1/mingw_64/include/QtCore/QDateTime \
-  C:/QT/6.11.1/mingw_64/include/QtCore/QList \
-  C:/QT/6.11.1/mingw_64/include/QtCore/QMap \
-  C:/QT/6.11.1/mingw_64/include/QtCore/QPair \
-  C:/QT/6.11.1/mingw_64/include/QtCore/QRectF \
-  C:/QT/6.11.1/mingw_64/include/QtCore/QString \
-  C:/QT/6.11.1/mingw_64/include/QtCore/QStringList \
   C:/QT/6.11.1/mingw_64/include/QtCore/q17memory.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/q20bit.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/q20functional.h \
@@ -17,7 +10,6 @@ C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/YPKJ5OE7
   C:/QT/6.11.1/mingw_64/include/QtCore/q20utility.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/q23type_traits.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/q23utility.h \
-  C:/QT/6.11.1/mingw_64/include/QtCore/qabstractitemmodel.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qalgorithms.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qalloc.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qanystringview.h \
@@ -62,9 +54,7 @@ C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/YPKJ5OE7
   C:/QT/6.11.1/mingw_64/include/QtCore/qglobalstatic.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qhash.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qhashfunctions.h \
-  C:/QT/6.11.1/mingw_64/include/QtCore/qiodevice.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qiodevicebase.h \
-  C:/QT/6.11.1/mingw_64/include/QtCore/qitemselectionmodel.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qiterable.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qiterator.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qlatin1stringview.h \
@@ -91,7 +81,6 @@ C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/YPKJ5OE7
   C:/QT/6.11.1/mingw_64/include/QtCore/qprocessordetection.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qrect.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qrefcount.h \
-  C:/QT/6.11.1/mingw_64/include/QtCore/qregularexpression.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qscopedpointer.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qscopeguard.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qset.h \
@@ -137,7 +126,6 @@ C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/YPKJ5OE7
   C:/QT/6.11.1/mingw_64/include/QtCore/qtversionchecks.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qtypeinfo.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qtypes.h \
-  C:/QT/6.11.1/mingw_64/include/QtCore/qurl.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qutf8stringview.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qvariant.h \
   C:/QT/6.11.1/mingw_64/include/QtCore/qvarlengtharray.h \
@@ -158,50 +146,21 @@ C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/YPKJ5OE7
   C:/QT/6.11.1/mingw_64/include/QtGui/qkeysequence.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qpaintdevice.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qpalette.h \
-  C:/QT/6.11.1/mingw_64/include/QtGui/qpicture.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qpixelformat.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qpixmap.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qpolygon.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qregion.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qrgb.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qrgba64.h \
-  C:/QT/6.11.1/mingw_64/include/QtGui/qtextdocument.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qtgui-config.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qtguiexports.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qtguiglobal.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qtransform.h \
-  C:/QT/6.11.1/mingw_64/include/QtGui/qvalidator.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs.h \
   C:/QT/6.11.1/mingw_64/include/QtGui/qwindowdefs_win.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/QComboBox \
   C:/QT/6.11.1/mingw_64/include/QtWidgets/QDialog \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/QLabel \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/QProgressBar \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/QPushButton \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/QTabWidget \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/QTableWidget \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/QWidget \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qabstractbutton.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qabstractitemview.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qabstractscrollarea.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qabstractslider.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qabstractspinbox.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qcombobox.h \
   C:/QT/6.11.1/mingw_64/include/QtWidgets/qdialog.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qframe.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qlabel.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qprogressbar.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qpushbutton.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qrubberband.h \
   C:/QT/6.11.1/mingw_64/include/QtWidgets/qsizepolicy.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qslider.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qstyle.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qstyleoption.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qtabbar.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qtableview.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qtablewidget.h \
-  C:/QT/6.11.1/mingw_64/include/QtWidgets/qtabwidget.h \
   C:/QT/6.11.1/mingw_64/include/QtWidgets/qtwidgets-config.h \
   C:/QT/6.11.1/mingw_64/include/QtWidgets/qtwidgetsexports.h \
   C:/QT/6.11.1/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -418,7 +377,4 @@ C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/YPKJ5OE7
   C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/sys/types.h \
   C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h \
   C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
-  C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
-  C:/Users/marlo/Documents/antigravity/silly-volta/src/logic/OeeCalculator.h \
-  C:/Users/marlo/Documents/antigravity/silly-volta/src/model/Entities.h \
-  C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/CustomCharts.h
+  C:/QT/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h

@@ -20,6 +20,7 @@
 #define __FLT32_MIN_EXP__ (-125)
 #define __cpp_static_assert 201411L
 #define __BFLT16_MIN_10_EXP__ (-37)
+#define QT_GUI_LIB 1
 #define __ORDER_LITTLE_ENDIAN__ 1234
 #define __WCHAR_MAX__ 0xffff
 #define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 1
@@ -242,7 +243,6 @@
 #define __DEC128_MIN_EXP__ (-6142)
 #define __DEC128_MAX__ 9.999999999999999999999999999999999E6144DL
 #define __INT_FAST32_TYPE__ int
-#define QT_CONCURRENT_LIB 1
 #define __UINT_LEAST16_TYPE__ short unsigned int
 #define __DEC128_MAX_EXP__ 6145
 #define __DBL_HAS_DENORM__ 1

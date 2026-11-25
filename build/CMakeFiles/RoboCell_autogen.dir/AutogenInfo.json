@@ -430,16 +430,6 @@
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets-relwithdebinfo.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginAdditionalTargetInfo.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Sql/Qt6SqlVersionlessAliasTargets.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentConfigVersion.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentConfigVersionImpl.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentConfig.cmake",
-		"C:/QT/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentDependencies.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentTargetsPrecheck.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentTargets.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentTargets-relwithdebinfo.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentAdditionalTargetInfo.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentVersionlessAliasTargets.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportConfigVersion.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportConfigVersionImpl.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportConfig.cmake",
@@ -450,7 +440,9 @@
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportTargets-relwithdebinfo.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportAdditionalTargetInfo.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportPlugins.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportVersionlessAliasTargets.cmake"
+		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportVersionlessAliasTargets.cmake",
+		"C:/Users/marlo/Documents/antigravity/silly-volta/resources.qrc",
+		"C:/Users/marlo/Documents/antigravity/silly-volta/resources.qrc"
 	],
 	"CMAKE_SOURCE_DIR" : "C:/Users/marlo/Documents/antigravity/silly-volta",
 	"CROSS_CONFIG" : false,
@@ -459,87 +451,117 @@
 	"HEADERS" : 
 	[
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/AuthManager.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/benutzerverwaltung.h",
 			"MU",
-			"PRMOGMWJPH/moc_AuthManager.cpp",
+			"PRMOGMWJPH/moc_benutzerverwaltung.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/LanguageManager.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/einstellungen.h",
 			"MU",
-			"PRMOGMWJPH/moc_LanguageManager.cpp",
+			"PRMOGMWJPH/moc_einstellungen.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/LruCache.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/farben.h",
 			"MU",
-			"PRMOGMWJPH/moc_LruCache.cpp",
+			"PRMOGMWJPH/moc_farben.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/DataRepository.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/protokollcache.h",
 			"MU",
-			"F43WJJHJFQ/moc_DataRepository.cpp",
+			"PRMOGMWJPH/moc_protokollcache.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/XmlProtokollReader.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/sprache.h",
 			"MU",
-			"F43WJJHJFQ/moc_XmlProtokollReader.cpp",
+			"PRMOGMWJPH/moc_sprache.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/logic/OeeCalculator.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/datenverwaltung.h",
 			"MU",
-			"PUYCVECU7E/moc_OeeCalculator.cpp",
+			"F43WJJHJFQ/moc_datenverwaltung.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/model/Entities.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/protokollleser.h",
 			"MU",
-			"VNQA4LF4BW/moc_Entities.cpp",
+			"F43WJJHJFQ/moc_protokollleser.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/AnlageDetailDialog.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/logic/oeeberechnung.h",
 			"MU",
-			"YPKJ5OE7LN/moc_AnlageDetailDialog.cpp",
+			"PUYCVECU7E/moc_oeeberechnung.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/AnlagenTableModel.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/model/datentypen.h",
 			"MU",
-			"YPKJ5OE7LN/moc_AnlagenTableModel.cpp",
+			"VNQA4LF4BW/moc_datentypen.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/CustomCharts.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/model/problem.h",
 			"MU",
-			"YPKJ5OE7LN/moc_CustomCharts.cpp",
+			"VNQA4LF4BW/moc_problem.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/EditDialogs.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/anlagedetaildialog.h",
 			"MU",
-			"YPKJ5OE7LN/moc_EditDialogs.cpp",
+			"YPKJ5OE7LN/moc_anlagedetaildialog.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/LineGraphicsView.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/anlagenmodell.h",
 			"MU",
-			"YPKJ5OE7LN/moc_LineGraphicsView.cpp",
+			"YPKJ5OE7LN/moc_anlagenmodell.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/LoginDialog.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/anmeldedialog.h",
 			"MU",
-			"YPKJ5OE7LN/moc_LoginDialog.cpp",
+			"YPKJ5OE7LN/moc_anmeldedialog.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/MainWindow.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/bearbeitendialoge.h",
 			"MU",
-			"YPKJ5OE7LN/moc_MainWindow.cpp",
+			"YPKJ5OE7LN/moc_bearbeitendialoge.cpp",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/diagramme.h",
+			"MU",
+			"YPKJ5OE7LN/moc_diagramme.cpp",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/einstellungendialog.h",
+			"MU",
+			"YPKJ5OE7LN/moc_einstellungendialog.cpp",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/fensterhilfe.h",
+			"MU",
+			"YPKJ5OE7LN/moc_fensterhilfe.cpp",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/linienansicht.h",
+			"MU",
+			"YPKJ5OE7LN/moc_linienansicht.cpp",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/mainwindow.h",
+			"MU",
+			"YPKJ5OE7LN/moc_mainwindow.cpp",
 			null
 		]
 	],
@@ -549,7 +571,6 @@
 	"MOC_DEFINITIONS" : 
 	[
 		"MINGW_HAS_SECURE_API=1",
-		"QT_CONCURRENT_LIB",
 		"QT_CORE_LIB",
 		"QT_GUI_LIB",
 		"QT_NEEDS_QMAIN",
@@ -582,7 +603,6 @@
 		"C:/QT/6.11.1/mingw_64/include/QtWidgets",
 		"C:/QT/6.11.1/mingw_64/include/QtXml",
 		"C:/QT/6.11.1/mingw_64/include/QtSql",
-		"C:/QT/6.11.1/mingw_64/include/QtConcurrent",
 		"C:/QT/6.11.1/mingw_64/include/QtPrintSupport",
 		"C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++",
 		"C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32",
@@ -625,27 +645,42 @@
 	"SOURCES" : 
 	[
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/AuthManager.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/benutzerverwaltung.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/LanguageManager.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/einstellungen.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/DataRepository.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/farben.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/XmlProtokollReader.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/protokollcache.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/logic/OeeCalculator.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/sprache.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/datenverwaltung.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/protokollleser.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/logic/oeeberechnung.cpp",
 			"MU",
 			null
 		],
@@ -655,37 +690,57 @@
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/AnlageDetailDialog.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/model/datentypen.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/AnlagenTableModel.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/model/problem.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/CustomCharts.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/anlagedetaildialog.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/EditDialogs.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/anlagenmodell.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/LineGraphicsView.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/anmeldedialog.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/LoginDialog.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/bearbeitendialoge.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/MainWindow.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/diagramme.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/einstellungendialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/fensterhilfe.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/linienansicht.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/ui/mainwindow.cpp",
 			"MU",
 			null
 		]

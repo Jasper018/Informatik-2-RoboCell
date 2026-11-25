@@ -450,11 +450,11 @@ Makefile: ../../RoboCell.pro C:/QT/6.11.1/mingw_64/mkspecs/win32-g++/qmake.conf 
 		C:/QT/6.11.1/mingw_64/lib/Qt6Gui.prl \
 		C:/QT/6.11.1/mingw_64/lib/Qt6Xml.prl \
 		C:/QT/6.11.1/mingw_64/lib/Qt6Sql.prl \
-		C:/QT/6.11.1/mingw_64/lib/Qt6Concurrent.prl \
 		C:/QT/6.11.1/mingw_64/lib/Qt6Core.prl \
 		C:/QT/6.11.1/mingw_64/lib/Qt6EntryPoint.prl \
 		.qmake.stash \
-		C:/QT/6.11.1/mingw_64/mkspecs/features/build_pass.prf
+		C:/QT/6.11.1/mingw_64/mkspecs/features/build_pass.prf \
+		../../resources.qrc
 	$(QMAKE) -o Makefile ..\..\RoboCell.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 C:/QT/6.11.1/mingw_64/mkspecs/features/spec_pre.prf:
 C:/QT/6.11.1/mingw_64/mkspecs/features/device_config.prf:
@@ -836,11 +836,11 @@ C:/QT/6.11.1/mingw_64/lib/Qt6Widgets.prl:
 C:/QT/6.11.1/mingw_64/lib/Qt6Gui.prl:
 C:/QT/6.11.1/mingw_64/lib/Qt6Xml.prl:
 C:/QT/6.11.1/mingw_64/lib/Qt6Sql.prl:
-C:/QT/6.11.1/mingw_64/lib/Qt6Concurrent.prl:
 C:/QT/6.11.1/mingw_64/lib/Qt6Core.prl:
 C:/QT/6.11.1/mingw_64/lib/Qt6EntryPoint.prl:
 .qmake.stash:
 C:/QT/6.11.1/mingw_64/mkspecs/features/build_pass.prf:
+../../resources.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ..\..\RoboCell.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 

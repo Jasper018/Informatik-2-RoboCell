@@ -1,1 +1,0 @@
-# Informatik-2-RoboCell

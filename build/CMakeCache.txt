@@ -283,9 +283,6 @@ QT_ADDITIONAL_HOST_PACKAGES_PREFIX_PATH:STRING=
 //Additional directories where find(Qt6 ...) components are searched
 QT_ADDITIONAL_PACKAGES_PREFIX_PATH:STRING=
 
-//The directory containing a CMake configuration file for Qt6Concurrent.
-Qt6Concurrent_DIR:PATH=C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent
-
 //The directory containing a CMake configuration file for Qt6CoreTools.
 Qt6CoreTools_DIR:PATH=C:/QT/6.11.1/mingw_64/lib/cmake/Qt6CoreTools
 

@@ -1,6 +1,0 @@
-set(__QT_DEPLOY_TARGET_RoboCell_FILE C:/Users/marlo/Documents/antigravity/silly-volta/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/RoboCell.exe)
-set(__QT_DEPLOY_TARGET_RoboCell_TYPE EXECUTABLE)
-set(__QT_DEPLOY_TARGET_RoboCell_RUNTIME_DLLS C:/QT/6.11.1/mingw_64/bin/Qt6Xml.dll;C:/QT/6.11.1/mingw_64/bin/Qt6Sql.dll;C:/QT/6.11.1/mingw_64/bin/Qt6Concurrent.dll;C:/QT/6.11.1/mingw_64/bin/Qt6PrintSupport.dll;C:/QT/6.11.1/mingw_64/bin/Qt6Widgets.dll;C:/QT/6.11.1/mingw_64/bin/Qt6Gui.dll;C:/QT/6.11.1/mingw_64/bin/Qt6Core.dll)
-set(__QT_DEPLOY_TARGET_RoboCellTests_FILE C:/Users/marlo/Documents/antigravity/silly-volta/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/RoboCellTests.exe)
-set(__QT_DEPLOY_TARGET_RoboCellTests_TYPE EXECUTABLE)
-set(__QT_DEPLOY_TARGET_RoboCellTests_RUNTIME_DLLS C:/QT/6.11.1/mingw_64/bin/Qt6Xml.dll;C:/QT/6.11.1/mingw_64/bin/Qt6Sql.dll;C:/QT/6.11.1/mingw_64/bin/Qt6Concurrent.dll;C:/QT/6.11.1/mingw_64/bin/Qt6Core.dll)

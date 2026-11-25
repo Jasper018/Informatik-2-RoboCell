@@ -1,84 +1,94 @@
-#pragma once
+#ifndef ANLAGEDETAILDIALOG_H
+#define ANLAGEDETAILDIALOG_H
 
-#include "model/Entities.h"
-#include "logic/OeeCalculator.h"
-#include "ui/CustomCharts.h"
+#include <QDate>
 #include <QDialog>
-#include <QLabel>
-#include <QComboBox>
-#include <QTableWidget>
-#include <QPushButton>
-#include <QProgressBar>
-#include <QTabWidget>
 
-namespace RoboCell {
+class QComboBox;
+class QEvent;
+class QGroupBox;
+class QLabel;
+class QProgressBar;
+class QPushButton;
+class QTableWidget;
+class QTabWidget;
+class Benutzerverwaltung;
+class Datenverwaltung;
+class StueckzahlDiagrammWidget;
+class TrendDiagrammWidget;
+class ZustandsLeisteWidget;
 
-class DataRepository;
-
-/**
- * @brief Detaildialog einer Anlage mit Stammdaten, Linieninfos, Lazy-Loading-Tagesprotokoll,
- *        Zustands-Zeitleiste, kumulierten Gutteilen, OEE-Auswertung, Schichtvergleich,
- *        MTBF/MTTR, 14-Tage-Trend und Berichtsexport (Mindestanforderung 2, 5, 6, 7 & Erweiterungen).
- */
+// Detailansicht einer Anlage mit Stammdaten, Protokollen (Lazy Loading),
+// Zustands-Zeitleiste, Stueckzahlverlauf, OEE, 14-Tage-Trend, Wartungen und Flags.
 class AnlageDetailDialog : public QDialog {
     Q_OBJECT
+
 public:
-    AnlageDetailDialog(const QString& anlageId, DataRepository* repo, QWidget* parent = nullptr);
+    AnlageDetailDialog(const QString& anlageId, Datenverwaltung* daten,
+                       Benutzerverwaltung* benutzer, QWidget* parent = nullptr,
+                       const QDate& anfangsDatum = QDate());
+
+protected:
+    void changeEvent(QEvent* ereignis) override;
 
 private slots:
-    void onDateSelected(int index);
-    void onEditMasterDataClicked();
-    void onAddMaintenanceClicked();
-    void onExportReportPdfClicked();
-    void onExportReportCsvClicked();
-    void refreshMasterDataHeader();
+    void slotTagGewaehlt(int index);
+    void slotBearbeiten();
+    void slotWartungErfassen();
+    void slotBerichtCsv();
+    void slotBerichtPdf();
 
 private:
-    void loadSelectedDayLazy(const QDate& date);
-    void populate14DaysTrendTab();
-    void populateMaintenanceTab();
+    void texteAktualisieren();
+    void stammdatenAnzeigen();
+    void tagesAuswahlFuellen(const QDate& zielDatum);
+    void tagLaden(const QDate& datum);
+    void trendFuellen();
+    void wartungenFuellen();
+    void flagsFuellen();
 
     QString m_anlageId;
-    DataRepository* m_repo = nullptr;
+    Datenverwaltung* m_daten = nullptr;
+    Benutzerverwaltung* m_benutzer = nullptr;
 
-    // Header / Stammdaten
-    QLabel* m_titleLabel = nullptr;
-    QLabel* m_masterInfoLabel = nullptr;
-    QLabel* m_lineInfoLabel = nullptr;
-    QLabel* m_warningBanner = nullptr;
-    QPushButton* m_editBtn = nullptr;
-    QPushButton* m_addMaintBtn = nullptr;
-    QPushButton* m_exportPdfBtn = nullptr;
-    QPushButton* m_exportCsvBtn = nullptr;
+    QLabel* m_titelLabel = nullptr;
+    QPushButton* m_bearbeitenBtn = nullptr;
+    QPushButton* m_wartungBtn = nullptr;
+    QPushButton* m_csvBtn = nullptr;
+    QPushButton* m_pdfBtn = nullptr;
 
-    // Tagesauswahl
-    QComboBox* m_dateCombo = nullptr;
-    QLabel* m_xmlPathLabel = nullptr;
-    QLabel* m_degradationBanner = nullptr;
+    QGroupBox* m_stammGruppe = nullptr;
+    QLabel* m_stammLabel = nullptr;
+    QLabel* m_linieLabel = nullptr;
+    QLabel* m_stammFlagBanner = nullptr;
 
-    // OEE KPI Cards
-    QProgressBar* m_vBar = nullptr;
-    QProgressBar* m_lBar = nullptr;
-    QProgressBar* m_qBar = nullptr;
-    QProgressBar* m_oeeBar = nullptr;
-    QLabel* m_kpiDetailsLabel = nullptr;
-    QLabel* m_mtbfMttrLabel = nullptr;
+    QLabel* m_tagAuswahlLabel = nullptr;
+    QComboBox* m_tagCombo = nullptr;
+    QLabel* m_pfadLabel = nullptr;
+    QLabel* m_protokollBanner = nullptr;
 
-    // Visualisierungen (Tab 1: Tagesverlauf)
-    StateTimelineWidget* m_timelineWidget = nullptr;
-    CumulativePartsChartWidget* m_cumPartsWidget = nullptr;
+    QGroupBox* m_oeeGruppe = nullptr;
+    QLabel* m_vLabel = nullptr;
+    QLabel* m_lLabel = nullptr;
+    QLabel* m_qLabel = nullptr;
+    QLabel* m_oeeLabel = nullptr;
+    QProgressBar* m_vBalken = nullptr;
+    QProgressBar* m_lBalken = nullptr;
+    QProgressBar* m_qBalken = nullptr;
+    QProgressBar* m_oeeBalken = nullptr;
+    QLabel* m_zeitenLabel = nullptr;
+    QLabel* m_zuverlaessigkeitLabel = nullptr;
 
-    // Tabellen (Tab 2: Zeitanteile & Schichtvergleich)
-    QTableWidget* m_stateDurationTable = nullptr;
-    QTableWidget* m_shiftCompareTable = nullptr;
-
-    // Tab 3: 14-Tage-Trend & Anomalieanalyse
-    Trend14DaysChartWidget* m_trendChart = nullptr;
-    QLabel* m_trendAnomalyLabel = nullptr;
-    QTableWidget* m_trendTable = nullptr;
-
-    // Tab 4: Wartungshistorie der Anlage
-    QTableWidget* m_maintTable = nullptr;
+    QTabWidget* m_tabs = nullptr;
+    ZustandsLeisteWidget* m_zeitleiste = nullptr;
+    StueckzahlDiagrammWidget* m_stueckChart = nullptr;
+    QTableWidget* m_zustandTabelle = nullptr;
+    QTableWidget* m_schichtTabelle = nullptr;
+    TrendDiagrammWidget* m_trendChart = nullptr;
+    QLabel* m_trendHinweisLabel = nullptr;
+    QTableWidget* m_trendTabelle = nullptr;
+    QTableWidget* m_wartungTabelle = nullptr;
+    QTableWidget* m_flagTabelle = nullptr;
 };
 
-} // namespace RoboCell
+#endif // ANLAGEDETAILDIALOG_H

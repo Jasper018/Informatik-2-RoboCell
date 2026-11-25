@@ -1,793 +1,1202 @@
-#include "ui/MainWindow.h"
-#include "ui/AnlageDetailDialog.h"
-#include "ui/EditDialogs.h"
-#include "ui/LoginDialog.h"
-#include "io/DataRepository.h"
-#include "core/AuthManager.h"
-#include "core/LanguageManager.h"
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include "mainwindow.h"
+#include "anlagedetaildialog.h"
+#include "anlagenmodell.h"
+#include "anmeldedialog.h"
+#include "bearbeitendialoge.h"
+#include "einstellungendialog.h"
+#include "fensterhilfe.h"
+#include "linienansicht.h"
+#include "core/benutzerverwaltung.h"
+#include "core/einstellungen.h"
+#include "core/farben.h"
+#include "core/sprache.h"
+#include "io/datenverwaltung.h"
+#include "logic/oeeberechnung.h"
+#include <QAbstractItemView>
+#include <QAction>
+#include <QActionGroup>
+#include <QApplication>
+#include <QCheckBox>
+#include <QCloseEvent>
+#include <QComboBox>
+#include <QDir>
+#include <QEvent>
+#include <QFileDialog>
 #include <QGridLayout>
 #include <QGroupBox>
+#include <QHBoxLayout>
 #include <QHeaderView>
-#include <QStatusBar>
+#include <QKeySequence>
+#include <QLabel>
+#include <QLineEdit>
 #include <QMenu>
-#include <QFileDialog>
+#include <QMenuBar>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QSpinBox>
 #include <QSplitter>
-#include <QtConcurrent>
+#include <QStatusBar>
+#include <QStyle>
+#include <QTabWidget>
+#include <QTableView>
+#include <QTableWidget>
+#include <QVBoxLayout>
+#include <algorithm>
 
-namespace RoboCell {
-
-MainWindow::MainWindow(DataRepository* repo, QWidget* parent)
-    : QMainWindow(parent), m_repo(repo)
+MainWindow::MainWindow(Datenverwaltung* daten, Benutzerverwaltung* benutzer, QWidget* parent)
+    : QMainWindow(parent)
+    , m_daten(daten)
+    , m_benutzer(benutzer)
 {
-    resize(1340, 840);
-    setMinimumSize(1100, 700);
+    setMinimumSize(640, 480);
 
-    auto* central = new QWidget(this);
-    setCentralWidget(central);
-    auto* rootLayout = new QVBoxLayout(central);
-    rootLayout->setSpacing(8);
-    rootLayout->setContentsMargins(12, 10, 12, 8);
+    menueLeisteBauen();
 
-    // ========================================================================
-    // 1. Top Action & Role Bar
-    // ========================================================================
-    auto* topBar = new QHBoxLayout();
-    m_appTitleLabel = new QLabel(this);
-    m_appTitleLabel->setStyleSheet("font-size: 18px; font-weight: bold; color: #0f172a;");
+    QWidget* zentral = new QWidget(this);
+    setCentralWidget(zentral);
+    QVBoxLayout* haupt = new QVBoxLayout(zentral);
+    haupt->setSpacing(6);
+    haupt->setContentsMargins(10, 8, 10, 6);
 
-    m_userBadgeLabel = new QLabel(this);
-    m_userBadgeLabel->setStyleSheet(
-        "background-color: #dbeafe; border: 1px solid #93c5fd; border-radius: 5px; padding: 4px 10px; color: #1e3a8a; font-weight: bold;"
-    );
+    // Automatischer Flag-Hinweis direkt unter der Menueleiste
+    m_flagLeiste = new QWidget(zentral);
+    QHBoxLayout* flagLeisteLayout = new QHBoxLayout(m_flagLeiste);
+    flagLeisteLayout->setContentsMargins(0, 0, 0, 0);
+    flagLeisteLayout->setSpacing(8);
+    m_flagLeisteText = new QLabel(m_flagLeiste);
+    m_flagLeisteText->setWordWrap(true);
+    m_flagLeisteBtn = new QPushButton(m_flagLeiste);
+    flagLeisteLayout->addWidget(m_flagLeisteText, 1);
+    flagLeisteLayout->addWidget(m_flagLeisteBtn);
+    m_flagLeiste->hide();
+    haupt->addWidget(m_flagLeiste);
 
-    m_switchUserBtn = new QPushButton(this);
-    m_langBtn = new QPushButton(this);
-    m_openDirBtn = new QPushButton(this);
-    m_exportCsvBtn = new QPushButton(this);
-    m_exportCsvBtn->setStyleSheet("background-color: #16a34a; color: white; font-weight: bold; padding: 5px 10px; border-radius: 5px;");
-    m_saveSqliteBtn = new QPushButton(this);
-    m_loadSqliteBtn = new QPushButton(this);
+    // 5 Arbeitsbereiche in Registerkarten
+    m_tabs = new QTabWidget(zentral);
+    haupt->addWidget(m_tabs, 1);
 
-    topBar->addWidget(m_appTitleLabel);
-    topBar->addStretch();
-    topBar->addWidget(m_userBadgeLabel);
-    topBar->addWidget(m_switchUserBtn);
-    topBar->addWidget(m_langBtn);
-    topBar->addWidget(m_openDirBtn);
-    topBar->addWidget(m_loadSqliteBtn);
-    topBar->addWidget(m_saveSqliteBtn);
-    topBar->addWidget(m_exportCsvBtn);
-    rootLayout->addLayout(topBar);
+    // -----------------------------------------------------------------------
+    // Tab 1: Anlagenliste und Filter
+    // -----------------------------------------------------------------------
+    QWidget* tabAnlagen = new QWidget(m_tabs);
+    QVBoxLayout* anlagenLayout = new QVBoxLayout(tabAnlagen);
 
-    // ========================================================================
-    // 2. Main Tab Widget
-    // ========================================================================
-    m_mainTabs = new QTabWidget(this);
-    rootLayout->addWidget(m_mainTabs, 1);
+    m_filterGruppe = new QGroupBox(tabAnlagen);
+    QGridLayout* filterGrid = new QGridLayout(m_filterGruppe);
+    filterGrid->setSpacing(6);
 
-    // ------------------------------------------------------------------------
-    // TAB 1: Anlagenliste & Mehrstufige Filter
-    // ------------------------------------------------------------------------
-    auto* tabAnlagen = new QWidget(this);
-    auto* anlagenLayout = new QVBoxLayout(tabAnlagen);
+    m_sucheLabel = new QLabel(m_filterGruppe);
+    m_sucheEdit = new QLineEdit(m_filterGruppe);
+    m_sucheEdit->setClearButtonEnabled(true);
 
-    auto* filterGroup = new QGroupBox(this);
-    auto* filterGrid = new QGridLayout(filterGroup);
-    filterGrid->setSpacing(8);
+    m_linieLabel = new QLabel(m_filterGruppe);
+    m_linieCombo = new QComboBox(m_filterGruppe);
 
-    m_searchEdit = new QLineEdit(this);
-    m_searchEdit->setClearButtonEnabled(true);
+    m_typLabel = new QLabel(m_filterGruppe);
+    m_typCombo = new QComboBox(m_filterGruppe);
 
-    m_linieFilterCombo = new QComboBox(this);
-    m_typFilterCombo = new QComboBox(this);
-    m_statusFilterCombo = new QComboBox(this);
+    m_statusLabel = new QLabel(m_filterGruppe);
+    m_statusCombo = new QComboBox(m_filterGruppe);
 
-    m_maxBaujahrSpin = new QSpinBox(this);
-    m_maxBaujahrSpin->setRange(2000, 2035);
-    m_maxBaujahrSpin->setSpecialValueText(trBi("Alle Baujahre", "All Years"));
-    m_maxBaujahrSpin->setValue(2000); // 2000 = special value "Alle"
+    m_baujahrLabel = new QLabel(m_filterGruppe);
+    m_baujahrSpin = new QSpinBox(m_filterGruppe);
+    m_baujahrSpin->setRange(2000, 2040);
+    m_baujahrSpin->setValue(2000);
 
-    m_onlyConspicuousCheck = new QCheckBox(this);
-    m_onlyWarningsCheck = new QCheckBox(this);
-    m_resetFilterBtn = new QPushButton(this);
+    m_auffaelligCheck = new QCheckBox(m_filterGruppe);
+    m_flagCheck = new QCheckBox(m_filterGruppe);
+    m_filterResetBtn = new QPushButton(m_filterGruppe);
 
-    filterGrid->addWidget(new QLabel(trBi("Suche (ID, Bez., Linie):", "Search (ID, Desc., Line):"), this), 0, 0);
-    filterGrid->addWidget(m_searchEdit, 0, 1);
-    filterGrid->addWidget(new QLabel(trBi("Linie:", "Line:"), this), 0, 2);
-    filterGrid->addWidget(m_linieFilterCombo, 0, 3);
-    filterGrid->addWidget(new QLabel(trBi("Typ:", "Type:"), this), 0, 4);
-    filterGrid->addWidget(m_typFilterCombo, 0, 5);
-    filterGrid->addWidget(new QLabel(trBi("Status:", "Status:"), this), 0, 6);
-    filterGrid->addWidget(m_statusFilterCombo, 0, 7);
+    filterGrid->addWidget(m_sucheLabel, 0, 0);
+    filterGrid->addWidget(m_sucheEdit, 0, 1);
+    filterGrid->addWidget(m_linieLabel, 0, 2);
+    filterGrid->addWidget(m_linieCombo, 0, 3);
+    filterGrid->addWidget(m_typLabel, 0, 4);
+    filterGrid->addWidget(m_typCombo, 0, 5);
+    filterGrid->addWidget(m_statusLabel, 0, 6);
+    filterGrid->addWidget(m_statusCombo, 0, 7);
 
-    filterGrid->addWidget(new QLabel(trBi("Baujahr bis max.:", "Build Year max.:"), this), 1, 0);
-    filterGrid->addWidget(m_maxBaujahrSpin, 1, 1);
-    filterGrid->addWidget(m_onlyConspicuousCheck, 1, 2, 1, 2);
-    filterGrid->addWidget(m_onlyWarningsCheck, 1, 4, 1, 2);
-    filterGrid->addWidget(m_resetFilterBtn, 1, 6, 1, 2);
-    anlagenLayout->addWidget(filterGroup);
+    filterGrid->addWidget(m_baujahrLabel, 1, 0);
+    filterGrid->addWidget(m_baujahrSpin, 1, 1);
+    filterGrid->addWidget(m_auffaelligCheck, 1, 2, 1, 2);
+    filterGrid->addWidget(m_flagCheck, 1, 4, 1, 2);
+    filterGrid->addWidget(m_filterResetBtn, 1, 6, 1, 2);
+    filterGrid->setColumnStretch(1, 2);
+    filterGrid->setColumnStretch(3, 1);
+    filterGrid->setColumnStretch(5, 1);
+    filterGrid->setColumnStretch(7, 1);
+    anlagenLayout->addWidget(m_filterGruppe);
 
-    // TableView + ProxyModel
-    m_tableModel = new AnlagenTableModel(m_repo, this);
-    m_proxyModel = new AnlagenFilterProxyModel(this);
-    m_proxyModel->setSourceModel(m_tableModel);
+    m_anlagenModell = new AnlagenModell(m_daten, this);
+    m_filterModell = new AnlagenFilterModell(this);
+    m_filterModell->setSourceModel(m_anlagenModell);
 
-    m_anlagenView = new QTableView(this);
-    m_anlagenView->setModel(m_proxyModel);
+    m_anlagenView = new QTableView(tabAnlagen);
+    m_anlagenView->setModel(m_filterModell);
     m_anlagenView->setSortingEnabled(true);
-    m_anlagenView->sortByColumn(AnlagenTableModel::ColAnlageId, Qt::AscendingOrder);
+    m_anlagenView->sortByColumn(AnlagenModell::SpAnlageId, Qt::AscendingOrder);
     m_anlagenView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_anlagenView->setSelectionMode(QAbstractItemView::SingleSelection);
     m_anlagenView->setAlternatingRowColors(true);
+    m_anlagenView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_anlagenView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     m_anlagenView->setContextMenuPolicy(Qt::CustomContextMenu);
     m_anlagenView->horizontalHeader()->setStretchLastSection(true);
     m_anlagenView->verticalHeader()->setVisible(false);
     anlagenLayout->addWidget(m_anlagenView, 1);
 
-    // Action Bar below Anlagen table
-    auto* actionRow = new QHBoxLayout();
-    m_filterCountLabel = new QLabel(this);
-    m_filterCountLabel->setStyleSheet("font-weight: bold; color: #334155;");
-    m_detailBtn = new QPushButton(this);
-    m_detailBtn->setStyleSheet("background-color: #2563eb; color: white; font-weight: bold; padding: 6px 14px; border-radius: 5px;");
-    m_editAnlageBtn = new QPushButton(this);
-    m_addMaintBtn = new QPushButton(this);
+    QHBoxLayout* fussLeiste = new QHBoxLayout();
+    m_anzahlLabel = new QLabel(tabAnlagen);
+    m_detailBtn = new QPushButton(tabAnlagen);
+    m_bearbeitenBtn = new QPushButton(tabAnlagen);
+    m_wartungBtn = new QPushButton(tabAnlagen);
+    fussLeiste->addWidget(m_anzahlLabel);
+    fussLeiste->addStretch();
+    fussLeiste->addWidget(m_detailBtn);
+    fussLeiste->addWidget(m_bearbeitenBtn);
+    fussLeiste->addWidget(m_wartungBtn);
+    anlagenLayout->addLayout(fussLeiste);
 
-    actionRow->addWidget(m_filterCountLabel);
-    actionRow->addStretch();
-    actionRow->addWidget(m_detailBtn);
-    actionRow->addWidget(m_editAnlageBtn);
-    actionRow->addWidget(m_addMaintBtn);
-    anlagenLayout->addLayout(actionRow);
+    m_tabs->addTab(tabAnlagen, QString());
 
-    m_mainTabs->addTab(tabAnlagen, "");
+    // -----------------------------------------------------------------------
+    // Tab 2: Grafische Linienansicht und Engpassanalyse
+    // -----------------------------------------------------------------------
+    m_linienAnsicht = new LinienAnsichtWidget(m_daten, m_tabs);
+    m_tabs->addTab(m_linienAnsicht, QString());
 
-    // ------------------------------------------------------------------------
-    // TAB 2: Grafische Linienansicht & Engpassanalyse (Erweiterung 7 & 8)
-    // ------------------------------------------------------------------------
-    m_lineFlowWidget = new LineFlowWidget(m_repo, this);
-    m_mainTabs->addTab(m_lineFlowWidget, "");
+    // -----------------------------------------------------------------------
+    // Tab 3: Stoercodes und Pareto-Statistik
+    // -----------------------------------------------------------------------
+    QWidget* tabPareto = new QWidget(m_tabs);
+    QVBoxLayout* paretoLayout = new QVBoxLayout(tabPareto);
+    QHBoxLayout* paretoFilterLeiste = new QHBoxLayout();
+    m_paretoFilterLabel = new QLabel(tabPareto);
+    m_paretoLinieCombo = new QComboBox(tabPareto);
+    paretoFilterLeiste->addWidget(m_paretoFilterLabel);
+    paretoFilterLeiste->addWidget(m_paretoLinieCombo);
+    paretoFilterLeiste->addStretch();
+    paretoLayout->addLayout(paretoFilterLeiste);
 
-    // ------------------------------------------------------------------------
-    // TAB 3: Störcodes & Pareto-Auswertung (Mindestanforderung 2 & Erweiterung 1)
-    // ------------------------------------------------------------------------
-    auto* tabStoer = new QWidget(this);
-    auto* stoerLayout = new QVBoxLayout(tabStoer);
-    auto* paretoTop = new QHBoxLayout();
-    paretoTop->addWidget(new QLabel(trBi("<b>Pareto-Auswertung der Störcodes nach Linie filtern:</b>",
-                                         "<b>Filter Fault Code Pareto Analysis by Line:</b>"), this));
-    m_paretoLineCombo = new QComboBox(this);
-    m_calcParetoBtn = new QPushButton(trBi("🔄 Pareto-Statistik über alle Schichtprotokolle berechnen",
-                                           "🔄 Calculate Pareto Statistics Across All Shift Logs"), this);
-    m_calcParetoBtn->setStyleSheet("background-color: #2563eb; color: white; font-weight: bold; padding: 5px 12px; border-radius: 5px;");
-    paretoTop->addWidget(m_paretoLineCombo);
-    paretoTop->addWidget(m_calcParetoBtn);
-    paretoTop->addStretch();
-    stoerLayout->addLayout(paretoTop);
+    QSplitter* paretoTeiler = new QSplitter(Qt::Horizontal, tabPareto);
+    paretoTeiler->setChildrenCollapsible(false);
 
-    auto* stoerSplitter = new QSplitter(Qt::Horizontal, this);
-    m_stoercodesTable = new QTableWidget(this);
-    m_stoercodesTable->setColumnCount(3);
-    m_stoercodesTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_stoercodesTable->setAlternatingRowColors(true);
-    m_stoercodesTable->horizontalHeader()->setStretchLastSection(true);
+    m_stoercodeTabelle = new QTableWidget(paretoTeiler);
+    m_stoercodeTabelle->setColumnCount(3);
+    m_stoercodeTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_stoercodeTabelle->setAlternatingRowColors(true);
+    m_stoercodeTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_stoercodeTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_stoercodeTabelle->horizontalHeader()->setStretchLastSection(true);
+    m_stoercodeTabelle->verticalHeader()->setVisible(false);
 
-    m_paretoTable = new QTableWidget(this);
-    m_paretoTable->setColumnCount(6);
-    m_paretoTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_paretoTable->setAlternatingRowColors(true);
-    m_paretoTable->horizontalHeader()->setStretchLastSection(true);
+    m_paretoTabelle = new QTableWidget(paretoTeiler);
+    m_paretoTabelle->setColumnCount(6);
+    m_paretoTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_paretoTabelle->setAlternatingRowColors(true);
+    m_paretoTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_paretoTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_paretoTabelle->horizontalHeader()->setStretchLastSection(true);
+    m_paretoTabelle->verticalHeader()->setVisible(false);
 
-    stoerSplitter->addWidget(m_stoercodesTable);
-    stoerSplitter->addWidget(m_paretoTable);
-    stoerSplitter->setStretchFactor(0, 2);
-    stoerSplitter->setStretchFactor(1, 3);
-    stoerLayout->addWidget(stoerSplitter, 1);
-    m_mainTabs->addTab(tabStoer, "");
+    paretoTeiler->addWidget(m_stoercodeTabelle);
+    paretoTeiler->addWidget(m_paretoTabelle);
+    paretoTeiler->setStretchFactor(0, 2);
+    paretoTeiler->setStretchFactor(1, 3);
+    paretoLayout->addWidget(paretoTeiler, 1);
+    m_tabs->addTab(tabPareto, QString());
 
-    // ------------------------------------------------------------------------
-    // TAB 4: Linien, Produkte & Wartungen (Mindestanforderung 2 & Erweiterung 1)
-    // ------------------------------------------------------------------------
-    auto* tabMaster = new QWidget(this);
-    auto* masterLayout = new QVBoxLayout(tabMaster);
-    auto* masterSplitter = new QSplitter(Qt::Vertical, this);
+    // -----------------------------------------------------------------------
+    // Tab 4: Linien, Produkte und Wartungen
+    // -----------------------------------------------------------------------
+    QWidget* tabStamm = new QWidget(m_tabs);
+    QVBoxLayout* stammLayout = new QVBoxLayout(tabStamm);
+    QSplitter* stammTeiler = new QSplitter(Qt::Vertical, tabStamm);
+    stammTeiler->setChildrenCollapsible(false);
 
-    auto* topMasterWidget = new QWidget(this);
-    auto* topMasterLayout = new QHBoxLayout(topMasterWidget);
-    topMasterLayout->setContentsMargins(0, 0, 0, 0);
+    QWidget* obenBox = new QWidget(stammTeiler);
+    QHBoxLayout* obenLayout = new QHBoxLayout(obenBox);
+    obenLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_linienTable = new QTableWidget(this);
-    m_linienTable->setColumnCount(6);
-    m_linienTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_linienTable->setAlternatingRowColors(true);
-    m_linienTable->horizontalHeader()->setStretchLastSection(true);
+    QWidget* linienBox = new QWidget(obenBox);
+    QVBoxLayout* linienBoxLayout = new QVBoxLayout(linienBox);
+    linienBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_linienUeberschrift = new QLabel(linienBox);
+    m_linienTabelle = new QTableWidget(linienBox);
+    m_linienTabelle->setColumnCount(6);
+    m_linienTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_linienTabelle->setAlternatingRowColors(true);
+    m_linienTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_linienTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_linienTabelle->horizontalHeader()->setStretchLastSection(true);
+    m_linienTabelle->verticalHeader()->setVisible(false);
+    linienBoxLayout->addWidget(m_linienUeberschrift);
+    linienBoxLayout->addWidget(m_linienTabelle, 1);
 
-    m_produkteTable = new QTableWidget(this);
-    m_produkteTable->setColumnCount(4);
-    m_produkteTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_produkteTable->setAlternatingRowColors(true);
-    m_produkteTable->horizontalHeader()->setStretchLastSection(true);
+    QWidget* prodBox = new QWidget(obenBox);
+    QVBoxLayout* prodBoxLayout = new QVBoxLayout(prodBox);
+    prodBoxLayout->setContentsMargins(0, 0, 0, 0);
+    m_produkteUeberschrift = new QLabel(prodBox);
+    m_produkteTabelle = new QTableWidget(prodBox);
+    m_produkteTabelle->setColumnCount(4);
+    m_produkteTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_produkteTabelle->setAlternatingRowColors(true);
+    m_produkteTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_produkteTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_produkteTabelle->horizontalHeader()->setStretchLastSection(true);
+    m_produkteTabelle->verticalHeader()->setVisible(false);
+    prodBoxLayout->addWidget(m_produkteUeberschrift);
+    prodBoxLayout->addWidget(m_produkteTabelle, 1);
 
-    topMasterLayout->addWidget(m_linienTable, 3);
-    topMasterLayout->addWidget(m_produkteTable, 2);
-    masterSplitter->addWidget(topMasterWidget);
+    obenLayout->addWidget(linienBox, 3);
+    obenLayout->addWidget(prodBox, 2);
+    stammTeiler->addWidget(obenBox);
 
-    auto* bottomMaintWidget = new QWidget(this);
-    auto* bottomMaintLayout = new QVBoxLayout(bottomMaintWidget);
-    bottomMaintLayout->setContentsMargins(0, 0, 0, 0);
-    auto* maintHeader = new QHBoxLayout();
-    maintHeader->addWidget(new QLabel(trBi("<b>Wartungshistorie (wartungen.csv):</b>", "<b>Maintenance History (wartungen.csv):</b>"), this));
-    maintHeader->addStretch();
-    m_newWartungTabBtn = new QPushButton(trBi("➕ Neue Wartung erfassen", "➕ Record New Maintenance"), this);
-    maintHeader->addWidget(m_newWartungTabBtn);
-    bottomMaintLayout->addLayout(maintHeader);
+    QWidget* wartBox = new QWidget(stammTeiler);
+    QVBoxLayout* wartBoxLayout = new QVBoxLayout(wartBox);
+    wartBoxLayout->setContentsMargins(0, 0, 0, 0);
+    QHBoxLayout* wartKopf = new QHBoxLayout();
+    m_wartungenUeberschrift = new QLabel(wartBox);
+    m_neueWartungTabBtn = new QPushButton(wartBox);
+    wartKopf->addWidget(m_wartungenUeberschrift);
+    wartKopf->addStretch();
+    wartKopf->addWidget(m_neueWartungTabBtn);
+    wartBoxLayout->addLayout(wartKopf);
 
-    m_wartungenTable = new QTableWidget(this);
-    m_wartungenTable->setColumnCount(7);
-    m_wartungenTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_wartungenTable->setAlternatingRowColors(true);
-    m_wartungenTable->horizontalHeader()->setStretchLastSection(true);
-    bottomMaintLayout->addWidget(m_wartungenTable, 1);
+    m_wartungenTabelle = new QTableWidget(wartBox);
+    m_wartungenTabelle->setColumnCount(7);
+    m_wartungenTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_wartungenTabelle->setAlternatingRowColors(true);
+    m_wartungenTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_wartungenTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_wartungenTabelle->horizontalHeader()->setStretchLastSection(true);
+    m_wartungenTabelle->verticalHeader()->setVisible(false);
+    wartBoxLayout->addWidget(m_wartungenTabelle, 1);
+    stammTeiler->addWidget(wartBox);
 
-    masterSplitter->addWidget(bottomMaintWidget);
-    masterLayout->addWidget(masterSplitter, 1);
-    m_mainTabs->addTab(tabMaster, "");
+    stammLayout->addWidget(stammTeiler, 1);
+    m_tabs->addTab(tabStamm, QString());
 
-    // ------------------------------------------------------------------------
-    // TAB 5: Datenqualität & Fehlerprotokoll (Mindestanforderung 1 & 7)
-    // ------------------------------------------------------------------------
-    auto* tabIssues = new QWidget(this);
-    auto* issuesLayout = new QVBoxLayout(tabIssues);
-    m_issuesSummaryLabel = new QLabel(this);
-    m_issuesSummaryLabel->setWordWrap(true);
-    m_issuesSummaryLabel->setStyleSheet("background-color: #fff7ed; border: 1px solid #fb923c; border-radius: 6px; padding: 8px; color: #9a3412; font-weight: bold;");
-    issuesLayout->addWidget(m_issuesSummaryLabel);
+    // -----------------------------------------------------------------------
+    // Tab 5: Datenpruefung (automatische Flags)
+    // -----------------------------------------------------------------------
+    QWidget* tabFlags = new QWidget(m_tabs);
+    QVBoxLayout* flagsLayout = new QVBoxLayout(tabFlags);
+    m_flagZusammenfassung = new QLabel(tabFlags);
+    m_flagZusammenfassung->setWordWrap(true);
+    m_flagZusammenfassung->setProperty("meldung", "info");
+    flagsLayout->addWidget(m_flagZusammenfassung);
 
-    m_issuesTable = new QTableWidget(this);
-    m_issuesTable->setColumnCount(5);
-    m_issuesTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_issuesTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_issuesTable->setAlternatingRowColors(true);
-    m_issuesTable->horizontalHeader()->setStretchLastSection(true);
-    issuesLayout->addWidget(m_issuesTable, 1);
-    m_mainTabs->addTab(tabIssues, "");
+    QHBoxLayout* flagFilterZeile = new QHBoxLayout();
+    m_flagGradLabel = new QLabel(tabFlags);
+    m_flagGradCombo = new QComboBox(tabFlags);
+    m_flagDateiLabel = new QLabel(tabFlags);
+    m_flagDateiCombo = new QComboBox(tabFlags);
+    m_flagSucheLabel = new QLabel(tabFlags);
+    m_flagSucheEdit = new QLineEdit(tabFlags);
+    m_flagSucheEdit->setClearButtonEnabled(true);
+    flagFilterZeile->addWidget(m_flagGradLabel);
+    flagFilterZeile->addWidget(m_flagGradCombo);
+    flagFilterZeile->addSpacing(8);
+    flagFilterZeile->addWidget(m_flagDateiLabel);
+    flagFilterZeile->addWidget(m_flagDateiCombo);
+    flagFilterZeile->addSpacing(8);
+    flagFilterZeile->addWidget(m_flagSucheLabel);
+    flagFilterZeile->addWidget(m_flagSucheEdit, 1);
+    flagsLayout->addLayout(flagFilterZeile);
 
-    // ========================================================================
-    // 3. StatusBar with Background Loader & Cache Info
-    // ========================================================================
-    m_bgProgressBar = new QProgressBar(this);
-    m_bgProgressBar->setMaximumWidth(200);
-    m_bgProgressBar->setRange(0, 0);
-    m_bgProgressBar->hide();
+    m_flagTabelle = new QTableWidget(tabFlags);
+    m_flagTabelle->setColumnCount(5);
+    m_flagTabelle->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_flagTabelle->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_flagTabelle->setAlternatingRowColors(true);
+    m_flagTabelle->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_flagTabelle->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_flagTabelle->horizontalHeader()->setStretchLastSection(true);
+    m_flagTabelle->verticalHeader()->setVisible(false);
+    flagsLayout->addWidget(m_flagTabelle, 1);
+    m_tabs->addTab(tabFlags, QString());
 
-    m_cacheStatusLabel = new QLabel(this);
-    statusBar()->addPermanentWidget(m_bgProgressBar);
-    statusBar()->addPermanentWidget(m_cacheStatusLabel);
+    // -----------------------------------------------------------------------
+    // Statusleiste
+    // -----------------------------------------------------------------------
+    m_statusOrdner = new QLabel(this);
+    m_statusBenutzer = new QLabel(this);
+    m_statusFlags = new QLabel(this);
+    m_statusCache = new QLabel(this);
+    statusBar()->addWidget(m_statusOrdner, 1);
+    statusBar()->addPermanentWidget(m_statusBenutzer);
+    statusBar()->addPermanentWidget(m_statusFlags);
+    statusBar()->addPermanentWidget(m_statusCache);
 
-    m_bgWatcher = new QFutureWatcher<QMap<QString, AnomalyReport>>(this);
+    // -----------------------------------------------------------------------
+    // Signals und Slots verbinden
+    // -----------------------------------------------------------------------
+    connect(m_flagLeisteBtn, &QPushButton::clicked, this, &MainWindow::slotFlagsTabZeigen);
 
-    // ========================================================================
-    // Connections
-    // ========================================================================
-    connect(m_searchEdit, &QLineEdit::textChanged, this, &MainWindow::onSearchOrFilterChanged);
-    connect(m_linieFilterCombo, &QComboBox::currentIndexChanged, this, &MainWindow::onSearchOrFilterChanged);
-    connect(m_typFilterCombo, &QComboBox::currentIndexChanged, this, &MainWindow::onSearchOrFilterChanged);
-    connect(m_statusFilterCombo, &QComboBox::currentIndexChanged, this, &MainWindow::onSearchOrFilterChanged);
-    connect(m_maxBaujahrSpin, &QSpinBox::valueChanged, this, &MainWindow::onSearchOrFilterChanged);
-    connect(m_onlyConspicuousCheck, &QCheckBox::toggled, this, &MainWindow::onSearchOrFilterChanged);
-    connect(m_onlyWarningsCheck, &QCheckBox::toggled, this, &MainWindow::onSearchOrFilterChanged);
-    connect(m_resetFilterBtn, &QPushButton::clicked, this, &MainWindow::onResetFiltersClicked);
+    connect(m_sucheEdit, &QLineEdit::textChanged, this, &MainWindow::slotFilterGeaendert);
+    connect(m_linieCombo, &QComboBox::currentIndexChanged, this, &MainWindow::slotFilterGeaendert);
+    connect(m_typCombo, &QComboBox::currentIndexChanged, this, &MainWindow::slotFilterGeaendert);
+    connect(m_statusCombo, &QComboBox::currentIndexChanged, this, &MainWindow::slotFilterGeaendert);
+    connect(m_baujahrSpin, &QSpinBox::valueChanged, this, &MainWindow::slotFilterGeaendert);
+    connect(m_auffaelligCheck, &QCheckBox::toggled, this, &MainWindow::slotFilterGeaendert);
+    connect(m_flagCheck, &QCheckBox::toggled, this, &MainWindow::slotFilterGeaendert);
+    connect(m_filterResetBtn, &QPushButton::clicked, this, &MainWindow::slotFilterZuruecksetzen);
 
-    connect(m_anlagenView, &QTableView::doubleClicked, this, &MainWindow::onAnlageDoubleClicked);
-    connect(m_anlagenView, &QTableView::customContextMenuRequested, this, &MainWindow::onAnlageContextMenu);
-    connect(m_detailBtn, &QPushButton::clicked, this, [this]() {
-        const QString id = selectedAnlageId();
-        if (!id.isEmpty()) openAnlageDetails(id);
-    });
-    connect(m_editAnlageBtn, &QPushButton::clicked, this, &MainWindow::onEditSelectedAnlage);
-    connect(m_addMaintBtn, &QPushButton::clicked, this, &MainWindow::onAddMaintenanceForSelected);
-    connect(m_newWartungTabBtn, &QPushButton::clicked, this, &MainWindow::onAddMaintenanceForSelected);
+    connect(m_anlagenView, &QTableView::doubleClicked, this, &MainWindow::slotAnlageDoppelklick);
+    connect(m_anlagenView, &QTableView::customContextMenuRequested, this, &MainWindow::slotAnlageKontextmenue);
+    connect(m_detailBtn, &QPushButton::clicked, this, &MainWindow::slotAusgewaehlteAnlageOeffnen);
+    connect(m_bearbeitenBtn, &QPushButton::clicked, this, &MainWindow::slotAnlageBearbeiten);
+    connect(m_wartungBtn, &QPushButton::clicked, this, &MainWindow::slotWartungErfassen);
+    connect(m_neueWartungTabBtn, &QPushButton::clicked, this, &MainWindow::slotWartungErfassen);
 
-    connect(m_lineFlowWidget, &LineFlowWidget::anlageDoubleClicked, this, &MainWindow::openAnlageDetails);
-    connect(m_issuesTable, &QTableWidget::cellDoubleClicked, this, [this](int row, int) {
-        if (auto* item = m_issuesTable->item(row, 3)) {
-            const QString id = item->text();
-            if (m_repo->findAnlage(id)) {
-                openAnlageDetails(id);
-            }
-        }
-    });
+    connect(m_linienAnsicht, &LinienAnsichtWidget::anlageDoppelklick,
+            this, [this](const QString& id) { anlageDetailOeffnen(id); });
+    connect(m_paretoLinieCombo, &QComboBox::currentIndexChanged, this, &MainWindow::slotParetoAktualisieren);
 
-    connect(m_calcParetoBtn, &QPushButton::clicked, this, [this]() {
-        const QString lid = m_paretoLineCombo->currentData().toString();
-        const auto items = OeeCalculator::calculateStoercodePareto(*m_repo, lid);
-        m_paretoTable->setRowCount(items.size());
-        for (int i = 0; i < items.size(); ++i) {
-            const auto& it = items[i];
-            m_paretoTable->setItem(i, 0, new QTableWidgetItem(QString::number(i + 1)));
-            m_paretoTable->setItem(i, 1, new QTableWidgetItem(it.code));
-            m_paretoTable->setItem(i, 2, new QTableWidgetItem(it.kategorie));
-            m_paretoTable->setItem(i, 3, new QTableWidgetItem(it.beschreibung));
-            m_paretoTable->setItem(i, 4, new QTableWidgetItem(QString::number(it.count)));
-            m_paretoTable->setItem(i, 5, new QTableWidgetItem(
-                QString("%1 min (kum. %2%)").arg(it.totalMinutes, 0, 'f', 1).arg(it.cumulativePercent, 0, 'f', 1)));
-        }
-        m_cacheStatusLabel->setText(QString("LRU-Cache: %1 Protokolle | Hits: %2 | Misses: %3")
-            .arg(m_repo->cacheSize()).arg(m_repo->cacheHits()).arg(m_repo->cacheMisses()));
-    });
+    connect(m_flagGradCombo, &QComboBox::currentIndexChanged, this, &MainWindow::slotFlagFilterGeaendert);
+    connect(m_flagDateiCombo, &QComboBox::currentIndexChanged, this, &MainWindow::slotFlagFilterGeaendert);
+    connect(m_flagSucheEdit, &QLineEdit::textChanged, this, &MainWindow::slotFlagFilterGeaendert);
+    connect(m_flagTabelle, &QTableWidget::cellDoubleClicked, this, &MainWindow::slotFlagDoppelklick);
 
-    connect(m_exportCsvBtn, &QPushButton::clicked, this, &MainWindow::onExportCsvClicked);
-    connect(m_saveSqliteBtn, &QPushButton::clicked, this, &MainWindow::onSaveSqliteClicked);
-    connect(m_loadSqliteBtn, &QPushButton::clicked, this, &MainWindow::onLoadSqliteClicked);
-    connect(m_openDirBtn, &QPushButton::clicked, this, &MainWindow::onChangeDataDirClicked);
-    connect(m_switchUserBtn, &QPushButton::clicked, this, &MainWindow::onSwitchUserClicked);
-    connect(m_langBtn, &QPushButton::clicked, this, &MainWindow::onToggleLanguageClicked);
+    connect(m_daten, &Datenverwaltung::datensatzGeladen, this, &MainWindow::slotDatenGeaendert);
+    connect(m_daten, &Datenverwaltung::anlageGeaendert, this, &MainWindow::slotDatenGeaendert);
+    connect(m_daten, &Datenverwaltung::wartungHinzugefuegt, this, &MainWindow::slotDatenGeaendert);
+    connect(m_benutzer, &Benutzerverwaltung::benutzerGeaendert, this, &MainWindow::slotRollenAktualisieren);
 
-    connect(m_bgWatcher, &QFutureWatcher<QMap<QString, AnomalyReport>>::finished,
-            this, &MainWindow::onBackgroundAnalysisFinished);
-
-    connect(&LanguageManager::instance(), &LanguageManager::languageChanged, this, &MainWindow::retranslateUi);
-    connect(&AuthManager::instance(), &AuthManager::userChanged, this, &MainWindow::updateRolePermissionsUi);
-    connect(m_repo, &DataRepository::anlageUpdated, this, [this]() {
-        m_tableModel->refreshModel();
-        refreshSecondaryTabs();
-    });
-    connect(m_repo, &DataRepository::wartungAdded, this, [this]() {
-        refreshSecondaryTabs();
-    });
-
-    retranslateUi();
-    updateRolePermissionsUi();
-    refreshSecondaryTabs();
-    m_lineFlowWidget->refreshView();
+    texteAktualisieren();
+    allesFuellen();
+    slotRollenAktualisieren();
     m_anlagenView->resizeColumnsToContents();
 
-    // Starte nicht-blockierende 14-Tage-Auswertung im Hintergrund (Erweiterung 5 & 6)
-    startBackground14DaysAnalysis();
+    Fensterhilfe::geometrieSicherWiederherstellen(this, Einstellungen::fensterGeometrie(), 1240, 800);
 }
 
-MainWindow::~MainWindow() {
-    if (m_bgWatcher && m_bgWatcher->isRunning()) {
-        m_bgWatcher->waitForFinished();
+void MainWindow::menueLeisteBauen()
+{
+    QMenuBar* bar = menuBar();
+
+    // Datei
+    m_dateiMenu = bar->addMenu(QString());
+    m_actOrdner = m_dateiMenu->addAction(QString());
+    m_actOrdner->setShortcut(QKeySequence::Open);
+    m_actNeuLaden = m_dateiMenu->addAction(QString());
+    m_actNeuLaden->setShortcut(QKeySequence::Refresh);
+    m_dateiMenu->addSeparator();
+    m_actSqliteLaden = m_dateiMenu->addAction(QString());
+    m_actSqliteSpeichern = m_dateiMenu->addAction(QString());
+    m_actCsvExport = m_dateiMenu->addAction(QString());
+    m_actCsvExport->setShortcut(QKeySequence("Ctrl+E"));
+    m_dateiMenu->addSeparator();
+    m_actBeenden = m_dateiMenu->addAction(QString());
+    m_actBeenden->setShortcut(QKeySequence::Quit);
+
+    // Bearbeiten
+    m_bearbeitenMenu = bar->addMenu(QString());
+    m_actDetails = m_bearbeitenMenu->addAction(QString());
+    m_actBearbeiten = m_bearbeitenMenu->addAction(QString());
+    m_actWartung = m_bearbeitenMenu->addAction(QString());
+
+    // Ansicht
+    m_ansichtMenu = bar->addMenu(QString());
+    m_actTabAnlagen = m_ansichtMenu->addAction(QString());
+    m_actTabAnlagen->setShortcut(QKeySequence("Ctrl+1"));
+    m_actTabLinien = m_ansichtMenu->addAction(QString());
+    m_actTabLinien->setShortcut(QKeySequence("Ctrl+2"));
+    m_actTabPareto = m_ansichtMenu->addAction(QString());
+    m_actTabPareto->setShortcut(QKeySequence("Ctrl+3"));
+    m_actTabStamm = m_ansichtMenu->addAction(QString());
+    m_actTabStamm->setShortcut(QKeySequence("Ctrl+4"));
+    m_actTabFlags = m_ansichtMenu->addAction(QString());
+    m_actTabFlags->setShortcut(QKeySequence("Ctrl+5"));
+    m_ansichtMenu->addSeparator();
+    m_actFilterReset = m_ansichtMenu->addAction(QString());
+    m_actFilterReset->setShortcut(QKeySequence("Ctrl+R"));
+    m_actSpaltenAnpassen = m_ansichtMenu->addAction(QString());
+
+    // Einstellungen
+    m_einstellungenMenu = bar->addMenu(QString());
+    m_actEinstellungen = m_einstellungenMenu->addAction(QString());
+    m_actEinstellungen->setShortcut(QKeySequence("Ctrl+,"));
+    m_spracheUntermenu = m_einstellungenMenu->addMenu(QString());
+    m_spracheGruppe = new QActionGroup(this);
+    m_actDeutsch = m_spracheUntermenu->addAction("Deutsch");
+    m_actDeutsch->setCheckable(true);
+    m_actEnglisch = m_spracheUntermenu->addAction("English");
+    m_actEnglisch->setCheckable(true);
+    m_spracheGruppe->addAction(m_actDeutsch);
+    m_spracheGruppe->addAction(m_actEnglisch);
+
+    // Konto
+    m_kontoMenu = bar->addMenu(QString());
+    m_actKontoInfo = m_kontoMenu->addAction(QString());
+    m_actKontoInfo->setEnabled(false);
+    m_actRechte = m_kontoMenu->addAction(QString());
+    m_kontoMenu->addSeparator();
+    m_actBenutzerWechseln = m_kontoMenu->addAction(QString());
+    m_actBenutzerWechseln->setShortcut(QKeySequence("Ctrl+L"));
+    m_actAbmelden = m_kontoMenu->addAction(QString());
+
+    // Hilfe
+    m_hilfeMenu = bar->addMenu(QString());
+    m_actOeeHilfe = m_hilfeMenu->addAction(QString());
+    m_actUeber = m_hilfeMenu->addAction(QString());
+
+    connect(m_actOrdner, &QAction::triggered, this, &MainWindow::slotOrdnerOeffnen);
+    connect(m_actNeuLaden, &QAction::triggered, this, &MainWindow::slotNeuLaden);
+    connect(m_actSqliteLaden, &QAction::triggered, this, &MainWindow::slotSqliteLaden);
+    connect(m_actSqliteSpeichern, &QAction::triggered, this, &MainWindow::slotSqliteSpeichern);
+    connect(m_actCsvExport, &QAction::triggered, this, &MainWindow::slotCsvExportieren);
+    connect(m_actBeenden, &QAction::triggered, this, &QWidget::close);
+
+    connect(m_actDetails, &QAction::triggered, this, &MainWindow::slotAusgewaehlteAnlageOeffnen);
+    connect(m_actBearbeiten, &QAction::triggered, this, &MainWindow::slotAnlageBearbeiten);
+    connect(m_actWartung, &QAction::triggered, this, &MainWindow::slotWartungErfassen);
+
+    connect(m_actTabAnlagen, &QAction::triggered, this, [this]() { m_tabs->setCurrentIndex(0); });
+    connect(m_actTabLinien, &QAction::triggered, this, [this]() { m_tabs->setCurrentIndex(1); });
+    connect(m_actTabPareto, &QAction::triggered, this, [this]() { m_tabs->setCurrentIndex(2); });
+    connect(m_actTabStamm, &QAction::triggered, this, [this]() { m_tabs->setCurrentIndex(3); });
+    connect(m_actTabFlags, &QAction::triggered, this, [this]() { m_tabs->setCurrentIndex(4); });
+    connect(m_actFilterReset, &QAction::triggered, this, &MainWindow::slotFilterZuruecksetzen);
+    connect(m_actSpaltenAnpassen, &QAction::triggered, this, &MainWindow::slotSpaltenAnpassen);
+
+    connect(m_actEinstellungen, &QAction::triggered, this, &MainWindow::slotEinstellungenOeffnen);
+    connect(m_actDeutsch, &QAction::triggered, this, &MainWindow::slotSpracheDeutsch);
+    connect(m_actEnglisch, &QAction::triggered, this, &MainWindow::slotSpracheEnglisch);
+
+    connect(m_actRechte, &QAction::triggered, this, &MainWindow::slotBerechtigungenZeigen);
+    connect(m_actBenutzerWechseln, &QAction::triggered, this, &MainWindow::slotBenutzerWechseln);
+    connect(m_actAbmelden, &QAction::triggered, this, &MainWindow::slotAbmelden);
+
+    connect(m_actOeeHilfe, &QAction::triggered, this, &MainWindow::slotOeeHilfe);
+    connect(m_actUeber, &QAction::triggered, this, &MainWindow::slotUeberProgramm);
+}
+
+void MainWindow::changeEvent(QEvent* ereignis)
+{
+    if (ereignis->type() == QEvent::LanguageChange) {
+        texteAktualisieren();
+        m_anlagenModell->spracheAktualisieren();
+        allesFuellen();
+        slotRollenAktualisieren();
     }
+    QMainWindow::changeEvent(ereignis);
 }
 
-QString MainWindow::selectedAnlageId() const {
-    const QModelIndex proxyIdx = m_anlagenView->currentIndex();
-    if (!proxyIdx.isValid()) return QString();
-    return proxyIdx.siblingAtColumn(0).data(AnlagenTableModel::AnlageIdRole).toString();
+void MainWindow::closeEvent(QCloseEvent* ereignis)
+{
+    Einstellungen::setFensterGeometrie(saveGeometry());
+    QMainWindow::closeEvent(ereignis);
 }
 
-void MainWindow::openAnlageDetails(const QString& anlageId) {
+void MainWindow::texteAktualisieren()
+{
+    setWindowTitle(tr("RoboCell - Fertigungskennzahlen und OEE"));
+
+    m_dateiMenu->setTitle(tr("Datei"));
+    m_actOrdner->setText(tr("Datenordner öffnen..."));
+    m_actNeuLaden->setText(tr("Datensatz neu laden und prüfen"));
+    m_actSqliteLaden->setText(tr("Aus SQLite-Datenbank laden..."));
+    m_actSqliteSpeichern->setText(tr("In SQLite-Datenbank speichern..."));
+    m_actCsvExport->setText(tr("Stammdaten als CSV exportieren..."));
+    m_actBeenden->setText(tr("Beenden"));
+
+    m_bearbeitenMenu->setTitle(tr("Bearbeiten"));
+    m_actDetails->setText(tr("Anlagendetails öffnen"));
+    m_actBearbeiten->setText(tr("Stammdaten bearbeiten..."));
+    m_actWartung->setText(tr("Neue Wartung erfassen..."));
+
+    m_ansichtMenu->setTitle(tr("Ansicht"));
+    m_actTabAnlagen->setText(tr("Anlagen"));
+    m_actTabLinien->setText(tr("Linienansicht und Engpass"));
+    m_actTabPareto->setText(tr("Störcodes und Pareto"));
+    m_actTabStamm->setText(tr("Stammdaten"));
+    m_actTabFlags->setText(tr("Datenprüfung (Flags)"));
+    m_actFilterReset->setText(tr("Filter zurücksetzen"));
+    m_actSpaltenAnpassen->setText(tr("Spaltenbreite anpassen"));
+
+    m_einstellungenMenu->setTitle(tr("Einstellungen"));
+    m_actEinstellungen->setText(tr("Einstellungen..."));
+    m_spracheUntermenu->setTitle(tr("Sprache"));
+    m_actDeutsch->setChecked(Sprache::aktuell() == "de");
+    m_actEnglisch->setChecked(Sprache::aktuell() == "en");
+
+    m_kontoMenu->setTitle(tr("Konto"));
+    m_actRechte->setText(tr("Berechtigungen anzeigen"));
+    m_actBenutzerWechseln->setText(tr("Benutzer wechseln..."));
+    m_actAbmelden->setText(tr("Abmelden"));
+
+    m_hilfeMenu->setTitle(tr("Hilfe"));
+    m_actOeeHilfe->setText(tr("OEE-Formeln und Kennzahlen"));
+    m_actUeber->setText(tr("Über RoboCell"));
+
+    m_flagLeisteBtn->setText(tr("Flags anzeigen"));
+
+    m_tabs->setTabText(0, tr("Anlagen (%1)").arg(m_daten->anlagen().size()));
+    m_tabs->setTabText(1, tr("Linienansicht und Engpass"));
+    m_tabs->setTabText(2, tr("Störcodes und Pareto"));
+    m_tabs->setTabText(3, tr("Stammdaten"));
+    m_tabs->setTabText(4, tr("Datenprüfung (%1 Flags)").arg(m_daten->alleProbleme().size()));
+
+    m_filterGruppe->setTitle(tr("Suche und Filter"));
+    m_sucheLabel->setText(tr("Suche (ID, Bez., Linie):"));
+    m_sucheEdit->setPlaceholderText(tr("z. B. A025, Schweißroboter, L2"));
+    m_linieLabel->setText(tr("Linie:"));
+    m_typLabel->setText(tr("Typ:"));
+    m_statusLabel->setText(tr("Status:"));
+    m_baujahrLabel->setText(tr("Baujahr max.:"));
+    m_baujahrSpin->setSpecialValueText(tr("Alle"));
+    m_auffaelligCheck->setText(tr("Nur auffällige Anlagen (14T-Trend)"));
+    m_flagCheck->setText(tr("Nur Anlagen mit Flag"));
+    m_filterResetBtn->setText(tr("Filter zurücksetzen"));
+
+    m_detailBtn->setText(tr("Details öffnen"));
+    m_bearbeitenBtn->setText(tr("Stammdaten bearbeiten"));
+    m_wartungBtn->setText(tr("Wartung erfassen"));
+
+    // Typ-Auswahl
+    const int alterTyp = m_typCombo->currentIndex();
+    m_typCombo->blockSignals(true);
+    m_typCombo->clear();
+    m_typCombo->addItem(tr("Alle Typen"), -1);
+    const AnlagenTyp typen[8] = {
+        AnlagenTyp::CncBeladung, AnlagenTyp::Schweissroboter, AnlagenTyp::Montageroboter,
+        AnlagenTyp::Schraubstation, AnlagenTyp::Klebestation, AnlagenTyp::Pruefstation,
+        AnlagenTyp::Laserbeschriftung, AnlagenTyp::Palettierer
+    };
+    for (int i = 0; i < 8; i++) {
+        m_typCombo->addItem(anlagenTypName(typen[i]), int(typen[i]));
+    }
+    if (alterTyp >= 0 && alterTyp < m_typCombo->count()) m_typCombo->setCurrentIndex(alterTyp);
+    m_typCombo->blockSignals(false);
+
+    // Status-Auswahl
+    const int alterStatus = m_statusCombo->currentIndex();
+    m_statusCombo->blockSignals(true);
+    m_statusCombo->clear();
+    m_statusCombo->addItem(tr("Alle Status"), -1);
+    const AnlagenStatus stati[4] = {
+        AnlagenStatus::InBetrieb, AnlagenStatus::Stoerung,
+        AnlagenStatus::Wartung, AnlagenStatus::Umbau
+    };
+    for (int i = 0; i < 4; i++) {
+        m_statusCombo->addItem(anlagenStatusName(stati[i]), int(stati[i]));
+    }
+    if (alterStatus >= 0 && alterStatus < m_statusCombo->count()) m_statusCombo->setCurrentIndex(alterStatus);
+    m_statusCombo->blockSignals(false);
+
+    m_paretoFilterLabel->setText(tr("Pareto-Auswertung nach Linie filtern:"));
+    m_stoercodeTabelle->setHorizontalHeaderLabels({
+        tr("Code"), tr("Kategorie"), tr("Beschreibung")
+    });
+    m_paretoTabelle->setHorizontalHeaderLabels({
+        tr("Rang"), tr("Code"), tr("Kategorie"), tr("Beschreibung"),
+        tr("Häufigkeit"), tr("Dauer (kumuliert)")
+    });
+
+    m_linienUeberschrift->setText(tr("Fertigungslinien (linien.csv)"));
+    m_produkteUeberschrift->setText(tr("Produkte (produkte.csv)"));
+    m_wartungenUeberschrift->setText(tr("Wartungen (wartungen.csv)"));
+    m_neueWartungTabBtn->setText(tr("Neue Wartung erfassen"));
+
+    m_linienTabelle->setHorizontalHeaderLabels({
+        tr("Linie"), tr("Bezeichnung"), tr("Halle"),
+        tr("Schichtmodell"), tr("Anlagen"), tr("Ø Linien-OEE")
+    });
+    m_produkteTabelle->setHorizontalHeaderLabels({
+        tr("Produkt-ID"), tr("Linie"), tr("Bezeichnung"), tr("Prüfung")
+    });
+    m_wartungenTabelle->setHorizontalHeaderLabels({
+        tr("Wartung-ID"), tr("Anlage"), tr("Datum"), tr("Art"),
+        tr("Dauer [min]"), tr("Geplant"), tr("Bemerkung / Flag")
+    });
+
+    m_flagGradLabel->setText(tr("Schweregrad:"));
+    m_flagDateiLabel->setText(tr("Datei:"));
+    m_flagSucheLabel->setText(tr("Suche:"));
+    m_flagSucheEdit->setPlaceholderText(tr("ID oder Meldung filtern..."));
+
+    const int alterGrad = std::max(0, m_flagGradCombo->currentIndex());
+    m_flagGradCombo->blockSignals(true);
+    m_flagGradCombo->clear();
+    m_flagGradCombo->addItem(tr("Alle"), -1);
+    m_flagGradCombo->addItem(tr("Fehler"), int(Schweregrad::Fehler));
+    m_flagGradCombo->addItem(tr("Warnung"), int(Schweregrad::Warnung));
+    m_flagGradCombo->setCurrentIndex(alterGrad);
+    m_flagGradCombo->blockSignals(false);
+
+    m_flagTabelle->setHorizontalHeaderLabels({
+        tr("Schweregrad"), tr("Datei"), tr("Zeile"), tr("Objekt-ID"), tr("Beschreibung")
+    });
+}
+
+void MainWindow::allesFuellen()
+{
+    m_tabs->setTabText(0, tr("Anlagen (%1)").arg(m_daten->anlagen().size()));
+    m_tabs->setTabText(4, tr("Datenprüfung (%1 Flags)").arg(m_daten->alleProbleme().size()));
+
+    // Linien-Filter und Pareto-Filter fuellen
+    const QString alteLinie = m_linieCombo->currentData().toString();
+    const QString altePareto = m_paretoLinieCombo->currentData().toString();
+
+    m_linieCombo->blockSignals(true);
+    m_linieCombo->clear();
+    m_linieCombo->addItem(tr("Alle Linien"), "");
+    for (const Linie& l : m_daten->linien()) {
+        m_linieCombo->addItem(QString("%1 - %2").arg(l.linieId, l.bezeichnung), l.linieId);
+    }
+    // Auch fehlerhafte Linien-IDs aus anlagen.csv im Filter anbieten
+    for (const Anlage& a : m_daten->anlagen()) {
+        if (m_linieCombo->findData(a.linieId) < 0) {
+            m_linieCombo->addItem(tr("%1 (unbekannt)").arg(a.linieId), a.linieId);
+        }
+    }
+    const int lIdx = m_linieCombo->findData(alteLinie);
+    if (lIdx >= 0) m_linieCombo->setCurrentIndex(lIdx);
+    m_linieCombo->blockSignals(false);
+
+    m_paretoLinieCombo->blockSignals(true);
+    m_paretoLinieCombo->clear();
+    m_paretoLinieCombo->addItem(tr("Alle Linien (Gesamtwerk)"), "");
+    for (const Linie& l : m_daten->linien()) {
+        m_paretoLinieCombo->addItem(QString("%1 - %2").arg(l.linieId, l.bezeichnung), l.linieId);
+    }
+    const int pIdx = m_paretoLinieCombo->findData(altePareto);
+    if (pIdx >= 0) m_paretoLinieCombo->setCurrentIndex(pIdx);
+    m_paretoLinieCombo->blockSignals(false);
+
+    // Dateifilter der Flag-Tabelle fuellen
+    const QString alteFlagDatei = m_flagDateiCombo->currentData().toString();
+    m_flagDateiCombo->blockSignals(true);
+    m_flagDateiCombo->clear();
+    m_flagDateiCombo->addItem(tr("Alle Dateien"), "");
+    QStringList dateien;
+    for (const Problem& p : m_daten->alleProbleme()) {
+        if (!dateien.contains(p.datei)) dateien.append(p.datei);
+    }
+    std::sort(dateien.begin(), dateien.end());
+    for (const QString& d : dateien) {
+        m_flagDateiCombo->addItem(d, d);
+    }
+    const int fdIdx = m_flagDateiCombo->findData(alteFlagDatei);
+    if (fdIdx >= 0) m_flagDateiCombo->setCurrentIndex(fdIdx);
+    m_flagDateiCombo->blockSignals(false);
+
+    m_anlagenModell->aktualisieren();
+    m_linienAnsicht->aktualisieren();
+    slotParetoAktualisieren();
+    stammdatenTabsFuellen();
+    flagTabelleFuellen();
+    flagLeisteAktualisieren();
+    slotFilterGeaendert();
+    statusLeisteAktualisieren();
+}
+
+void MainWindow::flagLeisteAktualisieren()
+{
+    const int fehler = m_daten->anzahlProbleme(Schweregrad::Fehler);
+    const int warnungen = m_daten->anzahlProbleme(Schweregrad::Warnung);
+    if (fehler == 0 && warnungen == 0) {
+        m_flagLeiste->hide();
+        return;
+    }
+
+    m_flagLeisteText->setProperty("meldung", fehler > 0 ? "fehler" : "warn");
+    m_flagLeisteText->style()->unpolish(m_flagLeisteText);
+    m_flagLeisteText->style()->polish(m_flagLeisteText);
+    m_flagLeisteText->setText(
+        tr("Automatische Datenprüfung (%1 Protokolle geprüft): %2 Fehler und %3 Warnungen erkannt und mit Flags markiert.")
+            .arg(m_daten->anzahlProtokollTagePruefung())
+            .arg(fehler)
+            .arg(warnungen)
+    );
+    m_flagLeiste->show();
+}
+
+void MainWindow::statusLeisteAktualisieren()
+{
+    m_statusOrdner->setText(tr("Daten: %1").arg(m_daten->ordner()));
+    m_statusBenutzer->setText(tr("Angemeldet: %1 (%2)")
+                                  .arg(m_benutzer->aktuellerName(), m_benutzer->rollenName()));
+    m_statusFlags->setText(tr("Flags: %1 Fehler, %2 Warnungen")
+                               .arg(m_daten->anzahlProbleme(Schweregrad::Fehler))
+                               .arg(m_daten->anzahlProbleme(Schweregrad::Warnung)));
+    m_statusCache->setText(tr("Cache: %1/%2 (Treffer %3)")
+                               .arg(m_daten->cacheGroesse())
+                               .arg(Einstellungen::cacheGroesse())
+                               .arg(m_daten->cacheTreffer()));
+}
+
+void MainWindow::stammdatenTabsFuellen()
+{
+    // Linien
+    const QList<Linie>& linien = m_daten->linien();
+    m_linienTabelle->setRowCount(linien.size());
+    for (int i = 0; i < linien.size(); i++) {
+        const Linie& l = linien[i];
+        int anlagenAnzahl = 0;
+        double summeOee = 0.0;
+        int oeeAnzahl = 0;
+        for (const Anlage& a : m_daten->anlagen()) {
+            if (a.linieId != l.linieId) continue;
+            anlagenAnzahl++;
+            const Trendbericht b = m_daten->trendbericht(a.anlageId);
+            if (b.gueltigeTage > 0) {
+                summeOee += b.mittelOee;
+                oeeAnzahl++;
+            }
+        }
+        m_linienTabelle->setItem(i, 0, new QTableWidgetItem(l.linieId));
+        m_linienTabelle->setItem(i, 1, new QTableWidgetItem(l.bezeichnung));
+        m_linienTabelle->setItem(i, 2, new QTableWidgetItem(l.halle));
+        m_linienTabelle->setItem(i, 3, new QTableWidgetItem(l.schichtmodell));
+        m_linienTabelle->setItem(i, 4, new QTableWidgetItem(QString::number(anlagenAnzahl)));
+        m_linienTabelle->setItem(i, 5, new QTableWidgetItem(
+            oeeAnzahl > 0 ? QString("%1 %").arg(summeOee / oeeAnzahl * 100.0, 0, 'f', 1) : "-"));
+    }
+    m_linienTabelle->resizeColumnsToContents();
+
+    // Produkte
+    const QList<Produkt>& produkte = m_daten->produkte();
+    m_produkteTabelle->setRowCount(produkte.size());
+    for (int i = 0; i < produkte.size(); i++) {
+        const Produkt& p = produkte[i];
+        m_produkteTabelle->setItem(i, 0, new QTableWidgetItem(p.produktId));
+        m_produkteTabelle->setItem(i, 1, new QTableWidgetItem(p.linieId));
+        m_produkteTabelle->setItem(i, 2, new QTableWidgetItem(p.bezeichnung));
+
+        QTableWidgetItem* flagItem = new QTableWidgetItem(
+            p.probleme.isEmpty() ? tr("OK") : p.probleme.first().text());
+        if (!p.probleme.isEmpty()) {
+            flagItem->setBackground(Farben::FEHLER_HINTERGRUND);
+            flagItem->setForeground(Farben::FEHLER_TEXT);
+        }
+        m_produkteTabelle->setItem(i, 3, flagItem);
+    }
+    m_produkteTabelle->resizeColumnsToContents();
+
+    // Wartungen
+    const QList<Wartung>& wartungen = m_daten->wartungen();
+    m_wartungenTabelle->setRowCount(wartungen.size());
+    for (int i = 0; i < wartungen.size(); i++) {
+        const Wartung& w = wartungen[i];
+        m_wartungenTabelle->setItem(i, 0, new QTableWidgetItem(w.wartungId));
+        m_wartungenTabelle->setItem(i, 1, new QTableWidgetItem(w.anlageId));
+        m_wartungenTabelle->setItem(i, 2, new QTableWidgetItem(w.datum.toString("yyyy-MM-dd")));
+        m_wartungenTabelle->setItem(i, 3, new QTableWidgetItem(w.art));
+        m_wartungenTabelle->setItem(i, 4, new QTableWidgetItem(QString::number(w.dauerMin)));
+        m_wartungenTabelle->setItem(i, 5, new QTableWidgetItem(w.geplant ? tr("Ja") : tr("Nein")));
+
+        QString text = w.bemerkung;
+        if (!w.probleme.isEmpty()) {
+            text = QString("[%1] %2  |  %3").arg(w.probleme.first().gradText(),
+                                                  w.probleme.first().text(), w.bemerkung);
+        }
+        QTableWidgetItem* bemItem = new QTableWidgetItem(text);
+        if (!w.probleme.isEmpty()) {
+            bemItem->setBackground(Farben::FEHLER_HINTERGRUND);
+            bemItem->setForeground(Farben::FEHLER_TEXT);
+        }
+        m_wartungenTabelle->setItem(i, 6, bemItem);
+    }
+    m_wartungenTabelle->resizeColumnsToContents();
+}
+
+void MainWindow::slotParetoAktualisieren()
+{
+    const QList<Stoercode>& codes = m_daten->stoercodes();
+    m_stoercodeTabelle->setRowCount(codes.size());
+    for (int i = 0; i < codes.size(); i++) {
+        m_stoercodeTabelle->setItem(i, 0, new QTableWidgetItem(codes[i].code));
+        m_stoercodeTabelle->setItem(i, 1, new QTableWidgetItem(codes[i].kategorie));
+        m_stoercodeTabelle->setItem(i, 2, new QTableWidgetItem(codes[i].beschreibung));
+    }
+    m_stoercodeTabelle->resizeColumnsToContents();
+
+    const QString linieId = m_paretoLinieCombo->currentData().toString();
+    const QList<ParetoEintrag> liste = m_daten->pareto(linieId);
+    m_paretoTabelle->setRowCount(liste.size());
+    for (int i = 0; i < liste.size(); i++) {
+        const ParetoEintrag& e = liste[i];
+        const Stoercode* sc = m_daten->findeStoercode(e.code);
+        m_paretoTabelle->setItem(i, 0, new QTableWidgetItem(QString::number(i + 1)));
+        m_paretoTabelle->setItem(i, 1, new QTableWidgetItem(e.code));
+        m_paretoTabelle->setItem(i, 2, new QTableWidgetItem(sc ? sc->kategorie : tr("unbekannt")));
+        m_paretoTabelle->setItem(i, 3, new QTableWidgetItem(
+            sc ? sc->beschreibung : tr("Nicht in stoercodes.csv hinterlegt")));
+        m_paretoTabelle->setItem(i, 4, new QTableWidgetItem(QString::number(e.anzahl)));
+        m_paretoTabelle->setItem(i, 5, new QTableWidgetItem(
+            QString("%1 min (kum. %2 %)")
+                .arg(e.minuten, 0, 'f', 1)
+                .arg(e.kumuliertProzent, 0, 'f', 1)));
+    }
+    m_paretoTabelle->resizeColumnsToContents();
+}
+
+void MainWindow::flagTabelleFuellen()
+{
+    const int gesamtFehler = m_daten->anzahlProbleme(Schweregrad::Fehler);
+    const int gesamtWarn = m_daten->anzahlProbleme(Schweregrad::Warnung);
+    m_flagZusammenfassung->setText(
+        tr("Beim Laden des Datensatzes wurden alle CSV-Dateien und %1 XML-Schichtprotokolle automatisch geprüft. "
+           "Ergebnis: %2 Fehler und %3 Warnungen. Doppelklick auf eine Zeile öffnet die betroffene Anlage.")
+            .arg(m_daten->anzahlProtokollTagePruefung())
+            .arg(gesamtFehler)
+            .arg(gesamtWarn)
+    );
+    slotFlagFilterGeaendert();
+}
+
+void MainWindow::slotFlagFilterGeaendert()
+{
+    const int gradFilter = m_flagGradCombo->currentData().toInt();
+    const QString dateiFilter = m_flagDateiCombo->currentData().toString();
+    const QString suchFilter = m_flagSucheEdit->text().trimmed();
+
+    m_flagTabelle->setRowCount(0);
+    for (const Problem& p : m_daten->alleProbleme()) {
+        if (gradFilter >= 0 && int(p.grad) != gradFilter) continue;
+        if (!dateiFilter.isEmpty() && p.datei != dateiFilter) continue;
+        const QString beschreibung = p.text();
+        if (!suchFilter.isEmpty()
+            && !p.objektId.contains(suchFilter, Qt::CaseInsensitive)
+            && !p.datei.contains(suchFilter, Qt::CaseInsensitive)
+            && !beschreibung.contains(suchFilter, Qt::CaseInsensitive)) {
+            continue;
+        }
+
+        const int r = m_flagTabelle->rowCount();
+        m_flagTabelle->insertRow(r);
+
+        QTableWidgetItem* gradItem = new QTableWidgetItem(p.gradText());
+        if (p.grad == Schweregrad::Fehler) {
+            gradItem->setBackground(Farben::FEHLER_HINTERGRUND);
+            gradItem->setForeground(Farben::FEHLER_TEXT);
+        } else if (p.grad == Schweregrad::Warnung) {
+            gradItem->setBackground(Farben::WARN_HINTERGRUND);
+            gradItem->setForeground(Farben::WARN_TEXT);
+        }
+        m_flagTabelle->setItem(r, 0, gradItem);
+        m_flagTabelle->setItem(r, 1, new QTableWidgetItem(p.datei));
+        m_flagTabelle->setItem(r, 2, new QTableWidgetItem(p.zeile > 0 ? QString::number(p.zeile) : "-"));
+        m_flagTabelle->setItem(r, 3, new QTableWidgetItem(p.objektId));
+        m_flagTabelle->setItem(r, 4, new QTableWidgetItem(beschreibung));
+    }
+    m_flagTabelle->resizeColumnsToContents();
+}
+
+void MainWindow::slotFlagDoppelklick(int zeile, int)
+{
+    QTableWidgetItem* idItem = m_flagTabelle->item(zeile, 3);
+    if (!idItem) return;
+    const QStringList teile = idItem->text().split(' ', Qt::SkipEmptyParts);
+    if (teile.isEmpty()) return;
+
+    const QString anlageId = teile.first();
+    if (!m_daten->findeAnlage(anlageId)) return;
+
+    QDate tag;
+    if (teile.size() >= 2) {
+        tag = QDate::fromString(teile[1], "yyyy-MM-dd");
+    }
+    anlageDetailOeffnen(anlageId, tag);
+}
+
+QString MainWindow::ausgewaehlteAnlageId() const
+{
+    const QModelIndex idx = m_anlagenView->currentIndex();
+    if (!idx.isValid()) return QString();
+    return idx.siblingAtColumn(0).data(AnlagenModell::AnlageIdRolle).toString();
+}
+
+void MainWindow::anlageDetailOeffnen(const QString& anlageId, const QDate& datum)
+{
     if (anlageId.isEmpty()) return;
-    AnlageDetailDialog dlg(anlageId, m_repo, this);
+    AnlageDetailDialog dlg(anlageId, m_daten, m_benutzer, this, datum);
     dlg.exec();
-    m_cacheStatusLabel->setText(QString("LRU-Cache: %1 Protokolle | Hits: %2 | Misses: %3")
-        .arg(m_repo->cacheSize()).arg(m_repo->cacheHits()).arg(m_repo->cacheMisses()));
+    statusLeisteAktualisieren();
 }
 
-void MainWindow::onAnlageDoubleClicked(const QModelIndex& proxyIndex) {
+void MainWindow::slotAusgewaehlteAnlageOeffnen()
+{
+    const QString id = ausgewaehlteAnlageId();
+    if (!id.isEmpty()) anlageDetailOeffnen(id);
+}
+
+void MainWindow::slotAnlageDoppelklick(const QModelIndex& proxyIndex)
+{
     if (!proxyIndex.isValid()) return;
-    const QString id = proxyIndex.siblingAtColumn(0).data(AnlagenTableModel::AnlageIdRole).toString();
-    openAnlageDetails(id);
+    anlageDetailOeffnen(proxyIndex.siblingAtColumn(0).data(AnlagenModell::AnlageIdRolle).toString());
 }
 
-void MainWindow::onAnlageContextMenu(const QPoint& pos) {
+void MainWindow::slotAnlageKontextmenue(const QPoint& pos)
+{
     const QModelIndex idx = m_anlagenView->indexAt(pos);
     if (!idx.isValid()) return;
-    const QString id = idx.siblingAtColumn(0).data(AnlagenTableModel::AnlageIdRole).toString();
-    const Anlage* a = m_repo->findAnlage(id);
+    const QString id = idx.siblingAtColumn(0).data(AnlagenModell::AnlageIdRolle).toString();
+    const Anlage* a = m_daten->findeAnlage(id);
     if (!a) return;
 
-    QMenu menu(this);
-    auto* actDetail = menu.addAction(trBi("🔍 Details, Schichtprotokolle & OEE öffnen (%1)", "🔍 Open Details, Shift Logs & OEE (%1)").arg(id));
-    menu.addSeparator();
-    auto* actEdit = menu.addAction(trBi("✎ Stammdaten bearbeiten...", "✎ Edit Master Data..."));
-    actEdit->setEnabled(AuthManager::instance().canChangeStatus());
+    QMenu menue(this);
+    QAction* actDetail = menue.addAction(tr("Details und Protokolle öffnen (%1)").arg(id));
+    menue.addSeparator();
+    QAction* actBearbeiten = menue.addAction(tr("Stammdaten bearbeiten..."));
+    actBearbeiten->setEnabled(m_benutzer->darfStatusAendern());
+    QAction* actWartung = menue.addAction(tr("Neue Wartung erfassen..."));
+    actWartung->setEnabled(m_benutzer->darfWartungErfassen());
 
-    auto* actMaint = menu.addAction(trBi("🔧 Neue Wartung erfassen...", "🔧 Record New Maintenance..."));
-    actMaint->setEnabled(AuthManager::instance().canRecordMaintenance());
+    QMenu* statusUntermenue = menue.addMenu(tr("Status ändern"));
+    statusUntermenue->setEnabled(m_benutzer->darfStatusAendern());
+    QAction* stBetrieb = statusUntermenue->addAction(anlagenStatusName(AnlagenStatus::InBetrieb));
+    stBetrieb->setData(int(AnlagenStatus::InBetrieb));
+    QAction* stStoer = statusUntermenue->addAction(anlagenStatusName(AnlagenStatus::Stoerung));
+    stStoer->setData(int(AnlagenStatus::Stoerung));
+    QAction* stWart = statusUntermenue->addAction(anlagenStatusName(AnlagenStatus::Wartung));
+    stWart->setData(int(AnlagenStatus::Wartung));
+    QAction* stUmbau = statusUntermenue->addAction(anlagenStatusName(AnlagenStatus::Umbau));
+    stUmbau->setData(int(AnlagenStatus::Umbau));
 
-    QMenu* statusMenu = menu.addMenu(trBi("⚡ Schnell-Status ändern", "⚡ Quick Change Status"));
-    statusMenu->setEnabled(AuthManager::instance().canChangeStatus());
-    auto* stBetrieb = statusMenu->addAction("in_betrieb");
-    auto* stStoer = statusMenu->addAction("stoerung");
-    auto* stWart = statusMenu->addAction("wartung");
-    auto* stUmbau = statusMenu->addAction("umbau");
+    QAction* wahl = menue.exec(m_anlagenView->viewport()->mapToGlobal(pos));
+    if (!wahl) return;
 
-    QAction* chosen = menu.exec(m_anlagenView->viewport()->mapToGlobal(pos));
-    if (!chosen) return;
-
-    if (chosen == actDetail) {
-        openAnlageDetails(id);
-    } else if (chosen == actEdit) {
-        onEditSelectedAnlage();
-    } else if (chosen == actMaint) {
-        onAddMaintenanceForSelected();
-    } else if (chosen == stBetrieb || chosen == stStoer || chosen == stWart || chosen == stUmbau) {
-        Anlage copy = *a;
-        copy.rawStatus = chosen->text();
-        copy.status = parseAnlagenStatus(copy.rawStatus);
-        m_repo->updateAnlage(copy);
+    if (wahl == actDetail) {
+        anlageDetailOeffnen(id);
+    } else if (wahl == actBearbeiten) {
+        slotAnlageBearbeiten();
+    } else if (wahl == actWartung) {
+        slotWartungErfassen();
+    } else if (wahl->data().isValid()) {
+        Anlage kopie = *a;
+        kopie.status = static_cast<AnlagenStatus>(wahl->data().toInt());
+        kopie.statusRoh = anlagenStatusText(kopie.status);
+        m_daten->anlageAendern(kopie);
     }
 }
 
-void MainWindow::onSearchOrFilterChanged() {
-    m_proxyModel->setSearchText(m_searchEdit->text());
-    m_proxyModel->setLinieFilter(m_linieFilterCombo->currentData().toString());
-    m_proxyModel->setTypFilter(m_typFilterCombo->currentData().toInt());
-    m_proxyModel->setStatusFilter(m_statusFilterCombo->currentData().toInt());
-    const int maxYear = m_maxBaujahrSpin->value();
-    m_proxyModel->setMaxBaujahrFilter(maxYear > 2000 ? maxYear : 0);
-    m_proxyModel->setOnlyConspicuous(m_onlyConspicuousCheck->isChecked());
-    m_proxyModel->setOnlyDataWarnings(m_onlyWarningsCheck->isChecked());
-
-    m_filterCountLabel->setText(trBi("Angezeigte Anlagen: %1 von %2", "Displayed Machines: %1 of %2")
-        .arg(m_proxyModel->rowCount()).arg(m_tableModel->rowCount()));
-}
-
-void MainWindow::onResetFiltersClicked() {
-    m_searchEdit->clear();
-    m_linieFilterCombo->setCurrentIndex(0);
-    m_typFilterCombo->setCurrentIndex(0);
-    m_statusFilterCombo->setCurrentIndex(0);
-    m_maxBaujahrSpin->setValue(2000);
-    m_onlyConspicuousCheck->setChecked(false);
-    m_onlyWarningsCheck->setChecked(false);
-    m_proxyModel->resetAllFilters();
-    onSearchOrFilterChanged();
-}
-
-void MainWindow::onEditSelectedAnlage() {
-    const QString id = selectedAnlageId();
+void MainWindow::slotAnlageBearbeiten()
+{
+    if (!m_benutzer->darfStatusAendern()) return;
+    const QString id = ausgewaehlteAnlageId();
     if (id.isEmpty()) return;
-    const Anlage* a = m_repo->findAnlage(id);
+    const Anlage* a = m_daten->findeAnlage(id);
     if (!a) return;
 
-    AnlageEditDialog dlg(*a, m_repo, this);
+    AnlageBearbeitenDialog dlg(*a, m_daten, m_benutzer, this);
     if (dlg.exec() == QDialog::Accepted) {
-        m_repo->updateAnlage(dlg.updatedAnlage());
+        m_daten->anlageAendern(dlg.ergebnis());
     }
 }
 
-void MainWindow::onAddMaintenanceForSelected() {
-    QString id = selectedAnlageId();
-    if (id.isEmpty() && !m_repo->anlagen().isEmpty()) {
-        id = m_repo->anlagen().first().anlageId;
+void MainWindow::slotWartungErfassen()
+{
+    if (!m_benutzer->darfWartungErfassen()) return;
+    QString id = ausgewaehlteAnlageId();
+    if (id.isEmpty() && !m_daten->anlagen().isEmpty()) {
+        id = m_daten->anlagen().first().anlageId;
     }
-    WartungAddDialog dlg(id, m_repo, this);
+    WartungDialog dlg(id, m_daten, this);
     if (dlg.exec() == QDialog::Accepted) {
-        m_repo->addWartung(dlg.createdWartung());
-        QMessageBox::information(this,
-            trBi("Wartung erfasst", "Maintenance Recorded"),
-            trBi("Wartungseintrag wurde hinzugefügt.", "Maintenance entry was added."));
+        m_daten->wartungHinzufuegen(dlg.ergebnis());
+        QMessageBox::information(this, tr("Wartung gespeichert"),
+                                 tr("Die Wartung wurde im Speicher hinzugefügt."));
     }
 }
 
-void MainWindow::onExportCsvClicked() {
-    QString err;
-    if (m_repo->exportModifiedCsv(m_repo->dataDirectory(), &err)) {
-        QMessageBox::information(this,
-            trBi("CSV-Export erfolgreich", "CSV Export Successful"),
-            trBi("Die aktualisierten Stammdaten wurden erfolgreich exportiert nach:\n• %1/anlagen_out.csv\n• %1/wartungen_out.csv",
-                 "Updated master data successfully exported to:\n• %1/anlagen_out.csv\n• %1/wartungen_out.csv")
-                .arg(m_repo->dataDirectory()));
-    } else {
-        QMessageBox::critical(this, trBi("Export-Fehler", "Export Error"), err);
-    }
+void MainWindow::slotFilterGeaendert()
+{
+    m_filterModell->setSuchtext(m_sucheEdit->text());
+    m_filterModell->setLinieFilter(m_linieCombo->currentData().toString());
+    m_filterModell->setTypFilter(m_typCombo->currentData().toInt());
+    m_filterModell->setStatusFilter(m_statusCombo->currentData().toInt());
+    m_filterModell->setMaxBaujahr(m_baujahrSpin->value() > 2000 ? m_baujahrSpin->value() : 0);
+    m_filterModell->setNurAuffaellige(m_auffaelligCheck->isChecked());
+    m_filterModell->setNurMitFlag(m_flagCheck->isChecked());
+
+    m_anzahlLabel->setText(tr("Angezeigte Anlagen: %1 von %2")
+                               .arg(m_filterModell->rowCount())
+                               .arg(m_anlagenModell->rowCount()));
 }
 
-void MainWindow::onSaveSqliteClicked() {
-    const QString path = QFileDialog::getSaveFileName(
+void MainWindow::slotFilterZuruecksetzen()
+{
+    m_sucheEdit->clear();
+    m_linieCombo->setCurrentIndex(0);
+    m_typCombo->setCurrentIndex(0);
+    m_statusCombo->setCurrentIndex(0);
+    m_baujahrSpin->setValue(2000);
+    m_auffaelligCheck->setChecked(false);
+    m_flagCheck->setChecked(false);
+    m_filterModell->filterZuruecksetzen();
+    slotFilterGeaendert();
+}
+
+void MainWindow::slotSpaltenAnpassen()
+{
+    m_anlagenView->resizeColumnsToContents();
+}
+
+void MainWindow::slotFlagsTabZeigen()
+{
+    m_tabs->setCurrentIndex(4);
+}
+
+void MainWindow::slotOrdnerOeffnen()
+{
+    const QString ordner = QFileDialog::getExistingDirectory(
+        this, tr("Datenordner auswählen"), m_daten->ordner());
+    if (ordner.isEmpty()) return;
+
+    Einstellungen::setDatenordner(ordner);
+    m_daten->datensatzLaden(ordner);
+}
+
+void MainWindow::slotNeuLaden()
+{
+    m_daten->datensatzLaden(m_daten->ordner());
+}
+
+void MainWindow::slotSqliteLaden()
+{
+    const QString datei = QFileDialog::getOpenFileName(
         this,
-        trBi("Stammdaten in SQLite-Datenbank speichern", "Save Master Data to SQLite Database"),
-        QDir(m_repo->dataDirectory()).filePath("RoboCell_daten.sqlite"),
+        tr("Stammdaten aus SQLite laden"),
+        QDir(m_daten->ordner()).filePath("RoboCell_daten.sqlite"),
         "SQLite (*.sqlite *.db)"
     );
-    if (path.isEmpty()) return;
+    if (datei.isEmpty()) return;
 
-    QString err;
-    if (m_repo->saveToSqlite(path, &err)) {
-        QMessageBox::information(this, trBi("SQLite-Persistenz", "SQLite Persistence"),
-                                 trBi("Stammdaten erfolgreich in SQLite gespeichert:\n%1", "Master data saved to SQLite:\n%1").arg(path));
-    } else {
-        QMessageBox::critical(this, trBi("SQLite-Fehler", "SQLite Error"), err);
+    if (!m_daten->datensatzAusSqliteLaden(datei)) {
+        QMessageBox::warning(this, tr("SQLite-Fehler"),
+                             tr("Die SQLite-Datenbank konnte nicht geladen werden."));
     }
 }
 
-void MainWindow::onLoadSqliteClicked() {
-    const QString path = QFileDialog::getOpenFileName(
+void MainWindow::slotSqliteSpeichern()
+{
+    if (!m_benutzer->darfSqliteSpeichern()) return;
+    const QString datei = QFileDialog::getSaveFileName(
         this,
-        trBi("Stammdaten aus SQLite-Datenbank laden", "Load Master Data from SQLite Database"),
-        QDir(m_repo->dataDirectory()).filePath("RoboCell_daten.sqlite"),
+        tr("Stammdaten in SQLite speichern"),
+        QDir(m_daten->ordner()).filePath("RoboCell_daten.sqlite"),
         "SQLite (*.sqlite *.db)"
     );
-    if (path.isEmpty()) return;
+    if (datei.isEmpty()) return;
 
-    if (m_repo->loadFromSqlite(path)) {
-        m_tableModel->refreshModel();
-        refreshSecondaryTabs();
-        m_lineFlowWidget->refreshView();
-        QMessageBox::information(this, trBi("SQLite geladen", "SQLite Loaded"),
-                                 trBi("Anlagen-Stammdaten wurden aus SQLite geladen.", "Machine master data loaded from SQLite."));
+    QString fehler;
+    if (m_daten->inSqliteSpeichern(datei, &fehler)) {
+        QMessageBox::information(this, tr("SQLite gespeichert"),
+                                 tr("Stammdaten wurden gespeichert:\n%1").arg(datei));
     } else {
-        QMessageBox::warning(this, trBi("SQLite-Fehler", "SQLite Error"),
-                             trBi("Datenbank konnte nicht geladen werden.", "Could not load database."));
+        QMessageBox::critical(this, tr("SQLite-Fehler"), fehler);
     }
 }
 
-void MainWindow::onChangeDataDirClicked() {
-    const QString dir = QFileDialog::getExistingDirectory(
-        this,
-        trBi("RoboCell_Daten Ordner auswählen", "Select RoboCell_Daten Directory"),
-        m_repo->dataDirectory()
-    );
-    if (dir.isEmpty()) return;
-
-    m_repo->loadAllFromDirectory(dir);
-    m_tableModel->refreshModel();
-    refreshSecondaryTabs();
-    m_lineFlowWidget->refreshView();
-    startBackground14DaysAnalysis();
+void MainWindow::slotCsvExportieren()
+{
+    if (!m_benutzer->darfCsvExportieren()) return;
+    QString fehler;
+    if (m_daten->csvExportieren(m_daten->ordner(), &fehler)) {
+        QMessageBox::information(this, tr("CSV-Export abgeschlossen"),
+            tr("Die bearbeiteten Tabellen wurden exportiert nach:\n- %1/anlagen_out.csv\n- %1/wartungen_out.csv")
+                .arg(m_daten->ordner()));
+    } else {
+        QMessageBox::critical(this, tr("Export-Fehler"), fehler);
+    }
 }
 
-void MainWindow::onSwitchUserClicked() {
-    LoginDialog dlg(this);
+void MainWindow::slotEinstellungenOeffnen()
+{
+    const QString alterOrdner = Einstellungen::datenordner();
+    EinstellungenDialog dlg(m_daten, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        const QString neuerOrdner = Einstellungen::datenordner();
+        if (!neuerOrdner.isEmpty() && neuerOrdner != alterOrdner && neuerOrdner != m_daten->ordner()) {
+            m_daten->datensatzLaden(neuerOrdner);
+        }
+        statusLeisteAktualisieren();
+    }
+}
+
+void MainWindow::slotSpracheDeutsch()
+{
+    Einstellungen::setSprache("de");
+    Sprache::setzen("de");
+}
+
+void MainWindow::slotSpracheEnglisch()
+{
+    Einstellungen::setSprache("en");
+    Sprache::setzen("en");
+}
+
+void MainWindow::slotBerechtigungenZeigen()
+{
+    QMessageBox::information(this, tr("Aktuelle Berechtigungen"),
+        tr("Benutzer: %1\nRolle: %2\n\n%3")
+            .arg(m_benutzer->aktuellerName(),
+                 m_benutzer->rollenName(),
+                 m_benutzer->rechteBeschreibung()));
+}
+
+void MainWindow::slotBenutzerWechseln()
+{
+    AnmeldeDialog dlg(m_benutzer, this);
     dlg.exec();
 }
 
-void MainWindow::onToggleLanguageClicked() {
-    auto& lm = LanguageManager::instance();
-    lm.setLanguage(lm.currentLanguage() == AppLanguage::German ? AppLanguage::English : AppLanguage::German);
+void MainWindow::slotAbmelden()
+{
+    m_benutzer->abmelden();
+    hide();
+    AnmeldeDialog dlg(m_benutzer);
+    if (dlg.exec() == QDialog::Accepted) {
+        show();
+    } else {
+        close();
+    }
 }
 
-void MainWindow::startBackground14DaysAnalysis() {
-    if (m_bgWatcher->isRunning()) return;
-    m_bgProgressBar->show();
-    statusBar()->showMessage(trBi("Lade alle 14 Protokolltage im Hintergrund für Trend- & OEE-Auswertung...",
-                                  "Loading all 14 log days in background for trend & OEE evaluation..."));
-
-    DataRepository* repoPtr = m_repo;
-    const QList<Anlage> anlagenCopy = m_repo->anlagen();
-
-    QFuture<QMap<QString, AnomalyReport>> future = QtConcurrent::run([repoPtr, anlagenCopy]() {
-        QMap<QString, AnomalyReport> results;
-        for (const auto& a : anlagenCopy) {
-            const auto protos = repoPtr->loadAllProtokolleForAnlage(a.anlageId);
-            const auto [daily, rep] = OeeCalculator::analyze14DaysTrend(a, protos);
-            results.insert(a.anlageId, rep);
-        }
-        return results;
-    });
-
-    m_bgWatcher->setFuture(future);
+void MainWindow::slotOeeHilfe()
+{
+    QMessageBox::information(this, tr("OEE-Formeln und Kennzahlen"),
+        tr("Planbelegungszeit T_plan: Dauer aller Zustände in geplanten Schichten ohne Pause und Wartung.\n"
+           "Laufzeit T_lauf: Dauer aller Zustände vom Typ Produktion.\n\n"
+           "Verfügbarkeit V = T_lauf / T_plan\n"
+           "Leistungsgrad L = t_soll * (n_gut + n_aus) / T_lauf\n"
+           "Qualitätsrate Q = n_gut / (n_gut + n_aus)\n"
+           "OEE = V * L * Q"));
 }
 
-void MainWindow::onBackgroundAnalysisFinished() {
-    m_bgProgressBar->hide();
-    const QMap<QString, AnomalyReport> reports = m_bgWatcher->result();
-    m_tableModel->updateCalculatedMetrics(reports);
+void MainWindow::slotUeberProgramm()
+{
+    QMessageBox::about(this, tr("Über RoboCell"),
+        tr("RoboCell - Kennzahlen einer Fertigung mit Roboterzellen\n"
+           "Programmentwurf C++ und Qt 6 (DHBW Ravensburg, Campus Friedrichshafen)"));
+}
+
+void MainWindow::slotDatenGeaendert()
+{
+    allesFuellen();
     m_anlagenView->resizeColumnsToContents();
-    refreshSecondaryTabs();
-
-    m_cacheStatusLabel->setText(QString("LRU-Cache: %1 Protokolle | Hits: %2 | Misses: %3")
-        .arg(m_repo->cacheSize()).arg(m_repo->cacheHits()).arg(m_repo->cacheMisses()));
-    statusBar()->showMessage(trBi("✓ 14-Tage-Hintergrundanalyse für alle Anlagen abgeschlossen.",
-                                  "✓ 14-day background analysis completed for all machines."), 6000);
 }
 
-void MainWindow::updateRolePermissionsUi() {
-    auto& auth = AuthManager::instance();
-    m_userBadgeLabel->setText(QString("👤 %1 (%2)").arg(auth.currentUsername(), auth.currentRoleDisplayName()));
-    m_userBadgeLabel->setToolTip(auth.permissionsSummary());
+void MainWindow::slotRollenAktualisieren()
+{
+    const bool darfBearbeiten = m_benutzer->darfStatusAendern();
+    const bool darfWartung = m_benutzer->darfWartungErfassen();
+    const bool darfCsv = m_benutzer->darfCsvExportieren();
+    const bool darfSqlite = m_benutzer->darfSqliteSpeichern();
 
-    m_editAnlageBtn->setEnabled(auth.canChangeStatus());
-    m_addMaintBtn->setEnabled(auth.canRecordMaintenance());
-    m_newWartungTabBtn->setEnabled(auth.canRecordMaintenance());
-    m_exportCsvBtn->setEnabled(auth.canExportData());
-    m_saveSqliteBtn->setEnabled(auth.canEditMasterData());
+    m_actBearbeiten->setEnabled(darfBearbeiten);
+    m_bearbeitenBtn->setEnabled(darfBearbeiten);
+    m_actWartung->setEnabled(darfWartung);
+    m_wartungBtn->setEnabled(darfWartung);
+    m_neueWartungTabBtn->setEnabled(darfWartung);
+    m_actCsvExport->setEnabled(darfCsv);
+    m_actSqliteSpeichern->setEnabled(darfSqlite);
+
+    m_actKontoInfo->setText(tr("Angemeldet: %1 (%2)")
+                                .arg(m_benutzer->aktuellerName(), m_benutzer->rollenName()));
+    statusLeisteAktualisieren();
 }
-
-void MainWindow::refreshSecondaryTabs() {
-    // 1. Linien-Filter & Pareto-Linien-Combo aktualisieren
-    m_linieFilterCombo->blockSignals(true);
-    m_linieFilterCombo->clear();
-    m_linieFilterCombo->addItem(trBi("Alle Linien", "All Lines"), "");
-
-    m_paretoLineCombo->blockSignals(true);
-    m_paretoLineCombo->clear();
-    m_paretoLineCombo->addItem(trBi("Alle Linien (Gesamtwerk)", "All Lines (Entire Plant)"), "");
-
-    for (const auto& l : m_repo->linien()) {
-        m_linieFilterCombo->addItem(QString("%1 – %2").arg(l.linieId, l.bezeichnung), l.linieId);
-        m_paretoLineCombo->addItem(QString("%1 – %2").arg(l.linieId, l.bezeichnung), l.linieId);
-    }
-    // Auch fehlerhafte Linien wie L9 in der Filter-Auswahl auffindbar machen
-    m_linieFilterCombo->addItem(trBi("L9 (Fremdschlüsselfehler A040)", "L9 (Foreign Key Error A040)"), "L9");
-    m_linieFilterCombo->blockSignals(false);
-    m_paretoLineCombo->blockSignals(false);
-
-    // 2. Störcodes-Tabelle füllen
-    const auto& scList = m_repo->stoercodes();
-    m_stoercodesTable->setRowCount(scList.size());
-    for (int i = 0; i < scList.size(); ++i) {
-        m_stoercodesTable->setItem(i, 0, new QTableWidgetItem(scList[i].code));
-        m_stoercodesTable->setItem(i, 1, new QTableWidgetItem(scList[i].kategorie));
-        m_stoercodesTable->setItem(i, 2, new QTableWidgetItem(scList[i].beschreibung));
-    }
-
-    // 3. Linien-Tabelle inkl. Durchschnitts-OEE je Linie füllen
-    const auto& linList = m_repo->linien();
-    m_linienTable->setRowCount(linList.size());
-    for (int i = 0; i < linList.size(); ++i) {
-        const auto& l = linList[i];
-        int countAnlagen = 0;
-        double sumOee = 0.0;
-        int oeeCount = 0;
-        for (const auto& a : m_repo->anlagen()) {
-            if (a.linieId == l.linieId) {
-                ++countAnlagen;
-                if (const auto* rep = m_tableModel->anomalyForAnlage(a.anlageId)) {
-                    if (rep->avgOee > 0.0) {
-                        sumOee += rep->avgOee;
-                        ++oeeCount;
-                    }
-                }
-            }
-        }
-        m_linienTable->setItem(i, 0, new QTableWidgetItem(l.linieId));
-        m_linienTable->setItem(i, 1, new QTableWidgetItem(l.bezeichnung));
-        m_linienTable->setItem(i, 2, new QTableWidgetItem(l.halle));
-        m_linienTable->setItem(i, 3, new QTableWidgetItem(l.rawSchichtmodell));
-        m_linienTable->setItem(i, 4, new QTableWidgetItem(QString::number(countAnlagen)));
-        m_linienTable->setItem(i, 5, new QTableWidgetItem(
-            oeeCount > 0 ? QString("%1 %").arg((sumOee / oeeCount) * 100.0, 0, 'f', 1) : "-"));
-    }
-
-    // 4. Produkte-Tabelle füllen
-    const auto& prodList = m_repo->produkte();
-    m_produkteTable->setRowCount(prodList.size());
-    for (int i = 0; i < prodList.size(); ++i) {
-        const auto& p = prodList[i];
-        m_produkteTable->setItem(i, 0, new QTableWidgetItem(p.produktId));
-        m_produkteTable->setItem(i, 1, new QTableWidgetItem(p.linieId));
-        m_produkteTable->setItem(i, 2, new QTableWidgetItem(p.bezeichnung));
-        auto* stItem = new QTableWidgetItem(p.hasValidationWarning ? ("⚠ " + p.validationMessage) : "✓ OK");
-        if (p.hasValidationWarning) stItem->setBackground(QColor("#ffedd5"));
-        m_produkteTable->setItem(i, 3, stItem);
-    }
-
-    // 5. Wartungen-Tabelle füllen
-    const auto& wartList = m_repo->wartungen();
-    m_wartungenTable->setRowCount(wartList.size());
-    for (int i = 0; i < wartList.size(); ++i) {
-        const auto& w = wartList[i];
-        m_wartungenTable->setItem(i, 0, new QTableWidgetItem(w.wartungId));
-        m_wartungenTable->setItem(i, 1, new QTableWidgetItem(w.anlageId));
-        m_wartungenTable->setItem(i, 2, new QTableWidgetItem(w.datum.toString("yyyy-MM-dd")));
-        m_wartungenTable->setItem(i, 3, new QTableWidgetItem(w.art));
-        m_wartungenTable->setItem(i, 4, new QTableWidgetItem(QString("%1 min").arg(w.dauerMin)));
-        m_wartungenTable->setItem(i, 5, new QTableWidgetItem(w.geplant ? "ja" : "nein"));
-        m_wartungenTable->setItem(i, 6, new QTableWidgetItem(
-            w.hasValidationWarning ? ("⚠ " + w.validationMessage + " | " + w.bemerkung) : w.bemerkung));
-    }
-
-    // 6. Datenqualitäts- & Plausibilitätsbericht füllen (Mindestanforderung 1 & 7)
-    const auto& issues = m_repo->validationIssues();
-    m_issuesSummaryLabel->setText(trBi(
-        "Beim Einlesen der globalen CSV-Dateien wurden %1 Plausibilitäts-/Datenfehler erkannt und sicher abgefangen. "
-        "Doppelklicken Sie auf einen Eintrag, um die betroffene Anlage direkt zu öffnen und zu korrigieren.",
-        "During global CSV import, %1 plausibility/data issues were detected and safely handled. "
-        "Double-click an entry to open and fix the affected machine directly."
-    ).arg(issues.size()));
-
-    m_issuesTable->setRowCount(issues.size());
-    const bool isDe = (LanguageManager::instance().currentLanguage() == AppLanguage::German);
-    for (int i = 0; i < issues.size(); ++i) {
-        const auto& iss = issues[i];
-        QString sevText = "WARNUNG";
-        QColor bg("#fef9c3");
-        if (iss.severity == ValidationIssue::Severity::Error) {
-            sevText = isDe ? "FEHLER" : "ERROR";
-            bg = QColor("#fee2e2");
-        } else {
-            sevText = isDe ? "WARNUNG" : "WARNING";
-        }
-        auto* sevItem = new QTableWidgetItem(sevText);
-        sevItem->setBackground(bg);
-        m_issuesTable->setItem(i, 0, sevItem);
-        m_issuesTable->setItem(i, 1, new QTableWidgetItem(iss.sourceFile));
-        m_issuesTable->setItem(i, 2, new QTableWidgetItem(iss.lineNumber > 0 ? QString::number(iss.lineNumber) : "-"));
-        m_issuesTable->setItem(i, 3, new QTableWidgetItem(iss.entityId));
-        m_issuesTable->setItem(i, 4, new QTableWidgetItem(isDe ? iss.messageDe : iss.messageEn));
-    }
-
-    onSearchOrFilterChanged();
-}
-
-void MainWindow::retranslateUi() {
-    setWindowTitle(trBi("RoboCell – OEE- & Anlagenmanagement (C++ / Qt 6)",
-                        "RoboCell – OEE & Machine Management (C++ / Qt 6)"));
-    m_appTitleLabel->setText(trBi("🤖 RoboCell – Fertigungskennzahlen & OEE",
-                                  "🤖 RoboCell – Manufacturing KPIs & OEE"));
-
-    m_switchUserBtn->setText(trBi("🔑 Rolle / Benutzer wechseln", "🔑 Switch Role / User"));
-    m_langBtn->setText(LanguageManager::instance().currentLanguage() == AppLanguage::German ? "🌐 EN (English)" : "🌐 DE (Deutsch)");
-    m_openDirBtn->setText(trBi("📂 Datenordner...", "📂 Data Folder..."));
-    m_loadSqliteBtn->setText(trBi("🗄 SQLite laden", "🗄 Load SQLite"));
-    m_saveSqliteBtn->setText(trBi("💾 SQLite speichern", "💾 Save SQLite"));
-    m_exportCsvBtn->setText(trBi("📤 CSV Export (*_out.csv)", "📤 CSV Export (*_out.csv)"));
-
-    m_mainTabs->setTabText(0, trBi("🏭 Anlagenliste & Filter (%1)", "🏭 Machine List & Filters (%1)").arg(m_repo->anlagen().size()));
-    m_mainTabs->setTabText(1, trBi("🔀 Grafische Linienansicht & Engpassanalyse", "🔀 Graphical Line View & Bottleneck Analysis"));
-    m_mainTabs->setTabText(2, trBi("⚡ Störcodes & Pareto-Statistik", "⚡ Fault Codes & Pareto Statistics"));
-    m_mainTabs->setTabText(3, trBi("📋 Linien, Produkte & Wartungen", "📋 Lines, Products & Maintenance"));
-    m_mainTabs->setTabText(4, trBi("🛡 Datenqualität & Fehlerprotokoll (%1)", "🛡 Data Quality & Issue Log (%1)").arg(m_repo->validationIssues().size()));
-
-    m_searchEdit->setPlaceholderText(trBi("z. B. A025, Schweißroboter, L2, Kinetronic...",
-                                          "e.g. A025, Welding Robot, L2, Kinetronic..."));
-
-    // Typ-Filter Combo
-    m_typFilterCombo->blockSignals(true);
-    m_typFilterCombo->clear();
-    m_typFilterCombo->addItem(trBi("Alle Typen", "All Types"), -1);
-    m_typFilterCombo->addItem("cnc_beladung", static_cast<int>(AnlagenTyp::CncBeladung));
-    m_typFilterCombo->addItem("schweissroboter", static_cast<int>(AnlagenTyp::Schweissroboter));
-    m_typFilterCombo->addItem("montageroboter", static_cast<int>(AnlagenTyp::Montageroboter));
-    m_typFilterCombo->addItem("schraubstation", static_cast<int>(AnlagenTyp::Schraubstation));
-    m_typFilterCombo->addItem("klebestation", static_cast<int>(AnlagenTyp::Klebestation));
-    m_typFilterCombo->addItem("pruefstation", static_cast<int>(AnlagenTyp::Pruefstation));
-    m_typFilterCombo->addItem("laserbeschriftung", static_cast<int>(AnlagenTyp::Laserbeschriftung));
-    m_typFilterCombo->addItem("palettierer", static_cast<int>(AnlagenTyp::Palettierer));
-    m_typFilterCombo->blockSignals(false);
-
-    // Status-Filter Combo
-    m_statusFilterCombo->blockSignals(true);
-    m_statusFilterCombo->clear();
-    m_statusFilterCombo->addItem(trBi("Alle Status", "All Statuses"), -1);
-    m_statusFilterCombo->addItem("in_betrieb", static_cast<int>(AnlagenStatus::InBetrieb));
-    m_statusFilterCombo->addItem("stoerung", static_cast<int>(AnlagenStatus::Stoerung));
-    m_statusFilterCombo->addItem("wartung", static_cast<int>(AnlagenStatus::Wartung));
-    m_statusFilterCombo->addItem("umbau", static_cast<int>(AnlagenStatus::Umbau));
-    m_statusFilterCombo->blockSignals(false);
-
-    m_onlyConspicuousCheck->setText(trBi("🔍 Nur auffällige Anlagen (14T-Trend)", "🔍 Only Conspicuous Machines (14d Trend)"));
-    m_onlyWarningsCheck->setText(trBi("⚠ Nur Anlagen mit Stammdaten-Warnung", "⚠ Only Machines with Data Warnings"));
-    m_resetFilterBtn->setText(trBi("✖ Filter zurücksetzen", "✖ Reset Filters"));
-
-    m_detailBtn->setText(trBi("📊 Details, Schichtprotokoll & OEE öffnen", "📊 Open Details, Shift Log & OEE"));
-    m_editAnlageBtn->setText(trBi("✎ Stammdaten bearbeiten", "✎ Edit Master Data"));
-    m_addMaintBtn->setText(trBi("🔧 Wartung erfassen", "🔧 Record Maintenance"));
-
-    m_stoercodesTable->setHorizontalHeaderLabels({
-        trBi("Code", "Code"), trBi("Kategorie", "Category"), trBi("Beschreibung", "Description")
-    });
-    m_paretoTable->setHorizontalHeaderLabels({
-        trBi("Rang", "Rank"), trBi("Code", "Code"), trBi("Kategorie", "Category"),
-        trBi("Beschreibung", "Description"), trBi("Häufigkeit", "Count"),
-        trBi("Gesamtdauer (kum. %)", "Total Duration (cum. %)")
-    });
-    m_linienTable->setHorizontalHeaderLabels({
-        trBi("Linie", "Line"), trBi("Bezeichnung", "Description"), trBi("Halle", "Hall"),
-        trBi("Schichtmodell", "Shift Model"), trBi("Anlagen", "Machines"), trBi("Ø Linien-OEE", "Avg Line OEE")
-    });
-    m_produkteTable->setHorizontalHeaderLabels({
-        trBi("Produkt-ID", "Product ID"), trBi("Linie", "Line"), trBi("Bezeichnung", "Description"), trBi("Prüfung", "Check")
-    });
-    m_wartungenTable->setHorizontalHeaderLabels({
-        trBi("Wartung-ID", "Maint. ID"), trBi("Anlage", "Machine"), trBi("Datum", "Date"),
-        trBi("Art", "Type"), trBi("Dauer", "Duration"), trBi("Geplant", "Planned"), trBi("Bemerkung", "Comment")
-    });
-    m_issuesTable->setHorizontalHeaderLabels({
-        trBi("Typ", "Severity"), trBi("Datei", "File"), trBi("Zeile", "Line"),
-        trBi("Objekt-ID", "Entity ID"), trBi("Plausibilitätsmeldung", "Plausibility Message")
-    });
-
-    updateRolePermissionsUi();
-    refreshSecondaryTabs();
-}
-
-} // namespace RoboCell

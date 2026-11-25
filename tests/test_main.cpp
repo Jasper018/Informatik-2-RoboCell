@@ -1,118 +1,198 @@
-#include "io/DataRepository.h"
-#include "logic/OeeCalculator.h"
-#include "core/AuthManager.h"
-#include "core/LanguageManager.h"
 #include <QCoreApplication>
-#include <QTextStream>
+#include <QDate>
 #include <QDir>
 #include <QFile>
-#include <cassert>
+#include <QTemporaryDir>
+#include <QTextStream>
 #include <cmath>
+#include <cstdlib>
+#include "core/benutzerverwaltung.h"
+#include "core/farben.h"
+#include "core/sprache.h"
+#include "io/datenverwaltung.h"
+#include "logic/oeeberechnung.h"
+#include "model/datentypen.h"
+#include "model/problem.h"
 
-using namespace RoboCell;
+#define CHECK(cond) \
+    do { \
+        if (!(cond)) { \
+            QTextStream err(stderr); \
+            err << "TEST FEHLGESCHLAGEN (" << __FILE__ << ":" << __LINE__ << "): " #cond "\n" << Qt::flush; \
+            std::exit(1); \
+        } \
+    } while (0)
 
-int main(int argc, char* argv[]) {
+static bool hatProblemCode(const QList<Problem>& liste, const QString& code)
+{
+    for (const Problem& p : liste) {
+        if (p.code == code) return true;
+    }
+    return false;
+}
+
+static bool hatProblemFuerObjekt(const QList<Problem>& liste, const QString& objektId, const QString& code)
+{
+    for (const Problem& p : liste) {
+        if (p.objektId == objektId && p.code == code) return true;
+    }
+    return false;
+}
+
+int main(int argc, char* argv[])
+{
     QCoreApplication app(argc, argv);
     QTextStream out(stdout);
+    out << "=== RoboCell Automatisierte Tests ===\n" << Qt::flush;
 
-    out << "=== RoboCell Automated Verification Suite ===\n";
+    // 1. Kontrastpruefung aller Farbpaare >= 8.0 : 1
+    const QList<Farben::Farbpaar> paare = Farben::alleFarbpaare();
+    CHECK(!paare.isEmpty());
+    for (const Farben::Farbpaar& p : paare) {
+        const double k = Farben::kontrast(p.vordergrund, p.hintergrund);
+        if (k < 8.0) {
+            out << "Kontrast zu niedrig bei: " << p.name << " (" << k << ")\n" << Qt::flush;
+        }
+        CHECK(k >= 8.0);
+    }
+    out << "Kontrastpruefung: alle " << paare.size() << " Farbpaare >= 8:1.\n" << Qt::flush;
 
-    // 1. Test DataRepository & CSV Plausibility Checks
-    DataRepository repo;
-    const QString dataDir = DataRepository::findDefaultDataDirectory();
-    out << "Found data directory: " << dataDir << "\n";
+    // 2. Passwort-Hash Testvektor und Benutzerrollen (keine Klartext-Passwoerter im Repo)
+    const QString testVektor = Benutzerverwaltung::passwortHash(
+        "Test", QByteArray::fromHex("00112233445566778899aabbccddeeff"));
+    CHECK(testVektor == "3756307e3b05370d6b11a49c721420920c697fefb913731bcb7aee5cb534ec19");
 
-    const bool loaded = repo.loadAllFromDirectory(dataDir);
-    assert(loaded && "DataRepository failed to load CSV files!");
+    Benutzerverwaltung benutzer;
+    CHECK(!benutzer.anmelden("Marlon", "Falsch1234567890"));
+    CHECK(!benutzer.anmelden("Unbekannt", "Falsch1234567890"));
 
-    out << "Loaded Linien: " << repo.linien().size() << "\n";
-    out << "Loaded Unique Anlagen: " << repo.anlagen().size() << "\n";
-    out << "Loaded Produkte: " << repo.produkte().size() << "\n";
-    out << "Loaded Unique Stoercodes: " << repo.stoercodes().size() << "\n";
-    out << "Loaded Wartungen: " << repo.wartungen().size() << "\n";
-    out << "Detected CSV Plausibility Issues: " << repo.validationIssues().size() << "\n";
+    // Wenn die 3 Passwoerter ueber CLI uebergeben werden, pruefen wir alle 3 Profile live
+    if (argc >= 4) {
+        const QString pwMarlon = QString::fromUtf8(argv[1]);
+        const QString pwBastian = QString::fromUtf8(argv[2]);
+        const QString pwSebastian = QString::fromUtf8(argv[3]);
 
-    assert(repo.linien().size() == 6);
-    assert(repo.anlagen().size() == 82);     // 83 rows minus 1 duplicate (A061)
-    assert(repo.stoercodes().size() == 24);  // 25 rows minus 1 duplicate (M-102)
-    assert(repo.validationIssues().size() >= 9);
+        CHECK(pwMarlon.size() == 16 && pwBastian.size() == 16 && pwSebastian.size() == 16);
 
-    // Check specific anomaly handling:
-    // A032 had "33,2" -> should be parsed as 33.2
-    const Anlage* a032 = repo.findAnlage("A032");
-    assert(a032 != nullptr);
-    assert(std::abs(a032->sollTaktzeitS - 33.2) < 0.01);
+        // Gross-/Kleinschreibung beim Benutzernamen egal
+        CHECK(benutzer.anmelden("marlon", pwMarlon));
+        CHECK(benutzer.aktuelleRolle() == BenutzerRolle::Admin);
+        CHECK(benutzer.darfStammdatenBearbeiten());
+        CHECK(benutzer.darfStatusAendern());
+        CHECK(benutzer.darfWartungErfassen());
+        CHECK(benutzer.darfCsvExportieren());
+        CHECK(benutzer.darfSqliteSpeichern());
 
-    // A060 had 11 columns (missing traglast_kg) -> should be parsed with baujahr=2018, soll_taktzeit_s=67.7
-    const Anlage* a060 = repo.findAnlage("A060");
-    assert(a060 != nullptr);
-    assert(a060->baujahr == 2018);
-    assert(std::abs(a060->sollTaktzeitS - 67.7) < 0.01);
+        CHECK(benutzer.anmelden("Bastian", pwBastian));
+        CHECK(benutzer.aktuelleRolle() == BenutzerRolle::Instandhaltung);
+        CHECK(!benutzer.darfStammdatenBearbeiten());
+        CHECK(benutzer.darfStatusAendern());
+        CHECK(benutzer.darfWartungErfassen());
+        CHECK(benutzer.darfCsvExportieren());
+        CHECK(!benutzer.darfSqliteSpeichern());
 
-    // 2. Test Lazy Loading & OEE Calculation on valid XML (A001 on 2026-09-14)
-    auto pA001 = repo.getProtokollLazy("A001", QDate(2026, 9, 14));
-    assert(pA001 != nullptr && pA001->loadSuccess);
-    const Anlage* a001 = repo.findAnlage("A001");
-    assert(a001 != nullptr);
+        CHECK(benutzer.anmelden("Sebastian", pwSebastian));
+        CHECK(benutzer.aktuelleRolle() == BenutzerRolle::Mitarbeiter);
+        CHECK(!benutzer.darfStammdatenBearbeiten());
+        CHECK(!benutzer.darfStatusAendern());
+        CHECK(!benutzer.darfWartungErfassen());
+        CHECK(!benutzer.darfCsvExportieren());
+        CHECK(!benutzer.darfSqliteSpeichern());
+        CHECK(benutzer.darfBerichtExportieren());
+        out << "Benutzerprofile Marlon (Admin), Bastian (Instandhaltung), Sebastian (Mitarbeiter) verifiziert.\n" << Qt::flush;
+    }
 
-    OeeMetrics m001 = OeeCalculator::calculateDailyOee(*pA001, a001->sollTaktzeitS);
-    assert(m001.isValid);
-    assert(m001.verfuegbarkeit > 0.5 && m001.verfuegbarkeit <= 1.0);
-    assert(m001.leistungsgrad > 0.5 && m001.leistungsgrad <= 1.2);
-    assert(m001.qualitaetsrate > 0.8 && m001.qualitaetsrate <= 1.0);
-    assert(m001.oee > 0.4 && m001.oee <= 1.0);
-    out << QString("A001 (2026-09-14) -> V=%1%, L=%2%, Q=%3%, OEE=%4%, Good=%5, Scrap=%6, MTBF=%7m, MTTR=%8m\n")
-            .arg(m001.verfuegbarkeit * 100.0, 0, 'f', 1)
-            .arg(m001.leistungsgrad * 100.0, 0, 'f', 1)
-            .arg(m001.qualitaetsrate * 100.0, 0, 'f', 1)
-            .arg(m001.oee * 100.0, 0, 'f', 1)
-            .arg(m001.gutteile)
-            .arg(m001.ausschuss)
-            .arg(m001.mtbfMinuten, 0, 'f', 1)
-            .arg(m001.mttrMinuten, 0, 'f', 1);
+    // 3. Datensatz laden und automatische Flags pruefen
+    Datenverwaltung daten;
+    const QString ordner = Datenverwaltung::standardOrdner();
+    CHECK(daten.datensatzLaden(ordner));
 
-    // 3. Test Graceful Degradation on Missing XML (A062 on 2026-09-22) and Malformed XML (A045 on 2026-09-25)
-    auto pMissing = repo.getProtokollLazy("A062", QDate(2026, 9, 22));
-    assert(pMissing != nullptr && !pMissing->loadSuccess);
-    out << "Graceful handling of missing XML (A062_2026-09-22): " << pMissing->errorMessage << "\n";
+    CHECK(daten.linien().size() == 6);
+    CHECK(daten.anlagen().size() == 82);
+    CHECK(daten.produkte().size() == 21);
+    CHECK(daten.stoercodes().size() == 24);
+    CHECK(daten.wartungen().size() == 155);
 
-    auto pMalformed = repo.getProtokollLazy("A045", QDate(2026, 9, 25));
-    assert(pMalformed != nullptr && !pMalformed->loadSuccess);
-    out << "Graceful handling of malformed XML (A045_2026-09-25): " << pMalformed->errorMessage << "\n";
+    const QList<Problem>& flags = daten.alleProbleme();
+    out << "Gepruefte Protokolltage: " << daten.anzahlProtokollTagePruefung()
+        << ", erkannte Flags gesamt: " << flags.size()
+        << " (Fehler: " << daten.anzahlProbleme(Schweregrad::Fehler)
+        << ", Warnungen: " << daten.anzahlProbleme(Schweregrad::Warnung) << ")\n" << Qt::flush;
 
-    // 4. Test XML Semantic Plausibility Warnings (A007 backwards time, A009 negative parts)
-    auto pA007 = repo.getProtokollLazy("A007", QDate(2026, 9, 21));
-    assert(pA007 != nullptr && pA007->loadSuccess && !pA007->warnings.isEmpty());
-    out << "Detected semantic warning in A007_2026-09-21: " << pA007->warnings.first() << "\n";
+    // Bekannte CSV-Fehler als Flags
+    CHECK(hatProblemFuerObjekt(flags, "A011", "TAKT_UNGUELTIG"));
+    CHECK(hatProblemFuerObjekt(flags, "A032", "DEZIMALKOMMA"));
+    CHECK(hatProblemFuerObjekt(flags, "A040", "FK_LINIE"));
+    CHECK(hatProblemFuerObjekt(flags, "A060", "SPALTE_REPARIERT"));
+    CHECK(hatProblemFuerObjekt(flags, "A061", "ID_DOPPELT"));
+    CHECK(hatProblemFuerObjekt(flags, "A063", "TYP_UNBEKANNT"));
+    CHECK(hatProblemFuerObjekt(flags, "A064", "BAUJAHR_UNPLAUSIBEL"));
+    CHECK(hatProblemFuerObjekt(flags, "P-7111", "FK_LINIE"));
+    CHECK(hatProblemFuerObjekt(flags, "M-102", "ID_DOPPELT"));
+    CHECK(hatProblemFuerObjekt(flags, "W0019", "FK_ANLAGE"));
 
-    auto pA009 = repo.getProtokollLazy("A009", QDate(2026, 9, 17));
-    assert(pA009 != nullptr && pA009->loadSuccess && !pA009->warnings.isEmpty());
-    out << "Detected semantic warning in A009_2026-09-17: " << pA009->warnings.first() << "\n";
+    // Bekannte XML-Fehler als Flags
+    CHECK(hatProblemFuerObjekt(flags, "A062 2026-09-22", "DATEI_FEHLT"));
+    CHECK(hatProblemFuerObjekt(flags, "A067 2026-09-18", "DATEI_FEHLT"));
+    CHECK(hatProblemFuerObjekt(flags, "A045 2026-09-25", "XML_SYNTAX"));
+    CHECK(hatProblemFuerObjekt(flags, "A007 2026-09-21", "ZEIT_RUECKWAERTS"));
+    CHECK(hatProblemFuerObjekt(flags, "A009 2026-09-17", "STUECK_NEGATIV"));
+    CHECK(hatProblemFuerObjekt(flags, "A012 2026-09-22", "CODE_UNBEKANNT"));
+    CHECK(hatProblemFuerObjekt(flags, "A051 2026-09-18", "ZUSTAND_TYP"));
 
-    // 5. Test Line Bottleneck Analysis & Pareto
-    auto bnL1 = OeeCalculator::analyzeLineBottlenecks("L1", repo, QDate(2026, 9, 14));
-    assert(!bnL1.isEmpty());
-    out << "L1 Bottleneck analysis stations: " << bnL1.size() << "\n";
+    // Sicherstellen, dass A040 keine Folgefehler PRODUKT_LINIE ausloest
+    CHECK(!hatProblemFuerObjekt(flags, "A040 2026-09-14", "PRODUKT_LINIE"));
 
-    // 6. Test Master Data Export (anlagen_out.csv, wartungen_out.csv)
-    QString exportErr;
-    const bool exported = repo.exportModifiedCsv(dataDir, &exportErr);
-    assert(exported && QFile::exists(QDir(dataDir).filePath("anlagen_out.csv")));
-    out << "Successfully verified CSV export (anlagen_out.csv & wartungen_out.csv).\n";
+    // 4. OEE-, Schichtvergleich-, Engpass- und Pareto-Berechnung
+    const Anlage* a001 = daten.findeAnlage("A001");
+    CHECK(a001 != nullptr);
+    const OeeKennzahlen k001 = daten.tageskennzahlen("A001", QDate(2026, 9, 14));
+    CHECK(k001.gueltig);
+    CHECK(std::abs(k001.verfuegbarkeit - 0.840) < 0.01);
+    CHECK(std::abs(k001.leistungsgrad - 0.926) < 0.01);
+    CHECK(std::abs(k001.qualitaet - 0.991) < 0.01);
+    CHECK(std::abs(k001.oee - 0.771) < 0.01);
+    CHECK(k001.gut == 1358 && k001.ausschuss == 12);
 
-    // 7. Test AuthManager & LanguageManager
-    assert(AuthManager::instance().login("mitarbeiter", "1234"));
-    assert(!AuthManager::instance().canEditMasterData());
-    assert(AuthManager::instance().login("instandhaltung", "1234"));
-    assert(AuthManager::instance().canRecordMaintenance());
-    assert(AuthManager::instance().login("admin", "admin"));
-    assert(AuthManager::instance().canEditMasterData());
+    auto p001 = daten.protokoll("A001", QDate(2026, 9, 14));
+    CHECK(p001 && p001->geladen);
+    CHECK(OeeBerechnung::schichten(*p001, a001->sollTaktzeitS).size() == 3);
+    CHECK(daten.engpass("L1", QDate(2026, 9, 14)).size() == 14);
+    CHECK(!daten.pareto("").isEmpty());
 
-    LanguageManager::instance().setLanguage(AppLanguage::English);
-    assert(trBi("Deutsch", "English") == "English");
-    LanguageManager::instance().setLanguage(AppLanguage::German);
-    assert(trBi("Deutsch", "English") == "Deutsch");
+    // Korrektur an A011 muss TAKT_UNGUELTIG Flag entfernen
+    const Anlage* a011 = daten.findeAnlage("A011");
+    CHECK(a011 != nullptr);
+    Anlage korrigiert = *a011;
+    korrigiert.sollTaktzeitS = 40.0;
+    CHECK(daten.anlageAendern(korrigiert));
+    CHECK(!hatProblemCode(daten.findeAnlage("A011")->probleme, "TAKT_UNGUELTIG"));
+    out << "OEE, Engpass, Pareto und automatische Flag-Aktualisierung verifiziert.\n" << Qt::flush;
 
-    out << "=== ALL TESTS PASSED SUCCESSFULLY ===\n";
+    // 5. Export (CSV und SQLite) im temporaeren Ordner
+    QTemporaryDir tmp;
+    CHECK(tmp.isValid());
+    QString fehler;
+    CHECK(daten.csvExportieren(tmp.path(), &fehler));
+    CHECK(QFile::exists(QDir(tmp.path()).filePath("anlagen_out.csv")));
+    CHECK(QFile::exists(QDir(tmp.path()).filePath("wartungen_out.csv")));
+
+    const QString sqliteDatei = QDir(tmp.path()).filePath("test.sqlite");
+    CHECK(daten.inSqliteSpeichern(sqliteDatei, &fehler));
+    Datenverwaltung daten2;
+    CHECK(daten2.datensatzAusSqliteLaden(sqliteDatei));
+    CHECK(daten2.anlagen().size() == 82);
+    out << "CSV- und SQLite-Export/Import verifiziert.\n" << Qt::flush;
+
+    // 6. Sprachumschaltung zur Laufzeit
+    Sprache::setzen("en");
+    CHECK(zustandName(ZustandTyp::Produktion) == "Production");
+    const Problem probe = neuesProblem(Schweregrad::Fehler, "FK_LINIE", "anlagen.csv", 41, "A040", {"L9"});
+    CHECK(probe.text() == "References unknown line 'L9'");
+    Sprache::setzen("de");
+    CHECK(zustandName(ZustandTyp::Produktion) == "Produktion");
+    out << "Sprachumschaltung DE/EN verifiziert.\n" << Qt::flush;
+
+    out << "=== ALLE TESTS ERFOLGREICH ===\n" << Qt::flush;
     return 0;
 }

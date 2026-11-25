@@ -430,16 +430,6 @@
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets-relwithdebinfo.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginAdditionalTargetInfo.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Sql/Qt6SqlVersionlessAliasTargets.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentConfigVersion.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentConfigVersionImpl.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentConfig.cmake",
-		"C:/QT/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentDependencies.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentTargetsPrecheck.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentTargets.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentTargets-relwithdebinfo.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentAdditionalTargetInfo.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6Concurrent/Qt6ConcurrentVersionlessAliasTargets.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportConfigVersion.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportConfigVersionImpl.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportConfig.cmake",
@@ -450,7 +440,9 @@
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportTargets-relwithdebinfo.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportAdditionalTargetInfo.cmake",
 		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportPlugins.cmake",
-		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportVersionlessAliasTargets.cmake"
+		"C:/QT/6.11.1/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportVersionlessAliasTargets.cmake",
+		"C:/Users/marlo/Documents/antigravity/silly-volta/resources.qrc",
+		"C:/Users/marlo/Documents/antigravity/silly-volta/resources.qrc"
 	],
 	"CMAKE_SOURCE_DIR" : "C:/Users/marlo/Documents/antigravity/silly-volta",
 	"CROSS_CONFIG" : false,
@@ -459,45 +451,63 @@
 	"HEADERS" : 
 	[
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/AuthManager.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/benutzerverwaltung.h",
 			"MU",
-			"PRMOGMWJPH/moc_AuthManager.cpp",
+			"PRMOGMWJPH/moc_benutzerverwaltung.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/LanguageManager.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/einstellungen.h",
 			"MU",
-			"PRMOGMWJPH/moc_LanguageManager.cpp",
+			"PRMOGMWJPH/moc_einstellungen.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/LruCache.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/farben.h",
 			"MU",
-			"PRMOGMWJPH/moc_LruCache.cpp",
+			"PRMOGMWJPH/moc_farben.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/DataRepository.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/protokollcache.h",
 			"MU",
-			"F43WJJHJFQ/moc_DataRepository.cpp",
+			"PRMOGMWJPH/moc_protokollcache.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/XmlProtokollReader.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/sprache.h",
 			"MU",
-			"F43WJJHJFQ/moc_XmlProtokollReader.cpp",
+			"PRMOGMWJPH/moc_sprache.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/logic/OeeCalculator.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/datenverwaltung.h",
 			"MU",
-			"PUYCVECU7E/moc_OeeCalculator.cpp",
+			"F43WJJHJFQ/moc_datenverwaltung.cpp",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/model/Entities.h",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/protokollleser.h",
 			"MU",
-			"VNQA4LF4BW/moc_Entities.cpp",
+			"F43WJJHJFQ/moc_protokollleser.cpp",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/logic/oeeberechnung.h",
+			"MU",
+			"PUYCVECU7E/moc_oeeberechnung.cpp",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/model/datentypen.h",
+			"MU",
+			"VNQA4LF4BW/moc_datentypen.cpp",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/model/problem.h",
+			"MU",
+			"VNQA4LF4BW/moc_problem.cpp",
 			null
 		]
 	],
@@ -507,8 +517,8 @@
 	"MOC_DEFINITIONS" : 
 	[
 		"MINGW_HAS_SECURE_API=1",
-		"QT_CONCURRENT_LIB",
 		"QT_CORE_LIB",
+		"QT_GUI_LIB",
 		"QT_NO_DEBUG",
 		"QT_SQL_LIB",
 		"QT_XML_LIB",
@@ -532,9 +542,9 @@
 		"C:/QT/6.11.1/mingw_64/include/QtCore",
 		"C:/QT/6.11.1/mingw_64/include",
 		"C:/QT/6.11.1/mingw_64/mkspecs/win32-g++",
+		"C:/QT/6.11.1/mingw_64/include/QtGui",
 		"C:/QT/6.11.1/mingw_64/include/QtXml",
 		"C:/QT/6.11.1/mingw_64/include/QtSql",
-		"C:/QT/6.11.1/mingw_64/include/QtConcurrent",
 		"C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++",
 		"C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32",
 		"C:/QT/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward",
@@ -566,6 +576,7 @@
 	"MOC_RELAXED_MODE" : false,
 	"MOC_SKIP" : 
 	[
+		"C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/EWIEGA46WW/qrc_resources.cpp",
 		"C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/mocs_compilation.cpp"
 	],
 	"MULTI_CONFIG" : false,
@@ -579,27 +590,52 @@
 	"SOURCES" : 
 	[
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/AuthManager.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/benutzerverwaltung.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/LanguageManager.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/einstellungen.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/DataRepository.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/farben.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/XmlProtokollReader.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/protokollcache.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/marlo/Documents/antigravity/silly-volta/src/logic/OeeCalculator.cpp",
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/core/sprache.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/datenverwaltung.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/io/protokollleser.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/logic/oeeberechnung.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/model/datentypen.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/marlo/Documents/antigravity/silly-volta/src/model/problem.cpp",
 			"MU",
 			null
 		],
@@ -613,6 +649,7 @@
 	"UIC_SEARCH_PATHS" : [],
 	"UIC_SKIP" : 
 	[
+		"C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/EWIEGA46WW/qrc_resources.cpp",
 		"C:/Users/marlo/Documents/antigravity/silly-volta/build/RoboCell_autogen/mocs_compilation.cpp"
 	],
 	"UIC_UI_FILES" : [],
