@@ -1,0 +1,8 @@
+C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/RoboCell.dir
+C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/RoboCellTests.dir
+C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/edit_cache.dir
+C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/RoboCell_autogen_timestamp_deps.dir
+C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/RoboCell_autogen.dir
+C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/RoboCellTests_autogen_timestamp_deps.dir
+C:/Users/marlo/Documents/antigravity/Informatik-2-RoboCell-1/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/RoboCellTests_autogen.dir

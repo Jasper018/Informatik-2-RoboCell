@@ -1,0 +1,43 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/RoboCellTests_autogen.dir/AutogenUsed.txt"
+  "CMakeFiles/RoboCellTests_autogen.dir/ParseCache.txt"
+  "RoboCellTests_autogen"
+  "CMakeFiles/RoboCellTests.dir/RoboCellTests_autogen/EWIEGA46WW/qrc_resources.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/RoboCellTests_autogen/EWIEGA46WW/qrc_resources.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/RoboCellTests_autogen/mocs_compilation.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/RoboCellTests_autogen/mocs_compilation.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/src/core/benutzerverwaltung.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/src/core/benutzerverwaltung.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/src/core/einstellungen.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/src/core/einstellungen.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/src/core/farben.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/src/core/farben.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/src/core/protokollcache.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/src/core/protokollcache.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/src/core/sprache.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/src/core/sprache.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/src/io/datenverwaltung.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/src/io/datenverwaltung.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/src/io/protokollleser.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/src/io/protokollleser.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/src/logic/oeeberechnung.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/src/logic/oeeberechnung.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/src/model/datentypen.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/src/model/datentypen.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/src/model/problem.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/src/model/problem.cpp.obj.d"
+  "CMakeFiles/RoboCellTests.dir/tests/test_main.cpp.obj"
+  "CMakeFiles/RoboCellTests.dir/tests/test_main.cpp.obj.d"
+  "RoboCellTests.exe"
+  "RoboCellTests.exe.manifest"
+  "RoboCellTests.pdb"
+  "RoboCellTests_autogen/EWIEGA46WW/qrc_resources.cpp"
+  "RoboCellTests_autogen/mocs_compilation.cpp"
+  "RoboCellTests_autogen/timestamp"
+  "libRoboCellTests.dll.a"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/RoboCellTests.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
